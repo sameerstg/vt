@@ -7,10 +7,17 @@ export default function WorkExperience() {
       <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
         <div className="bdrb1 pb15 mb30 d-sm-flex justify-content-between">
           <h5 className="list-title">Work &amp; Experience</h5>
-          <a className="add-more-btn text-thm">
-            <i className="icon far fa-plus mr10" />
+          <button 
+            className="px-4 h-9 rounded-lg text-xs font-bold text-white transition-all active:translate-y-0.5 active:shadow-none bg-[#3b82f6]"
+            style={{ 
+              border: '1px solid #000',
+              boxShadow: '0 3px 0 #000',
+              textShadow: '0 1px 1px rgba(0,0,0,0.1)'
+            }}
+          >
+            <i className="icon far fa-plus mr-1" />
             Add Experience
-          </a>
+          </button>
         </div>
         <div className="position-relative">
           <div className="educational-quality">
@@ -70,10 +77,14 @@ export default function WorkExperience() {
             </div>
           </div>
           <div className="text-start">
-            <a className="ud-btn btn-thm">
-              Save
-              <i className="fal fa-arrow-right-long" />
-            </a>
+            <button 
+              type="button" 
+              className="flex items-center justify-center gap-2 px-8 h-12 rounded-lg font-bold text-white transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-purple-100"
+              style={{ backgroundColor: '#2d0087' }}
+            >
+              <span className="text-base">Save</span>
+              <i className="fal fa-arrow-up-right font-light" style={{ fontSize: '18px' }} />
+            </button>
           </div>
         </div>
       </div>

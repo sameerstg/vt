@@ -350,10 +350,13 @@ export default function BasicInformation() {
               </div>
               <div className="col-md-12">
                 <div className="text-start">
-                  <Link className="ud-btn btn-thm" href="/contact">
+                  <button 
+                    type="button" 
+                    className="ud-btn btn-thm"
+                  >
                     Save
                     <i className="fal fa-arrow-right-long" />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

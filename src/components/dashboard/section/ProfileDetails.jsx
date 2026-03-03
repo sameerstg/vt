@@ -372,10 +372,13 @@ export default function ProfileDetails() {
               </div>
               <div className="col-md-12">
                 <div className="text-start">
-                  <Link className="ud-btn btn-thm" href="/contact">
-                    Save
-                    <i className="fal fa-arrow-right-long" />
-                  </Link>
+                  <button 
+                    type="button" 
+                    className="btn-purple-arrow"
+                  >
+                    Save Profile
+                    <i className="fal fa-arrow-up-right" />
+                  </button>
                 </div>
               </div>
             </div>

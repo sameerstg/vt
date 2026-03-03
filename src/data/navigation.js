@@ -101,6 +101,42 @@ const menus = [
     ],
   },
   {
+    id: 7,
+    name: "Admin",
+    children: [
+      {
+        id: 1,
+        name: "Admin Dashboard",
+        path: "/admin",
+      },
+      {
+        id: 2,
+        name: "Admin Account",
+        path: "/admin/account",
+      },
+      {
+        id: 3,
+        name: "User Management",
+        path: "/admin/user-management",
+      },
+      {
+        id: 4,
+        name: "Task Monitoring",
+        path: "/admin/task-monitoring",
+      },
+      {
+        id: 5,
+        name: "Financial Overview",
+        path: "/admin/financial-overview",
+      },
+      {
+        id: 6,
+        name: "Platform Settings",
+        path: "/admin/settings",
+      },
+    ],
+  },
+  {
     id: 4,
     name: "Pages",
     children: [

@@ -13,8 +13,8 @@ export default function MessageInfo() {
           </div>
           <div className="col-lg-12">
             <div className="dashboard_title_area">
-              <h2>Dashboard</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              <h2 className="title" style={{ color: '#2d138f', fontSize: '30px', fontWeight: '700' }}>Messages</h2>
+              <p className="text" style={{ color: '#5e6d82', fontSize: '15px' }}>Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
         </div>

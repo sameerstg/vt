@@ -22,40 +22,47 @@ export default function ManageProjectInfo() {
   return (
     <>
       <div className="dashboard__content hover-bgc-color">
-        <div className="row pb40">
+        <div className="row pb40 pt-4">
           <div className="col-lg-12">
             <DashboardNavigation />
           </div>
           <div className="col-lg-9">
             <div className="dashboard_title_area">
-              <h2>Manage Project</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              <h2 className="title" style={{ color: '#2d138f', fontSize: '30px', fontWeight: '700' }}>Manage Project</h2>
+              <p className="text" style={{ color: '#5e6d82', fontSize: '15px' }}>Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
           <div className="col-lg-3">
             <div className="text-lg-end">
               <Link
                 href="/create-projects"
-                className="ud-btn btn-dark default-box-shadow2"
+                className="btn-3d-blue ml-auto"
               >
                 Create Project
-                <i className="fal fa-arrow-right-long" />
+                <i className="fal fa-plus" />
               </Link>
             </div>
           </div>
         </div>
         <div className="row">
           <div className="col-xl-12">
-            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative" style={{ border: '1px solid #eee' }}>
               <div className="navtab-style1">
                 <nav>
-                  <div className="nav nav-tabs mb30">
+                  <div className="nav nav-tabs mb30 border-bottom-0">
                     {tab.map((item, i) => (
                       <button
                         key={i}
-                        className={`nav-link fw500 ps-0 ${
+                        className={`nav-link fw600 ps-0 me-4 ${
                           selectedTab == i ? "active" : ""
                         }`}
+                        style={{ 
+                          color: selectedTab == i ? '#4d1aab' : '#94a3b8',
+                          border: 'none',
+                          borderBottom: selectedTab == i ? '2px solid #4d1aab' : 'none',
+                          paddingBottom: '15px',
+                          fontSize: '15px'
+                        }}
                         onClick={() => setSelectedTab(i)}
                       >
                         {item}
@@ -63,150 +70,29 @@ export default function ManageProjectInfo() {
                     ))}
                   </div>
                 </nav>
-                {selectedTab === 0 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
+                
+                <div className="packages_table table-responsive">
+                  <table className="table-style3 table at-savesearch">
+                    <thead className="t-head">
+                      <tr>
+                        <th scope="col" style={{ color: '#6200ee', fontWeight: '600', borderTop: 'none', paddingBottom: '20px' }}>Title</th>
+                        <th scope="col" style={{ color: '#6200ee', fontWeight: '600', borderTop: 'none', paddingBottom: '20px' }}>Category</th>
+                        <th scope="col" style={{ color: '#6200ee', fontWeight: '600', borderTop: 'none', paddingBottom: '20px' }}>Type/Cost</th>
+                        <th scope="col" style={{ color: '#6200ee', fontWeight: '600', borderTop: 'none', paddingBottom: '20px' }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="t-body">
+                      {Array(7)
+                        .fill(7)
+                        .map((_, i) => (
+                          <ManageProjectCard key={i} />
+                        ))}
+                    </tbody>
+                  </table>
+                  <div className="mt30">
+                    <Pagination1 />
                   </div>
-                )}
-                {selectedTab === 1 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
-                  </div>
-                )}
-                {selectedTab === 2 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
-                  </div>
-                )}
-                {selectedTab === 3 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
-                  </div>
-                )}
-                {selectedTab === 4 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
-                  </div>
-                )}
-                {selectedTab === 5 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
             </div>
           </div>

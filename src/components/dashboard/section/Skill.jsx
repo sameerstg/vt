@@ -174,10 +174,14 @@ export default function Skill() {
                 </div>
                 <div className="col-md-12">
                   <div className="text-start">
-                    <Link className="ud-btn btn-thm" href="/contact">
-                      Save
-                      <i className="fal fa-arrow-right-long" />
-                    </Link>
+                    <button 
+                      type="button" 
+                      className="flex items-center justify-center gap-2 px-8 h-12 rounded-lg font-bold text-white transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-purple-100"
+                      style={{ backgroundColor: '#2d0087' }}
+                    >
+                      <span className="text-base">Save</span>
+                      <i className="fal fa-arrow-up-right font-light" style={{ fontSize: '18px' }} />
+                    </button>
                   </div>
                 </div>
               </div>

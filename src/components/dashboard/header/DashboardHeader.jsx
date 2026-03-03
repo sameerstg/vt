@@ -1,5 +1,6 @@
 "use client";
 import { dasboardNavigation } from "@/data/dashboard";
+import { adminSidebarItems } from "@/data/adminDashboard";
 import toggleStore from "@/store/toggleStore";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +9,34 @@ import { usePathname } from "next/navigation";
 export default function DashboardHeader() {
   const toggle = toggleStore((state) => state.dashboardSlidebarToggleHandler);
   const path = usePathname();
+  const isDashboardAdminMode =
+    path === "/dashboard" || path.startsWith("/dashboard/");
+
+  const dashboardAdminItems = adminSidebarItems.map((item) => ({
+    ...item,
+    name: item.label,
+    path: item.path.startsWith("/admin")
+      ? item.path.replace(/^\/admin/, "/dashboard")
+      : item.path,
+  }));
+
+  const startNavItems = isDashboardAdminMode
+    ? dashboardAdminItems.filter((item) => item.group === "start")
+    : dasboardNavigation.slice(0, 8);
+  const organizeNavItems = isDashboardAdminMode
+    ? dashboardAdminItems.filter((item) => item.group === "organize")
+    : dasboardNavigation.slice(8, 13);
+  const accountNavItems = isDashboardAdminMode
+    ? dashboardAdminItems.filter((item) => item.group === "account")
+    : dasboardNavigation.slice(13, 15);
+
+  const isNavActive = (navPath) => {
+    if (navPath === "/dashboard") {
+      return path === navPath;
+    }
+
+    return path === navPath || path.startsWith(`${navPath}/`);
+  };
 
   return (
     <>
@@ -285,11 +314,11 @@ export default function DashboardHeader() {
                             <p className="fz15 fw400 ff-heading mb10 pl30">
                               Start
                             </p>
-                            {dasboardNavigation.slice(0, 8).map((item,i) => (
+                            {startNavItems.map((item, i) => (
                               <Link
                                 key={i}
                                 className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
+                                  isNavActive(item.path) ? "active" : ""
                                 }`}
                                 href={item.path}
                               >
@@ -300,11 +329,11 @@ export default function DashboardHeader() {
                             <p className="fz15 fw400 ff-heading mt30 pl30">
                               Organize and Manage
                             </p>
-                            {dasboardNavigation.slice(8, 13).map((item,i) => (
+                            {organizeNavItems.map((item, i) => (
                               <Link
                                 key={i}
                                 className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
+                                  isNavActive(item.path) ? "active" : ""
                                 }`}
                                 href={item.path}
                               >
@@ -315,11 +344,11 @@ export default function DashboardHeader() {
                             <p className="fz15 fw400 ff-heading mt30 pl30">
                               Account
                             </p>
-                            {dasboardNavigation.slice(13, 15).map((item,i) => (
+                            {accountNavItems.map((item, i) => (
                               <Link
                                 key={i}
                                 className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
+                                  isNavActive(item.path) ? "active" : ""
                                 }`}
                                 href={item.path}
                               >

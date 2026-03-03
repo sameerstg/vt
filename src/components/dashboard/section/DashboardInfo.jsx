@@ -5,6 +5,7 @@ import LineChart from "../chart/LineChart";
 import DashboardNavigation from "../header/DashboardNavigation";
 import RecentServiceCard1 from "../card/RecentServiceCard1";
 import { job1 } from "@/data/job";
+import AdminKpiCard from "../card/AdminKpiCard";
 
 export default function DashboardInfo() {
   return (
@@ -16,67 +17,43 @@ export default function DashboardInfo() {
           </div>
           <div className="col-lg-12">
             <div className="dashboard_title_area">
-              <h2>Dashboard</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              <h2 className="title" style={{ color: '#2d138f', fontSize: '30px', fontWeight: '700' }}>Dashboard</h2>
+              <p className="text" style={{ color: '#5e6d82', fontSize: '15px' }}>Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
         </div>
         <div className="row">
           <div className="col-sm-6 col-xxl-3">
-            <div className="d-flex align-items-center justify-content-between statistics_funfact">
-              <div className="details">
-                <div className="fz15">Services Offered</div>
-                <div className="title">25</div>
-                <div className="text fz14">
-                  <span className="text-thm">10</span> New Offered
-                </div>
-              </div>
-              <div className="icon text-center">
-                <i className="flaticon-contract" />
-              </div>
-            </div>
+            <AdminKpiCard 
+              title="Services Offered" 
+              value="25" 
+              trend="10 New Offered" 
+              icon="flaticon-contract" 
+            />
           </div>
           <div className="col-sm-6 col-xxl-3">
-            <div className="d-flex align-items-center justify-content-between statistics_funfact">
-              <div className="details">
-                <div className="fz15">Completed Services</div>
-                <div className="title">1292</div>
-                <div className="text fz14">
-                  <span className="text-thm">80+</span> New Completed
-                </div>
-              </div>
-              <div className="icon text-center">
-                <i className="flaticon-success" />
-              </div>
-            </div>
+            <AdminKpiCard 
+              title="Completed Services" 
+              value="1292" 
+              trend="80+ New Completed" 
+              icon="flaticon-success" 
+            />
           </div>
           <div className="col-sm-6 col-xxl-3">
-            <div className="d-flex align-items-center justify-content-between statistics_funfact">
-              <div className="details">
-                <div className="fz15">in Queue Services</div>
-                <div className="title">182</div>
-                <div className="text fz14">
-                  <span className="text-thm">35+</span> New Queue
-                </div>
-              </div>
-              <div className="icon text-center">
-                <i className="flaticon-review" />
-              </div>
-            </div>
+            <AdminKpiCard 
+              title="in Queue Services" 
+              value="182" 
+              trend="35+ New Queue" 
+              icon="flaticon-review" 
+            />
           </div>
           <div className="col-sm-6 col-xxl-3">
-            <div className="d-flex align-items-center justify-content-between statistics_funfact">
-              <div className="details">
-                <div className="fz15">Total Review</div>
-                <div className="title">22,786</div>
-                <div className="text fz14">
-                  <span className="text-thm">290+</span> New Review
-                </div>
-              </div>
-              <div className="icon text-center">
-                <i className="flaticon-review-1" />
-              </div>
-            </div>
+            <AdminKpiCard 
+              title="Total Review" 
+              value="22,786" 
+              trend="290+ New Review" 
+              icon="flaticon-review-1" 
+            />
           </div>
         </div>
         <div className="row">
@@ -91,7 +68,7 @@ export default function DashboardInfo() {
           <div className="col-md-6 col-xxl-4">
             <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
               <div className="d-flex justify-content-between bdrb1 pb15 mb20">
-                <h5 className="title">Most Viewed Services</h5>
+                <h5 className="title text-[18px] font-bold text-[#6200ee]">Most Viewed Services</h5>
                 <a className="text-decoration-underline text-thm6">View All</a>
               </div>
               <div className="dashboard-img-service">
@@ -109,7 +86,7 @@ export default function DashboardInfo() {
           <div className="col-md-6 col-xxl-4">
             <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
               <div className="d-flex justify-content-between bdrb1 pb15 mb30">
-                <h5 className="title">Recent Purchased Services</h5>
+                <h5 className="title text-[18px] font-bold text-[#6200ee]">Recent Purchased Services</h5>
                 <a className="text-decoration-underline text-thm6">View All</a>
               </div>
               <div className="dashboard-img-service">
@@ -127,7 +104,7 @@ export default function DashboardInfo() {
           <div className="col-md-6 col-xxl-4">
             <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
               <div className="bdrb1 pb15 mb30">
-                <h5 className="title">Recent Activity</h5>
+                <h5 className="title text-[18px] font-bold text-[#6200ee]">Recent Activity</h5>
               </div>
               <div className="dashboard-timeline-label">
                 <div className="timeline-item pb15">

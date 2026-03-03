@@ -63,10 +63,30 @@ export default function LineChart() {
   };
 
   const options = {
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top',
+        align: 'center',
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'rectRounded',
+          padding: 20,
+        }
+      }
+    },
     scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
       y: {
         min: 0,
         max: 300,
+        grid: {
+          color: 'rgba(0,0,0,0.05)',
+        }
       },
     },
   };
@@ -76,7 +96,7 @@ export default function LineChart() {
       <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
         <div className="navtab-style1">
           <div className="d-sm-flex align-items-center justify-content-between">
-            <h4 className="title fz17 mb20">Profile Views</h4>
+            <h4 className="title text-[20px] font-bold text-[#6200ee] mb-0">Profile Views</h4>
             <div className="page_control_shorting dark-color pr10 text-center text-md-end">
               <div className="dropdown bootstrap-select show-tick">
                 <button

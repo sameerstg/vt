@@ -11,14 +11,14 @@ export default function MyProfileInfo() {
   return (
     <>
       <div className="dashboard__content hover-bgc-color">
-        <div className="row pb40">
+        <div className="row pb40 pt-4">
           <div className="col-lg-12">
             <DashboardNavigation />
           </div>
-          <div className="col-lg-9">
+          <div className="col-lg-12">
             <div className="dashboard_title_area">
-              <h2>My Profile</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              <h2 className="title" style={{ color: '#2d138f', fontSize: '30px', fontWeight: '700' }}>My Profile</h2>
+              <p className="text" style={{ color: '#5e6d82', fontSize: '15px' }}>Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
         </div>
@@ -29,8 +29,14 @@ export default function MyProfileInfo() {
             <Education />
             <WorkExperience />
             <Award />
-            <ChangePassword />
-            <ConfirmPassword />
+            <div className="row">
+              <div className="col-lg-6">
+                <ChangePassword />
+              </div>
+              <div className="col-lg-6">
+                <ConfirmPassword />
+              </div>
+            </div>
           </div>
         </div>
       </div>
