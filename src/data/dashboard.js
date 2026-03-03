@@ -80,7 +80,7 @@ export const dasboardNavigation = [
   {
     id: 14,
     name: "My Profile",
-    icon: "flaticon-photo",
+    icon: "flaticon-user",
     path: "/my-profile",
   },
   {

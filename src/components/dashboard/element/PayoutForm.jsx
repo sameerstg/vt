@@ -80,12 +80,15 @@ export default function PayoutForm() {
         </div>
         <div className="row">
           <div className="col-md-12">
-            <div className="text-start">
-              <Link className="ud-btn btn-thm" href="/contact">
-                Save Detail
-                <i className="fal fa-arrow-right-long" />
-              </Link>
-            </div>
+                  <div className="text-start">
+                    <button 
+                      type="button" 
+                      className="ud-btn btn-thm"
+                    >
+                      Save Detail
+                      <i className="fal fa-arrow-right-long" />
+                    </button>
+                  </div>
           </div>
         </div>
       </form>

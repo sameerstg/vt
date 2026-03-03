@@ -17,18 +17,18 @@ export default function PayoutInfo() {
         <div className="row align-items-center justify-content-between pb40">
           <div className="col-lg-6">
             <div className="dashboard_title_area">
-              <h2>Payouts</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              <h2 className="title" style={{ color: '#2d138f', fontSize: '30px', fontWeight: '700' }}>Payouts</h2>
+              <p className="text" style={{ color: '#5e6d82', fontSize: '15px' }}>Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
           <div className="col-lg-6">
             <div className="text-lg-end">
               <Link
                 href="/freelancer-1"
-                className="ud-btn btn-dark default-box-shadow2"
+                className="btn-3d-blue ml-auto"
               >
                 Create Payout
-                <i className="fal fa-arrow-right-long" />
+                <i className="fal fa-plus" />
               </Link>
             </div>
           </div>
@@ -38,7 +38,7 @@ export default function PayoutInfo() {
             <div className="ps-widget bgc-white bdrs4 p30 mb60 overflow-hidden position-relative">
               <div className="packages_table table-responsive">
                 <table className="table-style3 table at-savesearch">
-                  <thead className="t-head">
+                  <thead className="t-head t-head-purple">
                     <tr>
                       <th scope="col">Amount</th>
                       <th scope="col">Date</th>

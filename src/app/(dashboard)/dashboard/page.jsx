@@ -1,7 +1,5 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import DashboardInfo from "@/components/dashboard/section/DashboardInfo";
-
-import MobileNavigation2 from "@/components/header/MobileNavigation2";
+import AdminDashboardOverview from "@/components/dashboard/section/AdminDashboardOverview";
 
 export const metadata = {
   title: "Freeio - Freelance Marketplace React/Next Js Template | Dashboard",
@@ -9,12 +7,8 @@ export const metadata = {
 
 export default function page() {
   return (
-    <>
-    
-    <MobileNavigation2 />
-      <DashboardLayout>
-        <DashboardInfo />
-      </DashboardLayout>
-    </>
+    <DashboardLayout>
+      <AdminDashboardOverview routeBase="/dashboard" />
+    </DashboardLayout>
   );
 }

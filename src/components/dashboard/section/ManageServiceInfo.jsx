@@ -28,18 +28,18 @@ export default function ManageServiceInfo() {
           </div>
           <div className="col-lg-9">
             <div className="dashboard_title_area">
-              <h2>Manage Services</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              <h2 className="title" style={{ color: '#2d138f', fontSize: '30px', fontWeight: '700' }}>Manage Services</h2>
+              <p className="text" style={{ color: '#5e6d82', fontSize: '15px' }}>Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
           <div className="col-lg-3">
             <div className="text-lg-end">
               <Link
                 href="/dashboard-add-service"
-                className="ud-btn btn-dark default-box-shadow2"
+                className="ud-btn btn-thm ml-auto"
               >
                 Add Service
-                <i className="fal fa-arrow-right-long" />
+                <i className="fal fa-plus" />
               </Link>
             </div>
           </div>

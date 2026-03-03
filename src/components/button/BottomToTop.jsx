@@ -1,15 +1,22 @@
 "use client";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function BottomToTop() {
   const [isBottom, setBottom] = useState(false);
+  const pathname = usePathname();
+  const isTaskMonitoringRoute =
+    pathname === "/dashboard/task-monitoring" ||
+    pathname.startsWith("/dashboard/task-monitoring/") ||
+    pathname === "/admin/task-monitoring" ||
+    pathname.startsWith("/admin/task-monitoring/");
 
   // scroll from top
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
-      setBottom(scrollTop > 200);
+        window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+      setBottom(scrollTop > 80);
     };
 
     if (typeof window !== "undefined") {
@@ -31,7 +38,8 @@ export default function BottomToTop() {
     <>
       <a
         onClick={bottomToTopHandler}
-        className={`scrollToHome ${isBottom ? "show" : ""}`}
+        aria-label="Back to top"
+        className={`scrollToHome ${isBottom ? "show" : ""}${isTaskMonitoringRoute ? " tm-round-up" : ""}`}
       >
         <i className="fas fa-angle-up" />
       </a>

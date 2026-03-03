@@ -34,7 +34,7 @@ export default function DoughnutChart() {
     <>
       <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
         <div className="bdrb1 pb15 mb30">
-          <h5 className="title">Traffic</h5>
+          <h5 className="title text-[20px] font-bold text-[#6200ee]">Traffic</h5>
         </div>
         <Doughnut data={data} options={options} />
       </div>
