@@ -4,6 +4,7 @@
   "private": true,
   "engine": "yarn",
   "scripts": {
+    "predev": "node -e \"const fs=require('fs');fs.rmSync('.next-dev',{recursive:true,force:true});\"",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

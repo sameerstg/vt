@@ -7,6 +7,7 @@ import DashboardNavigation from "../header/DashboardNavigation";
 import { project1 } from "@/data/product";
 import DeleteModal from "../modal/DeleteModal";
 import ProposalModal1 from "../modal/ProposalModal1";
+import Link from "next/link";
 
 const STATUS_TABS = [
   { key: "submitted", label: "Submitted" },
@@ -47,10 +48,18 @@ export default function ProposalInfo() {
           <div className="col-lg-12">
             <DashboardNavigation />
           </div>
-          <div className="col-lg-12">
+          <div className="col-lg-9">
             <div className="dashboard_title_area">
               <h2>My Proposals</h2>
               <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+            </div>
+          </div>
+          <div className="col-lg-3">
+            <div className="text-lg-end">
+              <Link href="/worker-dashboard/proposal-submission" className="ud-btn btn-thm">
+                Submit Offer
+                <i className="fal fa-arrow-right-long" />
+              </Link>
             </div>
           </div>
         </div>

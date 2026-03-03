@@ -67,24 +67,30 @@ export const dasboardNavigation = [
   },
   {
     id: 12,
+    name: "Dispute Resolution",
+    icon: "flaticon-review-1",
+    path: "/dispute-resolution",
+  },
+  {
+    id: 13,
     name: "Add Services",
     icon: "flaticon-document",
     path: "/add-services",
   },
   {
-    id: 13,
+    id: 14,
     name: "Create Project",
     icon: "flaticon-content",
     path: "/create-projects",
   },
   {
-    id: 14,
+    id: 15,
     name: "My Profile",
     icon: "flaticon-photo",
     path: "/my-profile",
   },
   {
-    id: 15,
+    id: 16,
     name: "Logout",
     icon: "flaticon-logout",
     path: "/login",

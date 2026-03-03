@@ -1,13 +1,10 @@
 "use client";
-import { dasboardNavigation } from "@/data/dashboardWorker";
 import toggleStore from "@/store/toggleStore";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export default function DashboardHeader() {
   const toggle = toggleStore((state) => state.dashboardSlidebarToggleHandler);
-  const path = usePathname();
 
   return (
     <>
@@ -272,62 +269,39 @@ export default function DashboardHeader() {
                     </li>
                     <li className="user_setting">
                       <div className="dropdown">
-                        <a className="btn" data-bs-toggle="dropdown">
+                        <button
+                          className="btn p-0 border-0 bg-transparent"
+                          type="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
                           <Image
                             height={50}
                             width={50}
                             src="/images/resource/user.png"
                             alt="user.png"
                           />
-                        </a>
-                        <div className="dropdown-menu">
-                          <div className="user_setting_content">
-                            <p className="fz15 fw400 ff-heading mb10 pl30">
-                              Start
-                            </p>
-                            {dasboardNavigation.slice(0, 8).map((item,i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
-                                href={item.path}
-                              >
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))}
-                            <p className="fz15 fw400 ff-heading mt30 pl30">
-                              Organize and Manage
-                            </p>
-                            {dasboardNavigation.slice(8, 13).map((item,i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
-                                href={item.path}
-                              >
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))}
-                            <p className="fz15 fw400 ff-heading mt30 pl30">
-                              Account
-                            </p>
-                            {dasboardNavigation.slice(13, 15).map((item,i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
-                                href={item.path}
-                              >
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))}
+                        </button>
+                        <div className="dropdown-menu user_profile_menu">
+                          <div className="user_profile_menu__head">
+                            <Image
+                              className="user_profile_menu__avatar"
+                              height={40}
+                              width={40}
+                              src="/images/resource/user.png"
+                              alt="profile"
+                            />
+                            <div>
+                              <p className="user_profile_menu__name mb-0">Sara Jay</p>
+                              <p className="user_profile_menu__role mb-0">Agent</p>
+                            </div>
                           </div>
+                          <Link className="dropdown-item" href="/my-profile">
+                            My Profile
+                          </Link>
+                          <Link className="dropdown-item logout" href="/login">
+                            Logout
+                          </Link>
                         </div>
                       </div>
                     </li>

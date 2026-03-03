@@ -3,6 +3,20 @@ import Header20 from "@/components/header/Header20";
 import Link from "next/link";
 
 export default function page() {
+    const roleSelectStyle = {
+        appearance: "none",
+        WebkitAppearance: "none",
+        MozAppearance: "none",
+        backgroundImage:
+            "linear-gradient(45deg, transparent 50%, #6b7280 50%), linear-gradient(135deg, #6b7280 50%, transparent 50%)",
+        backgroundPosition:
+            "calc(100% - 20px) calc(50% - 3px), calc(100% - 14px) calc(50% - 3px)",
+        backgroundSize: "6px 6px, 6px 6px",
+        backgroundRepeat: "no-repeat",
+        paddingRight: "44px",
+        cursor: "pointer",
+    };
+
     return (
         <>
             <div className="bgc-thm4">
@@ -44,50 +58,69 @@ export default function page() {
                                     </div>
                                     <div className="mb25">
                                         <label className="form-label fw500 dark-color">
-                                            Display Name
+                                            Full Name
                                         </label>
                                         <input
                                             type="text"
                                             className="form-control"
-                                            placeholder="Jimmy Doe"
+                                            placeholder="John Doe"
                                         />
                                     </div>
                                     <div className="mb25">
                                         <label className="form-label fw500 dark-color">
-                                            Username
+                                            Email or Phone
                                         </label>
                                         <input
                                             type="text"
                                             className="form-control"
-                                            placeholder="JimmyDoe"
+                                            placeholder="example@gmail.com or +1 555 000 0000"
                                         />
                                     </div>
                                     <div className="mb25">
-                                        <label className="form-label fw500 dark-color">
-                                            Email
-                                        </label>
-                                        <input
-                                            type="email"
-                                            className="form-control"
-                                            placeholder="example@gmail.com"
-                                        />
-                                    </div>
-                                    <div className="mb15">
                                         <label className="form-label fw500 dark-color">
                                             Password
                                         </label>
                                         <input
-                                            type="text"
+                                            type="password"
                                             className="form-control"
                                             placeholder="*******"
                                         />
+                                    </div>
+                                    <div className="mb25">
+                                        <label className="form-label fw500 dark-color">
+                                            Confirm Password
+                                        </label>
+                                        <input
+                                            type="password"
+                                            className="form-control"
+                                            placeholder="*******"
+                                        />
+                                    </div>
+                                    <div className="mb15">
+                                        <label className="form-label fw500 dark-color">
+                                            Role Selection
+                                        </label>
+                                        <select
+                                            className="form-control"
+                                            style={roleSelectStyle}
+                                            defaultValue=""
+                                        >
+                                            <option value="" disabled>
+                                                Select role
+                                            </option>
+                                            <option value="client">Client</option>
+                                            <option value="worker">Worker</option>
+                                            <option value="contractor">
+                                                Contractor
+                                            </option>
+                                        </select>
                                     </div>
                                     <div className="d-grid mb20">
                                         <button
                                             className="ud-btn btn-thm default-box-shadow2"
                                             type="button"
                                         >
-                                            Creat Account{" "}
+                                            Create Account{" "}
                                             <i className="fal fa-arrow-right-long" />
                                         </button>
                                     </div>
