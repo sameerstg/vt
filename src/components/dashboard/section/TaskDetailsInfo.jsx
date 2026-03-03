@@ -51,7 +51,7 @@ export default function TaskDetailsInfo() {
 
   return (
     <ClientSectionLayout
-      title="Task Details (Client View)"
+      title="Task Details"
       description="View task and manage lifecycle."
     >
       <div className="row">
