@@ -1,11 +1,13 @@
 import { product1 } from "@/data/product";
 import FreelancerAbout1 from "../element/FreelancerAbout1";
 import FreelancerSkill1 from "../element/FreelancerSkill1";
+import ServiceContactWidget1 from "../element/ServiceContactWidget1";
+import ServiceDetailPrice1 from "../element/ServiceDetailPrice1";
 import ServiceDetailComment1 from "../element/ServiceDetailComment1";
 import ServiceDetailReviewInfo1 from "../element/ServiceDetailReviewInfo1";
 import FreelancerFutureCard1 from "../card/FreelancerFutureCard1";
 
-export default function FreelancerDetail1() {
+export default function FreelancerDetail1({ milestoneMode = false }) {
   return (
     <>
       <section className="pt10 pb90 pb30-md">
@@ -171,8 +173,17 @@ export default function FreelancerDetail1() {
             </div>
             <div className="col-lg-4">
               <div className="blog-sidebar ms-lg-auto">
-                <FreelancerAbout1 />
-                <FreelancerSkill1 />
+                {milestoneMode ? (
+                  <>
+                    <ServiceDetailPrice1 initialTab={2} />
+                    <ServiceContactWidget1 />
+                  </>
+                ) : (
+                  <>
+                    <FreelancerAbout1 />
+                    <FreelancerSkill1 />
+                  </>
+                )}
               </div>
             </div>
           </div>

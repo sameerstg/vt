@@ -17,7 +17,7 @@ export default function Breadcumb4() {
             path === "/service-1"
               ? "cta-service-v1 mx20-lg"
               : path === "/service-2"
-              ? "cta-service-v2"
+              ? "cta-service-v1 mx20-lg"
               : path === "/service-5"
               ? "cta-service-v1 mb55 mx0"
               : ""
