@@ -64,6 +64,7 @@ const menus = [
           { id: 1, name: "Dashboard", path: "/dashboard" },
           { id: 2, name: "Worker Dashboard", path: "/worker-dashboard" },
           { id: 3, name: "Contractor Dashboard", path: "/contractor-dashboard" },
+          { id: 4, name: "Admin Dashboard", path: "/admin-dashboard" },
         ],
       },
       {
@@ -134,3 +135,4 @@ const menus = [
 ];
 
 export default menus;
+

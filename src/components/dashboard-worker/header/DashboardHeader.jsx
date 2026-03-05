@@ -270,33 +270,28 @@ export default function DashboardHeader() {
                     <li className="user_setting">
                       <div className="dropdown">
                         <button
-                          className="btn p-0 border-0 bg-transparent"
+                          className="btn p-0 border-0 bg-transparent admin-profile-trigger"
                           type="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
                         >
                           <Image
+                            className="admin-profile-trigger__avatar"
                             height={50}
                             width={50}
-                            src="/images/resource/user.png"
+                            src="/images/testimonials/testi-1.png"
                             alt="user.png"
                           />
+                          <span className="admin-profile-trigger__meta">
+                            <span className="admin-profile-trigger__name">alex howl</span>
+                            <span className="admin-profile-trigger__role">Agent</span>
+                          </span>
+                          <span className="admin-profile-trigger__chevron">
+                            <i className="fal fa-angle-down" />
+                          </span>
                         </button>
-                        <div className="dropdown-menu user_profile_menu">
-                          <div className="user_profile_menu__head">
-                            <Image
-                              className="user_profile_menu__avatar"
-                              height={40}
-                              width={40}
-                              src="/images/resource/user.png"
-                              alt="profile"
-                            />
-                            <div>
-                              <p className="user_profile_menu__name mb-0">Sara Jay</p>
-                              <p className="user_profile_menu__role mb-0">Agent</p>
-                            </div>
-                          </div>
-                          <Link className="dropdown-item" href="/my-profile">
+                        <div className="dropdown-menu user_profile_menu admin-profile-menu">
+                          <Link className="dropdown-item" href="/worker-dashboard/my-profile">
                             My Profile
                           </Link>
                           <Link className="dropdown-item logout" href="/login">
@@ -312,6 +307,96 @@ export default function DashboardHeader() {
           </div>
         </nav>
       </header>
+      <style jsx>{`
+        .admin-profile-trigger {
+          align-items: center;
+          display: inline-flex;
+          gap: 10px;
+          min-width: 185px;
+          padding: 0;
+        }
+
+        .admin-profile-trigger__avatar {
+          border-radius: 50%;
+          display: block;
+          flex-shrink: 0;
+          height: 46px;
+          object-fit: cover;
+          width: 46px;
+        }
+
+        .admin-profile-trigger__meta {
+          align-items: flex-start;
+          display: flex;
+          flex-direction: column;
+          line-height: 1.2;
+          text-align: left;
+        }
+
+        .admin-profile-trigger__name {
+          color: var(--headings-color);
+          font-family: var(--title-font-family);
+          font-size: 16px;
+          font-weight: 700;
+          text-transform: none;
+        }
+
+        .admin-profile-trigger__role {
+          color: #5b6d88;
+          font-size: 14px;
+          margin-top: 3px;
+        }
+
+        .admin-profile-trigger__chevron {
+          align-items: center;
+          border: 1px solid #d8dde8;
+          border-radius: 999px;
+          color: #64748b;
+          display: inline-flex;
+          font-size: 11px;
+          height: 22px;
+          justify-content: center;
+          margin-left: auto;
+          transition: transform 0.2s ease;
+          width: 22px;
+        }
+
+        .admin-profile-trigger[aria-expanded="true"] .admin-profile-trigger__chevron {
+          transform: rotate(180deg);
+        }
+
+        .user_setting .dropdown-menu.user_profile_menu.admin-profile-menu.show {
+          border: 1px solid #e4e8f1;
+          border-radius: 14px;
+          box-shadow: 0 12px 34px rgba(15, 23, 42, 0.13);
+          min-width: 180px;
+          padding: 8px 0;
+          transform: translate(-32px, 14px) !important;
+        }
+
+        .user_setting .dropdown-menu.user_profile_menu.admin-profile-menu .dropdown-item {
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 1.4;
+          padding: 10px 18px;
+        }
+
+        .user_setting
+          .dropdown-menu.user_profile_menu.admin-profile-menu
+          .dropdown-item.logout {
+          color: #ff3838;
+        }
+
+        @media (max-width: 575px) {
+          .admin-profile-trigger {
+            min-width: 172px;
+          }
+
+          .user_setting .dropdown-menu.user_profile_menu.admin-profile-menu.show {
+            transform: translate(-26px, 12px) !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

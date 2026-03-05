@@ -5,13 +5,25 @@ import { usePathname } from "next/navigation";
 
 export default function DashboardSidebar() {
   const path = usePathname();
+  const hiddenContractorMenuPaths = new Set([
+    "/contractor-dashboard/saved",
+    "/contractor-dashboard/reviews",
+    "/contractor-dashboard/invoice",
+    "/contractor-dashboard/payouts",
+    "/contractor-dashboard/statements",
+    "/contractor-dashboard/add-services",
+    "/contractor-dashboard/create-projects",
+  ]);
 
   return (
     <>
       <div className="dashboard__sidebar d-none d-lg-block">
         <div className="dashboard_sidebar_list">
           <p className="fz15 fw400 ff-heading pl30">Start</p>
-          {dasboardNavigation.slice(0, 8).map((item,i) => (
+          {dasboardNavigation
+            .slice(0, 8)
+            .filter((item) => !hiddenContractorMenuPaths.has(item.path))
+            .map((item, i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
@@ -27,7 +39,10 @@ export default function DashboardSidebar() {
 
           <p className="fz15 fw400 ff-heading pl30 mt30">Organize and Manage</p>
 
-          {dasboardNavigation.slice(8, 16).map((item,i) => (
+          {dasboardNavigation
+            .slice(8, 16)
+            .filter((item) => !hiddenContractorMenuPaths.has(item.path))
+            .map((item, i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
