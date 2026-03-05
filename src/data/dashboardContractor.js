@@ -6,48 +6,6 @@ export const dasboardNavigation = [
     path: "/contractor-dashboard",
   },
   {
-    id: 2,
-    name: "My Proposals",
-    icon: "flaticon-document",
-    path: "/contractor-dashboard/proposal",
-  },
-  {
-    id: 3,
-    name: "Saved",
-    icon: "flaticon-like",
-    path: "/contractor-dashboard/saved",
-  },
-  {
-    id: 4,
-    name: "Message",
-    icon: "flaticon-chat",
-    path: "/contractor-dashboard/message",
-  },
-  {
-    id: 5,
-    name: "Reviews",
-    icon: "flaticon-review-1",
-    path: "/contractor-dashboard/reviews",
-  },
-  {
-    id: 6,
-    name: "Invoice",
-    icon: "flaticon-receipt",
-    path: "/contractor-dashboard/invoice",
-  },
-  {
-    id: 7,
-    name: "Payouts",
-    icon: "flaticon-dollar",
-    path: "/contractor-dashboard/payouts",
-  },
-  {
-    id: 8,
-    name: "Statements",
-    icon: "flaticon-web",
-    path: "/contractor-dashboard/statements",
-  },
-  {
     id: 9,
     name: "Manage Services",
     icon: "flaticon-presentation",

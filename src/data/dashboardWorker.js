@@ -42,42 +42,6 @@ export const dasboardNavigation = [
     path: "/worker-dashboard/payment-history",
   },
   {
-    id: 8,
-    name: "My Proposals",
-    icon: "flaticon-web",
-    path: "/worker-dashboard/proposal",
-  },
-  {
-    id: 9,
-    name: "Manage Services",
-    icon: "flaticon-presentation",
-    path: "/worker-dashboard/manage-services",
-  },
-  {
-    id: 10,
-    name: "Manage Jobs",
-    icon: "flaticon-briefcase",
-    path: "/worker-dashboard/manage-jobs",
-  },
-  {
-    id: 11,
-    name: "Manage Project",
-    icon: "flaticon-content",
-    path: "/worker-dashboard/manage-projects",
-  },
-  {
-    id: 12,
-    name: "Add Services",
-    icon: "flaticon-document",
-    path: "/worker-dashboard/add-services",
-  },
-  {
-    id: 13,
-    name: "Create Project",
-    icon: "flaticon-content",
-    path: "/worker-dashboard/create-projects",
-  },
-  {
     id: 14,
     name: "My Profile",
     icon: "flaticon-photo",

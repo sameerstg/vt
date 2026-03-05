@@ -36,48 +36,6 @@ export const dasboardNavigation = [
     path: "/dashboard/disputed",
   },
   {
-    id: 7,
-    name: "My Proposals",
-    icon: "flaticon-document",
-    path: "/proposal",
-  },
-  {
-    id: 8,
-    name: "Saved",
-    icon: "flaticon-like",
-    path: "/saved",
-  },
-  {
-    id: 9,
-    name: "Message",
-    icon: "flaticon-chat",
-    path: "/message",
-  },
-  {
-    id: 10,
-    name: "Reviews",
-    icon: "flaticon-review-1",
-    path: "/reviews",
-  },
-  {
-    id: 11,
-    name: "Invoice",
-    icon: "flaticon-receipt",
-    path: "/invoice",
-  },
-  {
-    id: 12,
-    name: "Payouts",
-    icon: "flaticon-dollar",
-    path: "/payouts",
-  },
-  {
-    id: 13,
-    name: "Statements",
-    icon: "flaticon-web",
-    path: "/statements",
-  },
-  {
     id: 14,
     name: "Manage Services",
     icon: "flaticon-presentation",
