@@ -20,10 +20,7 @@ export default function DashboardSidebar() {
       <div className="dashboard__sidebar d-none d-lg-block">
         <div className="dashboard_sidebar_list">
           <p className="fz15 fw400 ff-heading pl30">Start</p>
-          {dasboardNavigation
-            .slice(0, 8)
-            .filter((item) => !hiddenDashboardMenuPaths.has(item.path))
-            .map((item, i) => (
+          {dasboardNavigation.slice(0, 13).map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
@@ -39,10 +36,7 @@ export default function DashboardSidebar() {
 
           <p className="fz15 fw400 ff-heading pl30 mt30">Organize and Manage</p>
 
-          {dasboardNavigation
-            .slice(8, 14)
-            .filter((item) => !hiddenDashboardMenuPaths.has(item.path))
-            .map((item, i) => (
+          {dasboardNavigation.slice(13, 24).map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
@@ -57,7 +51,7 @@ export default function DashboardSidebar() {
           ))}
 
           <p className="fz15 fw400 ff-heading pl30 mt30">Account</p>
-          {dasboardNavigation.slice(14, 16).map((item,i) => (
+          {dasboardNavigation.slice(24, 26).map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}

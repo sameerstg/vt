@@ -4,11 +4,10 @@
   "private": true,
   "engine": "yarn",
   "scripts": {
-    "predev": "node -e \"const fs=require('fs');fs.rmSync('.next-dev',{recursive:true,force:true});\"",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "node scripts/run-next.js dev",
+    "build": "node scripts/run-next.js build",
+    "start": "node scripts/run-next.js start",
+    "lint": "node scripts/run-next.js lint"
   },
   "dependencies": {
     "@babel/core": "^7.27.1",
