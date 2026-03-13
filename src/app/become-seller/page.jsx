@@ -17,9 +17,8 @@ export default function page() {
         <>
             <Header20 />
             <Breadcumb1
-                title={"Work Your Way"}
-                brief={` Give your visitor a smooth online
-                                        experience with a solid UX design.`}
+                title={"Work Smarter"}
+                brief={` Use our platform to manage services easily and efficiently.`}
                 isBtnActive={true}
             />
             <AboutArea1 />

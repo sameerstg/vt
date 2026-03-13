@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import DashboardNavigation from "../header/DashboardNavigation";
 import { getWorkerTasksBySection } from "@/data/workerTasks";
 import TaskDiscoveryPanel from "@/components/dashboard-shared/TaskDiscoveryPanel";
@@ -34,18 +35,42 @@ const sectionLabelMap = {
 
 export default function TasksInfo({
   initialFilter = "available",
-  pageTitle = "Tasks",
+  pageTitle = "Active Task",
   pageDescription = "",
 }) {
-  const [activeFilter, setActiveFilter] = useState(initialFilter);
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+
+  const [activeFilter, setActiveFilter] = useState(tabParam || initialFilter);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const tasksPerPage = 5;
 
+  const [category, setCategory] = useState("all");
+  const [location, setLocation] = useState("all");
+  const [taskType, setTaskType] = useState("all");
+  const [budgetModel, setBudgetModel] = useState("all");
+
   useEffect(() => {
-    setActiveFilter(initialFilter);
+    if (tabParam) {
+      setActiveFilter(tabParam);
+    } else {
+      setActiveFilter(initialFilter);
+    }
     setCurrentPage(1);
-  }, [initialFilter]);
+    setCategory("all");
+    setLocation("all");
+    setTaskType("all");
+    setBudgetModel("all");
+  }, [initialFilter, tabParam]);
+
+  useEffect(() => {
+    setCategory("all");
+    setLocation("all");
+    setTaskType("all");
+    setBudgetModel("all");
+    setCurrentPage(1);
+  }, [activeFilter]);
 
   const stats = useMemo(() => {
     const available = getWorkerTasksBySection("available").length;
@@ -68,17 +93,45 @@ export default function TasksInfo({
     [activeFilter]
   );
 
+  // Dynamic Options based on current section's tasks
+  const categoryOptions = useMemo(
+    () => ["all", ...new Set(baseTasks.map((item) => item.category).filter(Boolean))],
+    [baseTasks]
+  );
+
+  const locationOptions = useMemo(
+    () => ["all", ...new Set(baseTasks.map((item) => item.location).filter(Boolean))],
+    [baseTasks]
+  );
+
+  const taskTypeOptions = useMemo(
+    () => ["all", ...new Set(baseTasks.map((item) => item.taskType).filter(Boolean))],
+    [baseTasks]
+  );
+
+  const budgetModelOptions = useMemo(
+    () => ["all", ...new Set(baseTasks.map((item) => item.budgetModel).filter(Boolean))],
+    [baseTasks]
+  );
+
   const filteredTasks = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    return baseTasks.filter((task) => {
-      if (!query) return true;
-      return (
-        task.title.toLowerCase().includes(query) ||
-        task.client.toLowerCase().includes(query) ||
-        task.skills.join(" ").toLowerCase().includes(query)
+    return baseTasks
+      .filter((task) => {
+        if (!query) return true;
+        return (
+          task.title.toLowerCase().includes(query) ||
+          task.client.toLowerCase().includes(query) ||
+          (task.skills && task.skills.join(" ").toLowerCase().includes(query))
+        );
+      })
+      .filter((item) => (category === "all" ? true : item.category === category))
+      .filter((item) => (location === "all" ? true : item.location === location))
+      .filter((item) => (taskType === "all" ? true : item.taskType === taskType))
+      .filter((item) =>
+        budgetModel === "all" ? true : item.budgetModel === budgetModel
       );
-    });
-  }, [baseTasks, searchQuery]);
+  }, [baseTasks, searchQuery, category, location, taskType, budgetModel]);
 
   const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
 
@@ -181,6 +234,77 @@ export default function TasksInfo({
           </div>
         </div>
 
+        {/* REQUIRED FILTERS PANEL FOR OTHER SECTIONS */}
+        {(activeFilter === "applied" || activeFilter === "assigned" || activeFilter === "in_progress" || activeFilter === "completed") && (
+          <div className="col-xl-12">
+            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+              <h5 className="title mb20 font-size-15">Required Filters</h5>
+
+              <div className="row g-3">
+                <div className="col-md-6 col-xl-3">
+                  <label className="form-label fw500">Category</label>
+                  <select
+                    className="form-select"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    {categoryOptions.map((item) => (
+                      <option key={item} value={item}>
+                        {item === "all" ? "All Categories" : item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-md-6 col-xl-3">
+                  <label className="form-label fw500">Location</label>
+                  <select
+                    className="form-select"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  >
+                    {locationOptions.map((item) => (
+                      <option key={item} value={item}>
+                        {item === "all" ? "All Locations" : item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-md-6 col-xl-3">
+                  <label className="form-label fw500">Task Type</label>
+                  <select
+                    className="form-select"
+                    value={taskType}
+                    onChange={(e) => setTaskType(e.target.value)}
+                  >
+                    {taskTypeOptions.map((item) => (
+                      <option key={item} value={item}>
+                        {item === "all" ? "All Task Types" : item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-md-6 col-xl-3">
+                  <label className="form-label fw500">Budget Model</label>
+                  <select
+                    className="form-select"
+                    value={budgetModel}
+                    onChange={(e) => setBudgetModel(e.target.value)}
+                  >
+                    {budgetModelOptions.map((item) => (
+                      <option key={item} value={item}>
+                        {item === "all" ? "All Budget Models" : item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="col-xl-12">
           {activeFilter === "available" ? (
             <TaskDiscoveryPanel
@@ -205,6 +329,7 @@ export default function TasksInfo({
                       <th scope="col">Budget</th>
                       <th scope="col">Deadline</th>
                       <th scope="col">Skills</th>
+                      {(activeFilter === "applied" || activeFilter === "assigned" || activeFilter === "completed" || activeFilter === "in_progress") && <th scope="col">Action</th>}
                     </tr>
                   </thead>
                   <tbody className="t-body">
@@ -218,13 +343,12 @@ export default function TasksInfo({
                               task.title
                             )}`;
 
-                      // sirf Available aur In Progress clickable honge
-                      const allowNavigation =
-                        activeFilter === "available" || activeFilter === "in_progress";
+                      // Navigation must only happen through explicit buttons
+                      const allowNavigation = false;
 
                       const openDetail = () => {
                         if (!allowNavigation) return;
-                        window.location.href = detailHref;
+                        // detailHref logic removed as it's no longer used for row clicks
                       };
 
                       return (
@@ -248,12 +372,33 @@ export default function TasksInfo({
                           <td>{task.budget}</td>
                           <td>{task.deadline}</td>
                           <td>{task.skills.join(", ")}</td>
+                          {(activeFilter === "applied" || activeFilter === "assigned" || activeFilter === "completed" || activeFilter === "in_progress") && (
+                            <td>
+                              {activeFilter === "in_progress" ? (
+                                <Link
+                                  href={`/worker-dashboard/manage-projects?taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}`}
+                                  className="ud-btn btn-thm"
+                                  style={{ padding: "5px 15px", fontSize: "12px" }}
+                                >
+                                  Submit Work<i className="fal fa-arrow-right-long ms-1" />
+                                </Link>
+                              ) : (
+                                <Link
+                                  href={`/worker-dashboard/${activeFilter === "applied" ? "applied-tasks" : activeFilter === "assigned" ? "assigned-tasks" : "completed-tasks"}/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`}
+                                  className="ud-btn btn-thm"
+                                  style={{ padding: "5px 15px", fontSize: "12px" }}
+                                >
+                                  Details<i className="fal fa-arrow-right-long" />
+                                </Link>
+                              )}
+                            </td>
+                          )}
                         </tr>
                       );
                     })}
                     {!paginatedTasks.length && !filteredTasks.length && (
                       <tr>
-                        <td className="text-center py-5" colSpan={5}>
+                        <td className="text-center py-5" colSpan={(activeFilter === "applied" || activeFilter === "assigned" || activeFilter === "completed") ? 6 : 5}>
                           <p className="mb-0 text">No tasks found for this filter/search combination.</p>
                         </td>
                       </tr>

@@ -185,6 +185,7 @@ export default function TaskDiscoveryPanel({
                   <th>Task Type</th>
                   <th>Budget Model</th>
                   <th>Budget</th>
+                  <th>Action</th>
                 </tr>
               </thead>
 
@@ -193,16 +194,6 @@ export default function TaskDiscoveryPanel({
                   <tr
                     key={task.id}
                     className="task-row-hover"
-                    role="button"
-                    tabIndex={0}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => openProposalPage(task)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        openProposalPage(task);
-                      }
-                    }}
                   >
                     <td>{task.title}</td>
                     <td>{task.category}</td>
@@ -210,6 +201,34 @@ export default function TaskDiscoveryPanel({
                     <td>{task.taskType}</td>
                     <td>{task.budgetModel}</td>
                     <td>{task.budget}</td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const query = new URLSearchParams({
+                              taskId: task.id,
+                              title: task.title,
+                            });
+                            router.push(`/worker-dashboard/available-tasks/details?${query.toString()}`);
+                          }}
+                          className="ud-btn btn-light-default"
+                          style={{ padding: "5px 15px", fontSize: "12px" }}
+                        >
+                          Details
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openProposalPage(task);
+                          }}
+                          className="ud-btn btn-thm"
+                          style={{ padding: "5px 15px", fontSize: "12px" }}
+                        >
+                          Apply<i className="fal fa-arrow-right-long ms-1" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
 

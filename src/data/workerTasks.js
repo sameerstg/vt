@@ -1,23 +1,28 @@
 export const workerSectionConfig = {
   available: {
     title: "Available Tasks",
-    path: "/worker-dashboard/available-tasks",
+    path: "/worker-dashboard/tasks?tab=available",
+    description: "Browse and apply for new opportunities matching your profile."
   },
   applied: {
     title: "Applied Tasks",
-    path: "/worker-dashboard/applied-tasks",
+    path: "/worker-dashboard/tasks?tab=applied",
+    description: "Track the status of proposals you've submitted to clients."
   },
   assigned: {
     title: "Assigned Tasks",
-    path: "/worker-dashboard/assigned-tasks",
+    path: "/worker-dashboard/tasks?tab=assigned",
+    description: "Review tasks currently assigned to you and waiting for execution."
   },
   in_progress: {
     title: "In Progress",
-    path: "/worker-dashboard/in-progress",
+    path: "/worker-dashboard/tasks?tab=in_progress",
+    description: "Manage milestones and work updates for your active projects."
   },
   completed: {
     title: "Completed",
-    path: "/worker-dashboard/completed-tasks",
+    path: "/worker-dashboard/tasks?tab=completed",
+    description: "Review and access deliverables for your finished contracts."
   },
   payment_history: {
     title: "Payment History",
@@ -35,6 +40,10 @@ export const workerTasks = [
     skills: ["Figma", "UI/UX"],
     status: "available",
     isEligible: true,
+    category: "Design",
+    location: "United States",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
   {
     id: 1002,
@@ -45,6 +54,10 @@ export const workerTasks = [
     skills: ["React", "Chart.js"],
     status: "available",
     isEligible: true,
+    category: "Development",
+    location: "Remote",
+    taskType: "Hourly",
+    budgetModel: "Hourly",
   },
   {
     id: 1003,
@@ -55,6 +68,10 @@ export const workerTasks = [
     skills: ["Product Design", "UX Writing"],
     status: "available",
     isEligible: false,
+    category: "Design",
+    location: "Canada",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
   {
     id: 1004,
@@ -65,6 +82,10 @@ export const workerTasks = [
     skills: ["WordPress", "PHP"],
     status: "applied",
     isEligible: true,
+    category: "Development",
+    location: "United Kingdom",
+    taskType: "Fixed",
+    budgetModel: "Fixed Price",
   },
   {
     id: 1005,
@@ -75,6 +96,10 @@ export const workerTasks = [
     skills: ["QA", "Test Cases"],
     status: "applied",
     isEligible: true,
+    category: "QA",
+    location: "Remote",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
   {
     id: 1006,
@@ -85,6 +110,10 @@ export const workerTasks = [
     skills: ["HTML", "Responsive Email"],
     status: "assigned",
     isEligible: true,
+    category: "Development",
+    location: "United Arab Emirates",
+    taskType: "Fixed",
+    budgetModel: "Fixed Price",
   },
   {
     id: 1007,
@@ -95,6 +124,10 @@ export const workerTasks = [
     skills: ["Node.js", "REST"],
     status: "assigned",
     isEligible: true,
+    category: "Development",
+    location: "United States",
+    taskType: "Hourly",
+    budgetModel: "Hourly",
   },
   {
     id: 1008,
@@ -105,6 +138,10 @@ export const workerTasks = [
     skills: ["Next.js", "TypeScript"],
     status: "in_progress",
     isEligible: true,
+    category: "Development",
+    location: "Remote",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
   {
     id: 1009,
@@ -115,6 +152,10 @@ export const workerTasks = [
     skills: ["WCAG", "Audits"],
     status: "in_progress",
     isEligible: true,
+    category: "QA",
+    location: "United Kingdom",
+    taskType: "Hourly",
+    budgetModel: "Hourly",
   },
   {
     id: 1010,
@@ -125,6 +166,10 @@ export const workerTasks = [
     skills: ["Vercel", "CI/CD"],
     status: "completed",
     isEligible: true,
+    category: "Development",
+    location: "United States",
+    taskType: "Fixed",
+    budgetModel: "Fixed Price",
   },
   {
     id: 1011,
@@ -135,6 +180,10 @@ export const workerTasks = [
     skills: ["Docs", "Product"],
     status: "completed",
     isEligible: true,
+    category: "Writing",
+    location: "Remote",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
 ];
 
