@@ -25,7 +25,6 @@ export default function MyProfileInfo() {
             <WorkExperience />
             <Award />
             <ChangePassword />
-            <ConfirmPassword />
           </div>
         </div>
       </div>

@@ -1,15 +1,40 @@
 [
   {
     "id": "client-demo-1",
-    "name": "Client Demo",
+    "name": "Sarah Johnson",
     "email": "client@veritask.demo",
     "password": "Client@123",
     "role": "client",
-    "profileImage": "/images/front-view-business-woman-suit_23-2148603018.jpg"
+    "profileImage": "/images/front-view-business-woman-suit_23-2148603018.jpg",
+    "phone": "+12345678890",
+    "bio": "Hello",
+    "hourlyRate": "80",
+    "gender": "female",
+    "country": "germany",
+    "city": "berlin",
+    "language": "german",
+    "languageLevel": "advanced",
+    "skills": [
+      {
+        "id": "skill-1773380078605-b86ngv",
+        "skill": "programmer",
+        "point": "60"
+      },
+      {
+        "id": "skill-1773380078605-d8x1kt",
+        "skill": "designer",
+        "point": "70"
+      },
+      {
+        "id": "skill-1773380078605-nisrx6",
+        "skill": "ui-ux",
+        "point": "90"
+      }
+    ]
   },
   {
     "id": "worker-demo-1",
-    "name": "Worker",
+    "name": "John Deo",
     "email": "abc@gmail.com",
     "password": "abc1234",
     "role": "worker",
@@ -79,7 +104,7 @@
   },
   {
     "id": "contractor-demo-1",
-    "name": "Contractor Demo",
+    "name": "Emily Davis",
     "email": "contractor@veritask.demo",
     "password": "Contractor@123",
     "role": "contractor",
@@ -120,7 +145,7 @@
   },
   {
     "id": "client-user-1773125180382",
-    "name": "John Deo",
+    "name": "Jeff Bezos",
     "email": "johndeo@gmail.com",
     "password": "JohnDeo ",
     "role": "client",

@@ -2,19 +2,19 @@ import ClientSectionLayout from "./ClientSectionLayout";
 
 const proposals = [
   {
-    name: "Areeba Khan",
+    name: "Emma Johnson",
     quote: "$320",
     eta: "4 days",
     text: "I can deliver a modern, conversion-focused landing page with clean handoff.",
   },
   {
-    name: "Bilal Tariq",
+    name: "James Wilson",
     quote: "$300",
     eta: "5 days",
     text: "Strong UI detail and responsive implementation with milestone updates.",
   },
   {
-    name: "Mariam Siddique",
+    name: "Olivia Brown",
     quote: "$360",
     eta: "3 days",
     text: "Fast delivery with clear communication and revision support.",
@@ -38,7 +38,7 @@ export default function TaskDetailsInfo() {
       message: "Please prioritize hero section and mobile spacing in this revision.",
     },
     {
-      sender: "Hassan Riaz",
+      sender: "Daniel Carter",
       time: "Mar 02, 2026 - 10:24 AM",
       message: "Noted. I will share updated draft with revised spacing by evening.",
     },
@@ -116,7 +116,7 @@ export default function TaskDetailsInfo() {
                 className="rounded-circle me-3"
               />
               <div>
-                <h6 className="mb5">Hassan Riaz</h6>
+                <h6 className="mb5">Daniel Carter</h6>
                 <p className="text mb0">UI/UX Specialist</p>
               </div>
             </div>

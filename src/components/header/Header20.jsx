@@ -58,8 +58,8 @@ export default function Header20() {
                                         href="/"
                                     >
                                         <Image
-                                            height={40}
-                                            width={133}
+                                            height={30}
+                                            width={123}
                                             className="w-100 h-100 object-fit-contain"
                                             src="/images/logo.png"
                                             alt="Header Logo"
@@ -73,7 +73,7 @@ export default function Header20() {
                             <div className="col-auto">
                                 <div className="d-flex align-items-center header-right-cluster">
                                     <Navigation />
-                                    {(!isSessionReady || !session) && (
+                                    {/* {(!isSessionReady || !session) && (
                                         <a
                                             className="login-info bdrl1 pl15-lg pl30"
                                             data-bs-toggle="modal"
@@ -81,7 +81,7 @@ export default function Header20() {
                                         >
                                             <span className="flaticon-loupe" />
                                         </a>
-                                    )}
+                                    )} */}
                                     {isSessionReady && !session && (
                                         <Link
                                             className={`login-info mx15-lg mx30 ${
@@ -95,7 +95,7 @@ export default function Header20() {
                                             <span className="d-none d-xl-inline-block">
                                                 Become a
                                             </span>{" "}
-                                            Worker
+                                           Contractor &amp; Worker
                                         </Link>
                                     )}
                                     {!isSessionReady ? null : session ? (
@@ -131,7 +131,7 @@ export default function Header20() {
                                                 }`}
                                                 href={signInHref}
                                             >
-                                                Sign in
+                                                Sign in 
                                             </Link>
                                         </>
                                     )}

@@ -28,7 +28,7 @@ const popular = [
   "Engineer",
 ];
 
-const hero = ["/images/home/slide-1.jpg", "/images/home/slide-2.jpg", "/images/home/slide-4.png"];
+const hero = ["/images/home/slide-5.jpg", "/images/home/slide-2.jpg", "/images/home/slide-4.png"];
 
 export default function Hero1() {
   const [getSelectedRole, setSelectedRole] = useState(null);
@@ -101,7 +101,7 @@ export default function Hero1() {
                     <br className="d-none d-lg-block" />
                     any job, online.
                   </h3>
-                  <p className="banner-text text-white ff-heading mb25 animate-up-3">
+                  <p className="banner-text text-white ff-heading mb30 animate-up-3">
                     Millions of people use freeio.com to turn their ideas into
                     reality.
                   </p>

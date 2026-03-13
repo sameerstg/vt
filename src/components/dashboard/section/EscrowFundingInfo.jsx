@@ -25,7 +25,7 @@ export default function EscrowFundingInfo() {
             <div className="row">
               <div className="col-sm-6">
                 <p className="mb8"><span className="fw500">Task:</span> Landing Page Redesign</p>
-                <p className="mb8"><span className="fw500">Worker:</span> Hassan Riaz</p>
+                <p className="mb8"><span className="fw500">Worker:</span> Daniel Carter</p>
                 <p className="mb8"><span className="fw500">Budget Model:</span> Milestone</p>
               </div>
               <div className="col-sm-6">

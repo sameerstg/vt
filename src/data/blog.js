@@ -29,7 +29,7 @@ export const blog1 = [
   },
   {
     id: 3,
-    img: "/images/blog/blog-20.jpg",
+    img: "/images/blog/blog-2.jpg",
     date: "December 2, 2022",
     title: `Start an online business and work
         from home right now`,
