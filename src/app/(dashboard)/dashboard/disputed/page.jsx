@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import DisputedInfo from "@/components/dashboard/section/DisputedInfo";
+import ClientTaskManagementInfo from "@/components/dashboard/section/ClientTaskManagementInfo";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
@@ -11,7 +11,7 @@ export default function Page() {
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <DisputedInfo />
+        <ClientTaskManagementInfo initialTab="disputed" />
       </DashboardLayout>
     </>
   );

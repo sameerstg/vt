@@ -1,32 +1,26 @@
 export const workerSectionConfig = {
   available: {
     title: "Available Tasks",
-    description: "Tasks you are eligible to apply for.",
     path: "/worker-dashboard/available-tasks",
   },
   applied: {
     title: "Applied Tasks",
-    description: "Tasks where you already submitted an application.",
     path: "/worker-dashboard/applied-tasks",
   },
   assigned: {
     title: "Assigned Tasks",
-    description: "Tasks assigned to you and ready to start.",
     path: "/worker-dashboard/assigned-tasks",
   },
   in_progress: {
     title: "In Progress",
-    description: "Tasks currently being worked on.",
     path: "/worker-dashboard/in-progress",
   },
   completed: {
     title: "Completed",
-    description: "Tasks delivered and approved.",
     path: "/worker-dashboard/completed-tasks",
   },
   payment_history: {
     title: "Payment History",
-    description: "Completed payment and payout records.",
     path: "/worker-dashboard/payment-history",
   },
 };

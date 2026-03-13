@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DashboardNavigation from "../header/DashboardNavigation";
 
 const defaultProfileForm = {
   fullName: "Alex Howl",
@@ -121,9 +120,6 @@ export default function MyProfileInfo() {
   return (
     <div className="dashboard__content hover-bgc-color admin-my-profile-page">
       <div className="row pb40">
-        <div className="col-lg-12">
-          <DashboardNavigation />
-        </div>
         <div className="col-lg-12">
           <div className="dashboard_title_area">
             <h2>My Profile</h2>

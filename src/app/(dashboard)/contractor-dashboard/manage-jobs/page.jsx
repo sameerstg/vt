@@ -1,10 +1,10 @@
 import DashboardLayout from "@/components/dashboard-contractor/DashboardLayout";
-import ManageJobInfo from "@/components/dashboard-contractor/section/ManageJobInfo";
+import TaskDiscoveryInfo from "@/components/dashboard-contractor/section/TaskDiscoveryInfo";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Manage Job",
+  title: "Contractor Dashboard | Task Discovery",
 };
 
 export default function page() {
@@ -13,9 +13,8 @@ export default function page() {
     
     <MobileNavigation2 />
       <DashboardLayout>
-        <ManageJobInfo />
+        <TaskDiscoveryInfo />
       </DashboardLayout>
     </>
   );
 }
-

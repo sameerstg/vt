@@ -29,7 +29,7 @@ export const blog1 = [
   },
   {
     id: 3,
-    img: "/images/blog/blog-3.jpg",
+    img: "/images/blog/blog-20.jpg",
     date: "December 2, 2022",
     title: `Start an online business and work
         from home right now`,
@@ -87,7 +87,7 @@ export const blog1 = [
   },
   {
     id: 7,
-    img: "/images/blog/blog-7.jpg",
+    img: "/images/blog/blog-20.jpg",
     date: "December 2, 2022",
     title: "Hey Job Seeker, It’s Time To Get Up And Get Hired",
     brief: "A complete guide to starting a small business online",

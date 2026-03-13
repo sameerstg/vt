@@ -13,14 +13,6 @@ export default function ProfileDetails() {
     option: "Select",
     value: null,
   });
-  const [getSpecialization, setSpecialization] = useState({
-    option: "Select",
-    value: null,
-  });
-  const [getType, setType] = useState({
-    option: "Select",
-    value: null,
-  });
   const [getCountry, setCountry] = useState({
     option: "Select",
     value: null,
@@ -53,12 +45,6 @@ export default function ProfileDetails() {
     setGender({ option, value });
   };
 
-  const specializationHandler = (option, value) => {
-    setSpecialization({ option, value });
-  };
-  const typeHandler = (option, value) => {
-    setType({ option, value });
-  };
   const countryHandler = (option, value) => {
     setCountry({ option, value });
   };
@@ -160,18 +146,6 @@ export default function ProfileDetails() {
               </div>
               <div className="col-sm-6">
                 <div className="mb20">
-                  <label className="heading-color ff-heading fw500 mb10">
-                    Tagline
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="i will"
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
                   <SelectInput
                     label="Hourly Rate"
                     defaultSelect={getHourly}
@@ -201,46 +175,6 @@ export default function ProfileDetails() {
                       { option: "Other", value: "other" },
                     ]}
                     handler={genderHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Specialization"
-                    defaultSelect={getSpecialization}
-                    data={[
-                      { option: "Male", value: "male" },
-                      {
-                        option: "Female",
-                        value: "female",
-                      },
-                      { option: "Other", value: "other" },
-                    ]}
-                    handler={specializationHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Type"
-                    defaultSelect={getType}
-                    data={[
-                      {
-                        option: "Type 1",
-                        value: "type-1",
-                      },
-                      {
-                        option: "Type 2",
-                        value: "type-2",
-                      },
-                      {
-                        option: "Type 3",
-                        value: "type-3",
-                      },
-                    ]}
-                    handler={typeHandler}
                   />
                 </div>
               </div>

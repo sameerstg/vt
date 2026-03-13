@@ -1,9 +1,12 @@
 import DashboardLayout from "@/components/dashboard-worker/DashboardLayout";
 import WorkerTaskSectionInfo from "@/components/dashboard-worker/section/WorkerTaskSectionInfo";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
+import { workerSectionConfig } from "@/data/workerTasks";
+
+const sectionKey = "in_progress";
 
 export const metadata = {
-  title: "Worker Dashboard | In Progress",
+  title: `Worker Dashboard | ${workerSectionConfig[sectionKey].title}`,
 };
 
 export default function page() {
@@ -11,9 +14,8 @@ export default function page() {
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <WorkerTaskSectionInfo sectionKey="in_progress" />
+        <WorkerTaskSectionInfo sectionKey={sectionKey} />
       </DashboardLayout>
     </>
   );
 }
-

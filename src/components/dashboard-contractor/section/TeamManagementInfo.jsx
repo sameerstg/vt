@@ -180,7 +180,6 @@ export default function TeamManagementInfo() {
         <div className="col-lg-12">
           <div className="dashboard_title_area">
             <h2>Team Management</h2>
-            <p className="text">Create and manage team members.</p>
           </div>
         </div>
       </div>

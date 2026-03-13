@@ -1,4 +1,3 @@
-import DashboardNavigation from "../header/DashboardNavigation";
 import Award from "./Award";
 import ChangePassword from "./ChangePassword";
 import ConfirmPassword from "./ConfirmPassword";
@@ -12,13 +11,9 @@ export default function MyProfileInfo() {
     <>
       <div className="dashboard__content hover-bgc-color">
         <div className="row pb40">
-          <div className="col-lg-12">
-            <DashboardNavigation />
-          </div>
           <div className="col-lg-9">
             <div className="dashboard_title_area">
               <h2>My Profile</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
         </div>
@@ -30,7 +25,6 @@ export default function MyProfileInfo() {
             <WorkExperience />
             <Award />
             <ChangePassword />
-            <ConfirmPassword />
           </div>
         </div>
       </div>

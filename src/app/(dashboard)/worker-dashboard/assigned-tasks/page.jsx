@@ -1,9 +1,12 @@
 import DashboardLayout from "@/components/dashboard-worker/DashboardLayout";
-import WorkerTaskSectionInfo from "@/components/dashboard-worker/section/WorkerTaskSectionInfo";
+import TasksInfo from "@/components/dashboard-worker/section/TasksInfo";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
+import { workerSectionConfig } from "@/data/workerTasks";
+
+const sectionKey = "assigned";
 
 export const metadata = {
-  title: "Worker Dashboard | Assigned Tasks",
+  title: `Worker Dashboard | ${workerSectionConfig[sectionKey].title}`,
 };
 
 export default function page() {
@@ -11,9 +14,12 @@ export default function page() {
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <WorkerTaskSectionInfo sectionKey="assigned" />
+        <TasksInfo
+          initialFilter="assigned"
+          pageTitle="Assigned Tasks"
+          pageDescription="Same task flow view with assigned filter applied."
+        />
       </DashboardLayout>
     </>
   );
 }
-

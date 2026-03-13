@@ -1,10 +1,20 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  getRoleFlow,
+  registerMockUser,
+  setAuthSession,
+} from "@/utils/auth/mockAuth";
+
+const ALLOWED_ROLES = ["client", "worker", "contractor"];
 
 export default function WorkerContractorRegisterForm() {
-  const [role, setRole] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [role, setRole] = useState("client");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -14,6 +24,15 @@ export default function WorkerContractorRegisterForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [toasts, setToasts] = useState([]);
+
+  useEffect(() => {
+    const roleFromQuery = (searchParams.get("role") || "").toLowerCase();
+    if (ALLOWED_ROLES.includes(roleFromQuery)) {
+      setRole(roleFromQuery);
+      return;
+    }
+    setRole("client");
+  }, [searchParams]);
 
   const addToast = (type, message) => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -34,7 +53,7 @@ export default function WorkerContractorRegisterForm() {
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validate();
     setFieldErrors(errors);
@@ -42,8 +61,28 @@ export default function WorkerContractorRegisterForm() {
       addToast("error", "Please correct the errors in the form.");
       return;
     }
-    addToast("success", "Registration submitted successfully.");
-    // place submission logic here
+
+    const result = await registerMockUser({
+      name: fullName,
+      email,
+      phone,
+      password,
+      role,
+    });
+
+    if (!result.ok) {
+      setFieldErrors((prev) => ({ ...prev, email: result.message }));
+      addToast("error", result.message);
+      return;
+    }
+
+    setAuthSession(result.user);
+    addToast("success", "Registration successful. Redirecting to dashboard...");
+
+    const flow = getRoleFlow(result.user.role);
+    setTimeout(() => {
+      router.push(flow?.dashboardPath || "/seller/login");
+    }, 600);
   };
 
   const inputClass = (name) =>
@@ -175,6 +214,7 @@ export default function WorkerContractorRegisterForm() {
               onChange={(e) => setRole(e.target.value)}
             >
               <option value="">Select role</option>
+              <option value="client">Client</option>
               <option value="worker">Worker</option>
               <option value="contractor">Contractor</option>
             </select>

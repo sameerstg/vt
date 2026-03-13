@@ -1,0 +1,48 @@
+{
+  "client": {
+    "dashboardPath": "/dashboard",
+    "allowedPathPrefix": "/dashboard",
+    "sections": [
+      "Active Tasks",
+      "Pending Escrow Funding",
+      "In Progress",
+      "Completed",
+      "Disputed",
+      "Notifications"
+    ]
+  },
+  "worker": {
+    "dashboardPath": "/worker-dashboard",
+    "allowedPathPrefix": "/worker-dashboard",
+    "sections": [
+      "Available Tasks",
+      "Applied Tasks",
+      "Assigned Tasks",
+      "In Progress",
+      "Completed",
+      "Payment History"
+    ]
+  },
+  "contractor": {
+    "dashboardPath": "/contractor-dashboard",
+    "allowedPathPrefix": "/contractor-dashboard",
+    "sections": [
+      "Available Contractor Tasks",
+      "Assigned Tasks",
+      "Team Overview",
+      "Payout Distribution",
+      "Disputes"
+    ]
+  },
+  "admin": {
+    "dashboardPath": "/admin-dashboard",
+    "allowedPathPrefix": "/admin-dashboard",
+    "sections": [
+      "Dashboard",
+      "User Management",
+      "Task Monitoring",
+      "Financial Overview",
+      "Dispute Resolution"
+    ]
+  }
+}

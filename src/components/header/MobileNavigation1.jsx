@@ -1,7 +1,45 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  AUTH_SESSION_EVENT,
+  clearAuthSession,
+  getAuthSession,
+  getRoleFlow,
+} from "@/utils/auth/mockAuth";
 
 export default function MobileNavigation1() {
+  const router = useRouter();
+  const [session, setSession] = useState(null);
+  const mobileUserLabel = useMemo(() => {
+    if (!session?.name) return "";
+    return session.name.split(" ")[0];
+  }, [session]);
+  const dashboardHref = useMemo(() => {
+    if (!session?.role) return "/seller/login";
+    return getRoleFlow(session.role)?.dashboardPath || "/seller/login";
+  }, [session]);
+
+  useEffect(() => {
+    const syncSession = () => setSession(getAuthSession());
+    syncSession();
+    window.addEventListener("storage", syncSession);
+    window.addEventListener(AUTH_SESSION_EVENT, syncSession);
+
+    return () => {
+      window.removeEventListener("storage", syncSession);
+      window.removeEventListener(AUTH_SESSION_EVENT, syncSession);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    clearAuthSession();
+    router.push("/seller/login");
+  };
+
   return (
     <>
       <div className="mobilie_header_nav stylehome1">
@@ -18,9 +56,24 @@ export default function MobileNavigation1() {
                   />
                 </Link>
                 <div className="right-side text-end">
-                  <Link className="text-white" href="/login">
-                    join
-                  </Link>
+                  {session ? (
+                    <>
+                      <Link className="text-white" href={dashboardHref}>
+                        {mobileUserLabel}
+                      </Link>
+                      <button
+                        type="button"
+                        className="text-white border-0 bg-transparent ml10"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <Link className="text-white" href="/login">
+                      join
+                    </Link>
+                  )}
                   <a
                     className="menubar ml30"
                     data-bs-toggle="offcanvas"

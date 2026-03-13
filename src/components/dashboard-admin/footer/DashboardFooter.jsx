@@ -9,7 +9,7 @@ export default function DashboardFooter() {
                         <div className="col-auto">
                             <div className="copyright-widget">
                                 <p className="mb-md-0">
-                                    © Appvertices. 2026 . All rights
+                                    © Veritask. 2026 . All rights
                                     reserved.
                                 </p>
                             </div>

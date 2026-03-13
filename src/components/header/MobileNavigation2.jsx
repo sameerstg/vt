@@ -1,13 +1,23 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { AUTH_SESSION_EVENT, getAuthSession } from "@/utils/auth/mockAuth";
 
 export default function MobileNavigation2() {
-  const path = usePathname();
-  const isSellerFlow =
-    path === "/become-seller" || path.startsWith("/seller/");
-  const joinHref = isSellerFlow ? "/seller/register" : "/register";
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    const syncSession = () => setSession(getAuthSession());
+    syncSession();
+    window.addEventListener("storage", syncSession);
+    window.addEventListener(AUTH_SESSION_EVENT, syncSession);
+
+    return () => {
+      window.removeEventListener("storage", syncSession);
+      window.removeEventListener(AUTH_SESSION_EVENT, syncSession);
+    };
+  }, []);
 
   return (
     <>
@@ -25,7 +35,7 @@ export default function MobileNavigation2() {
                   />
                 </Link>
                 <div className="right-side text-end">
-                  <Link href={joinHref}>join</Link>
+                  {!session && <Link href="/register">join</Link>}
                   <a
                     className="menubar ml30"
                     data-bs-toggle="offcanvas"

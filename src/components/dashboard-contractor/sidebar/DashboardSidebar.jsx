@@ -1,32 +1,45 @@
 "use client";
 import { dasboardNavigation } from "@/data/dashboardContractor";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { clearAuthSession } from "@/utils/auth/mockAuth";
 
 export default function DashboardSidebar() {
   const path = usePathname();
-  const hiddenContractorMenuPaths = new Set([
-    "/contractor-dashboard/saved",
-    "/contractor-dashboard/reviews",
-    "/contractor-dashboard/invoice",
-    "/contractor-dashboard/payouts",
-    "/contractor-dashboard/statements",
-    "/contractor-dashboard/add-services",
-    "/contractor-dashboard/create-projects",
+  const router = useRouter();
+  const startPaths = new Set(["/contractor-dashboard"]);
+  const organizePaths = new Set([
+    "/contractor-dashboard/manage-services",
+    "/contractor-dashboard/manage-jobs",
+    "/contractor-dashboard/manage-projects",
+    "/contractor-dashboard/team-management",
+    "/contractor-dashboard/payment-distribution",
+    "/contractor-dashboard/dispute-submission",
   ]);
+  const accountPaths = new Set([
+    "/contractor-dashboard/my-profile",
+    "/login",
+  ]);
+
+  const handleNavClick = (event, item) => {
+    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";
+    if (!isLogout) return;
+    event.preventDefault();
+    clearAuthSession();
+    router.push("/seller/login");
+  };
 
   return (
     <>
       <div className="dashboard__sidebar d-none d-lg-block">
         <div className="dashboard_sidebar_list">
-          <p className="fz15 fw400 ff-heading pl30">Start</p>
           {dasboardNavigation
-            .slice(0, 8)
-            .filter((item) => !hiddenContractorMenuPaths.has(item.path))
+            .filter((item) => startPaths.has(item.path))
             .map((item, i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}
@@ -37,15 +50,15 @@ export default function DashboardSidebar() {
             </div>
           ))}
 
-          <p className="fz15 fw400 ff-heading pl30 mt30">Organize and Manage</p>
+          
 
           {dasboardNavigation
-            .slice(8, 16)
-            .filter((item) => !hiddenContractorMenuPaths.has(item.path))
+            .filter((item) => organizePaths.has(item.path))
             .map((item, i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}
@@ -56,11 +69,12 @@ export default function DashboardSidebar() {
             </div>
           ))}
 
-          <p className="fz15 fw400 ff-heading pl30 mt30">Account</p>
-          {dasboardNavigation.slice(16, 18).map((item,i) => (
+          
+          {dasboardNavigation.filter((item) => accountPaths.has(item.path)).map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}

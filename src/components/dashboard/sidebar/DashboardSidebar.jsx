@@ -1,29 +1,51 @@
 "use client";
 import { dasboardNavigation } from "@/data/dashboard";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { clearAuthSession } from "@/utils/auth/mockAuth";
 
 export default function DashboardSidebar() {
   const path = usePathname();
-  const hiddenDashboardMenuPaths = new Set([
-    "/saved",
-    "/invoice",
-    "/payouts",
-    "/statements",
+  const router = useRouter();
+  const hiddenSidebarPaths = new Set([
+    "/dashboard/pending-escrow-funding",
+    "/dashboard/in-progress",
+    "/dashboard/completed",
+    "/dashboard/disputed",
     "/manage-services",
     "/manage-jobs",
     "/manage-projects",
+    "/add-services",
+    "/create-projects",
   ]);
+
+  const primaryItems = dasboardNavigation
+    .slice(0, 13)
+    .filter((item) => !hiddenSidebarPaths.has(item.path));
+  const secondaryItems = dasboardNavigation
+    .slice(13, 24)
+    .filter((item) => !hiddenSidebarPaths.has(item.path));
+  const accountItems = dasboardNavigation
+    .slice(24, 26)
+    .filter((item) => !hiddenSidebarPaths.has(item.path));
+
+  const handleNavClick = (event, item) => {
+    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";
+    if (!isLogout) return;
+    event.preventDefault();
+    clearAuthSession();
+    router.push("/seller/login");
+  };
 
   return (
     <>
       <div className="dashboard__sidebar d-none d-lg-block">
         <div className="dashboard_sidebar_list">
-          <p className="fz15 fw400 ff-heading pl30">Start</p>
-          {dasboardNavigation.slice(0, 13).map((item,i) => (
+          {primaryItems.map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}
@@ -34,12 +56,13 @@ export default function DashboardSidebar() {
             </div>
           ))}
 
-          <p className="fz15 fw400 ff-heading pl30 mt30">Organize and Manage</p>
+          
 
-          {dasboardNavigation.slice(13, 24).map((item,i) => (
+          {secondaryItems.map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}
@@ -50,11 +73,12 @@ export default function DashboardSidebar() {
             </div>
           ))}
 
-          <p className="fz15 fw400 ff-heading pl30 mt30">Account</p>
-          {dasboardNavigation.slice(24, 26).map((item,i) => (
+          
+          {accountItems.map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}

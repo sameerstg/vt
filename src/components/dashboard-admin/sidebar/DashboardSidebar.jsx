@@ -1,20 +1,30 @@
 "use client";
 import { dasboardNavigation } from "@/data/dashboardAdmin";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { clearAuthSession } from "@/utils/auth/mockAuth";
 
 export default function DashboardSidebar() {
   const path = usePathname();
+  const router = useRouter();
+
+  const handleNavClick = (event, item) => {
+    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";
+    if (!isLogout) return;
+    event.preventDefault();
+    clearAuthSession();
+    router.push("/seller/login");
+  };
 
   return (
     <>
-      <div className="dashboard__sidebar d-none d-lg-block">
-        <div className="dashboard_sidebar_list">
-          <p className="fz15 fw400 ff-heading pl30">Start</p>
+      <div className="dashboard__sidebar d-none d-lg-block ">
+        <div className="dashboard_sidebar_list -mt-40" >
           {dasboardNavigation.slice(0, 1).map((item,i) => (
-            <div key={ i } className="sidebar_list_item mb-1">
+            <div key={ i } className="sidebar_list_item mt-4">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}
@@ -25,12 +35,13 @@ export default function DashboardSidebar() {
             </div>
           ))}
 
-          <p className="fz15 fw400 ff-heading pl30 mt30">Organize and Manage</p>
+          
 
           {dasboardNavigation.slice(1, 5).map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}
@@ -41,11 +52,12 @@ export default function DashboardSidebar() {
             </div>
           ))}
 
-          <p className="fz15 fw400 ff-heading pl30 mt30">Account</p>
+          
           {dasboardNavigation.slice(5, 7).map((item,i) => (
             <div key={ i } className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
+                onClick={(event) => handleNavClick(event, item)}
                 className={`items-center ${
                   path === item.path ? "-is-active" : ""
                 }`}
@@ -60,4 +72,3 @@ export default function DashboardSidebar() {
     </>
   );
 }
-

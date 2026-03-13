@@ -29,7 +29,7 @@ export default function ManageProjectInfo() {
           <div className="col-lg-9">
             <div className="dashboard_title_area">
               <h2>Manage Project</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              
             </div>
           </div>
           <div className="col-lg-3">

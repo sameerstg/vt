@@ -1,12 +1,38 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import toggleStore from "@/store/toggleStore";
 import DashboardHeader from "./header/DashboardHeader";
 import DashboardSidebar from "./sidebar/DashboardSidebar";
 import DashboardFooter from "./footer/DashboardFooter";
+import { getAuthSession, getRoleFlow } from "@/utils/auth/mockAuth";
 
 export default function DashboardLayout({ children }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const isActive = toggleStore((state) => state.isDasboardSidebarActive);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    const session = getAuthSession();
+    if (!session?.role) {
+      router.replace("/seller/login");
+      return;
+    }
+
+    if (session.role !== "admin") {
+      const roleFlow = getRoleFlow(session.role);
+      router.replace(roleFlow?.dashboardPath || "/seller/login");
+      return;
+    }
+
+    setIsAuthorized(true);
+  }, [pathname, router]);
+
+  if (!isAuthorized) {
+    return null;
+  }
 
   return (
     <>

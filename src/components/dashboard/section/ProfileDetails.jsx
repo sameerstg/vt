@@ -1,8 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SelectInput from "../option/SelectInput";
-import Link from "next/link";
 import Image from "next/image";
+import {
+  AUTH_SESSION_EVENT,
+  getAuthSession,
+  updateAuthSession,
+} from "@/utils/auth/mockAuth";
 
 export default function ProfileDetails() {
   const [getHourly, setHourly] = useState({
@@ -10,14 +14,6 @@ export default function ProfileDetails() {
     value: null,
   });
   const [getGender, setGender] = useState({
-    option: "Select",
-    value: null,
-  });
-  const [getSpecialization, setSpecialization] = useState({
-    option: "Select",
-    value: null,
-  });
-  const [getType, setType] = useState({
     option: "Select",
     value: null,
   });
@@ -38,11 +34,74 @@ export default function ProfileDetails() {
     value: null,
   });
   const [selectedImage, setSelectedImage] = useState(null);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    phone: "",
+    intro: "",
+  });
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const syncSession = () => {
+      const session = getAuthSession();
+      if (!session) return;
+
+      setFormData({
+        username: session.name || "",
+        email: session.email || "",
+        phone: session.phone || "",
+        intro: session.bio || "",
+      });
+      setSelectedImage(session.profileImage || null);
+    };
+
+    syncSession();
+    window.addEventListener("storage", syncSession);
+    window.addEventListener(AUTH_SESSION_EVENT, syncSession);
+
+    return () => {
+      window.removeEventListener("storage", syncSession);
+      window.removeEventListener(AUTH_SESSION_EVENT, syncSession);
+    };
+  }, []);
+
+  const previewImage = useMemo(
+    () => selectedImage || "/images/profile.jpg",
+    [selectedImage]
+  );
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    console.log(event);
-    setSelectedImage(URL.createObjectURL(file));
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imageDataUrl = String(reader.result || "");
+      if (!imageDataUrl) return;
+      setSelectedImage(imageDataUrl);
+      updateAuthSession({ profileImage: imageDataUrl });
+      setMessage("Profile image updated.");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const onChangeField = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = (event) => {
+    event.preventDefault();
+
+    updateAuthSession({
+      name: formData.username.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      bio: formData.intro.trim(),
+      profileImage: selectedImage || undefined,
+    });
+
+    setMessage("Profile details saved.");
   };
 
   // handlers
@@ -53,12 +112,6 @@ export default function ProfileDetails() {
     setGender({ option, value });
   };
 
-  const specializationHandler = (option, value) => {
-    setSpecialization({ option, value });
-  };
-  const typeHandler = (option, value) => {
-    setType({ option, value });
-  };
   const countryHandler = (option, value) => {
     setCountry({ option, value });
   };
@@ -85,7 +138,7 @@ export default function ProfileDetails() {
                 height={71}
                 width={71}
                 className="rounded-circle wa-xs"
-                src={selectedImage ? selectedImage : "/images/team/fl-1.png"}
+                src={previewImage}
                 style={{
                   height: "71px",
                   width: "71px",
@@ -98,7 +151,11 @@ export default function ProfileDetails() {
               <div className="d-flex align-items-center my-3">
                 <a
                   className="tag-delt text-thm2"
-                  onClick={() => setSelectedImage(null)}
+                  onClick={() => {
+                    setSelectedImage("/images/profile.jpg");
+                    updateAuthSession({ profileImage: "/images/profile.jpg" });
+                    setMessage("Profile image reset.");
+                  }}
                 >
                   <span className="flaticon-delete text-thm2" />
                 </a>
@@ -116,11 +173,12 @@ export default function ProfileDetails() {
                 Max file size is 1MB, Minimum dimension: 330x300 And Suitable
                 files are .jpg &amp; .png
               </p>
+              {message && <p className="text text-thm mt10 mb-0">{message}</p>}
             </div>
           </div>
         </div>
         <div className="col-lg-7">
-          <form className="form-style1">
+          <form className="form-style1" onSubmit={handleSave}>
             <div className="row">
               <div className="col-sm-6">
                 <div className="mb20">
@@ -130,7 +188,10 @@ export default function ProfileDetails() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="i will"
+                    value={formData.username}
+                    onChange={(event) =>
+                      onChangeField("username", event.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -142,7 +203,10 @@ export default function ProfileDetails() {
                   <input
                     type="email"
                     className="form-control"
-                    placeholder="i will"
+                    value={formData.email}
+                    onChange={(event) =>
+                      onChangeField("email", event.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -154,19 +218,10 @@ export default function ProfileDetails() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="i will"
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <label className="heading-color ff-heading fw500 mb10">
-                    Tagline
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="i will"
+                    value={formData.phone}
+                    onChange={(event) =>
+                      onChangeField("phone", event.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -201,46 +256,6 @@ export default function ProfileDetails() {
                       { option: "Other", value: "other" },
                     ]}
                     handler={genderHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Specialization"
-                    defaultSelect={getSpecialization}
-                    data={[
-                      { option: "Male", value: "male" },
-                      {
-                        option: "Female",
-                        value: "female",
-                      },
-                      { option: "Other", value: "other" },
-                    ]}
-                    handler={specializationHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Type"
-                    defaultSelect={getType}
-                    data={[
-                      {
-                        option: "Type 1",
-                        value: "type-1",
-                      },
-                      {
-                        option: "Type 2",
-                        value: "type-2",
-                      },
-                      {
-                        option: "Type 3",
-                        value: "type-3",
-                      },
-                    ]}
-                    handler={typeHandler}
                   />
                 </div>
               </div>
@@ -367,15 +382,23 @@ export default function ProfileDetails() {
                   <label className="heading-color ff-heading fw500 mb10">
                     Introduce Yourself
                   </label>
-                  <textarea cols={30} rows={6} placeholder="Description" />
+                  <textarea
+                    cols={30}
+                    rows={6}
+                    placeholder="Description"
+                    value={formData.intro}
+                    onChange={(event) =>
+                      onChangeField("intro", event.target.value)
+                    }
+                  />
                 </div>
               </div>
               <div className="col-md-12">
                 <div className="text-start">
-                  <Link className="ud-btn btn-thm" href="/contact">
+                  <button className="ud-btn btn-thm" type="submit">
                     Save
                     <i className="fal fa-arrow-right-long" />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

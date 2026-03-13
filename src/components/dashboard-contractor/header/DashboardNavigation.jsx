@@ -2,19 +2,34 @@
 import { dasboardNavigation } from "@/data/dashboardContractor";
 import Link from "next/link";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { clearAuthSession } from "@/utils/auth/mockAuth";
 export default function DashboardNavigation() {
   const [isActive, setActive] = useState(false);
   const path = usePathname();
-  const hiddenContractorMenuPaths = new Set([
-    "/contractor-dashboard/saved",
-    "/contractor-dashboard/reviews",
-    "/contractor-dashboard/invoice",
-    "/contractor-dashboard/payouts",
-    "/contractor-dashboard/statements",
-    "/contractor-dashboard/add-services",
-    "/contractor-dashboard/create-projects",
+  const router = useRouter();
+  const startPaths = new Set(["/contractor-dashboard"]);
+  const organizePaths = new Set([
+    "/contractor-dashboard/manage-services",
+    "/contractor-dashboard/manage-jobs",
+    "/contractor-dashboard/manage-projects",
+    "/contractor-dashboard/team-management",
+    "/contractor-dashboard/payment-distribution",
+    "/contractor-dashboard/dispute-submission",
   ]);
+  const accountPaths = new Set([
+    "/contractor-dashboard/my-profile",
+    "/login",
+  ]);
+
+  const handleNavClick = (event, item) => {
+    setActive(false);
+    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";
+    if (!isLogout) return;
+    event.preventDefault();
+    clearAuthSession();
+    router.push("/seller/login");
+  };
 
   return (
     <>
@@ -28,11 +43,10 @@ export default function DashboardNavigation() {
               <p className="fz15 fw400 ff-heading mt30 pl30">Start</p>
             </li>
             {dasboardNavigation
-              .slice(0, 8)
-              .filter((item) => !hiddenContractorMenuPaths.has(item.path))
+              .filter((item) => startPaths.has(item.path))
               .map((item, i) => (
-              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} onClick={() => setActive(false)} key={i}>
-                <Link href={item.path}>
+              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} key={i}>
+                <Link href={item.path} onClick={(event) => handleNavClick(event, item)}>
                   <i className={`${item.icon} mr10`} />
                   {item.name}
                 </Link>
@@ -40,15 +54,14 @@ export default function DashboardNavigation() {
             ))}
             <li>
               <p className="fz15 fw400 ff-heading mt30 pl30">
-                Organize and Manage
+                
               </p>
             </li>
             {dasboardNavigation
-              .slice(8, 16)
-              .filter((item) => !hiddenContractorMenuPaths.has(item.path))
+              .filter((item) => organizePaths.has(item.path))
               .map((item, i) => (
-              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''}  onClick={() => setActive(false)} key={i}>
-                <Link href={item.path}>
+              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} key={i}>
+                <Link href={item.path} onClick={(event) => handleNavClick(event, item)}>
                   <i className={`${item.icon} mr10`} />
                   {item.name}
                 </Link>
@@ -57,9 +70,9 @@ export default function DashboardNavigation() {
             <li>
               <p className="fz15 fw400 ff-heading mt30 pl30">Account</p>
             </li>
-            {dasboardNavigation.slice(16, 18).map((item,i) => (
-              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''}  onClick={() => setActive(false)} key={i}>
-                <Link href={item.path}>
+            {dasboardNavigation.filter((item) => accountPaths.has(item.path)).map((item,i) => (
+              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} key={i}>
+                <Link href={item.path} onClick={(event) => handleNavClick(event, item)}>
                   <i className={`${item.icon} mr10`} />
                   {item.name}
                 </Link>

@@ -2,9 +2,8 @@ import Link from "next/link";
 import FooterSocial2 from "./FooterSocial2";
 
 const links = [
-    { id: 1, name: "Terms of Service", path: "/" },
-    { id: 2, name: "Privacy Policy", path: "/" },
-    { id: 3, name: "Site Map", path: "/" },
+    { id: 1, name: "Terms of Service", path: "/terms-condition1" },
+    { id: 2, name: "Privacy Policy", path: "/privacy-policy" },
 ];
 
 export default function FooterHeader4() {

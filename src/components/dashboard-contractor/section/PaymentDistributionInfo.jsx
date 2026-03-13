@@ -135,7 +135,6 @@ export default function PaymentDistributionInfo() {
         <div className="col-lg-12">
           <div className="dashboard_title_area">
             <h2>Payment Distribution</h2>
-            <p className="text">Distribute escrow funds internally.</p>
           </div>
         </div>
       </div>

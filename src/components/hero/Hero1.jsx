@@ -28,7 +28,7 @@ const popular = [
   "Engineer",
 ];
 
-const hero = ["/images/home/slide-1.jpg", "/images/home/slide-2.jpg"];
+const hero = ["/images/home/slide-1.jpg", "/images/home/slide-2.jpg", "/images/home/slide-4.png"];
 
 export default function Hero1() {
   const [getSelectedRole, setSelectedRole] = useState(null);
@@ -96,7 +96,7 @@ export default function Hero1() {
             <div className="row">
               <div className="col-xl-10 col-xxl-7">
                 <div className="position-relative">
-                  <h3 className="banner-title animate-up-2">
+                  <h3 className="banner-title animate-up-2 text-white">
                     Hire the best freelancers for{" "}
                     <br className="d-none d-lg-block" />
                     any job, online.

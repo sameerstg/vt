@@ -4,12 +4,37 @@ import { isActiveNavigation } from "@/utils/isActiveNavigation";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import {
+  AUTH_SESSION_EVENT,
+  getAuthSession,
+} from "@/utils/auth/mockAuth";
+import filterNavigationByRole from "@/utils/auth/filterNavigationByRole";
 
 export default function NavSidebar() {
   const path = usePathname();
   const crossRef = useRef(null);
+  const [sessionRole, setSessionRole] = useState(null);
+
+  useEffect(() => {
+    const syncSessionRole = () => {
+      const session = getAuthSession();
+      setSessionRole(session?.role || null);
+    };
+
+    syncSessionRole();
+    window.addEventListener("storage", syncSessionRole);
+    window.addEventListener(AUTH_SESSION_EVENT, syncSessionRole);
+
+    return () => {
+      window.removeEventListener("storage", syncSessionRole);
+      window.removeEventListener(AUTH_SESSION_EVENT, syncSessionRole);
+    };
+  }, []);
+
+  const menuItems = filterNavigationByRole(navigation, sessionRole);
+  const hasPath = (value) => typeof value === "string" && value.length > 0;
 
   return (
     <>
@@ -40,7 +65,7 @@ export default function NavSidebar() {
           <div className="ui-navigation-sidebar">
             <Sidebar>
               <Menu>
-                {navigation.map((item,i) =>
+                {menuItems.map((item,i) =>
                   item?.children ? (
                     <SubMenu
                       key={ i }
@@ -63,7 +88,9 @@ export default function NavSidebar() {
                             {item2.children.map((item3,i3) => (
                               <MenuItem
                                 key={i3}
-                                component={<Link href={item3.path} />}
+                                component={
+                                  hasPath(item3.path) ? <Link href={item3.path} /> : undefined
+                                }
                                 className={
                                   item3.path === path ||
                                   item3.path === path.replace(/\/\d+$/, "")
@@ -80,7 +107,9 @@ export default function NavSidebar() {
                         ) : (
                           <MenuItem
                             key={i2}
-                            component={<Link href={item2.path} />}
+                            component={
+                              hasPath(item2.path) ? <Link href={item2.path} /> : undefined
+                            }
                             className={
                               item2.path === path ? "ui-mobile-active" : ""
                             }
@@ -95,7 +124,7 @@ export default function NavSidebar() {
                   ) : (
                     <MenuItem
                       key={ i }
-                      component={<Link href={item.path} />}
+                      component={hasPath(item.path) ? <Link href={item.path} /> : undefined}
                       className={item.path === path ? "ui-mobile-active" : ""}
                     >
                       <span data-bs-dismiss="offcanvas">{item.name}</span>

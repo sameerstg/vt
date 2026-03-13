@@ -414,6 +414,23 @@ li {
   position: absolute;
   right: 25px;
   top: 15px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+.mailchimp-style1 button.active {
+  opacity: 1;
+  background-color: var(--theme-color, #ff5a5f);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+.mailchimp-style1 button:disabled {
+  cursor: not-allowed;
 }
 .mailchimp-style1.white-version .form-control {
   background-color: #ffffff;

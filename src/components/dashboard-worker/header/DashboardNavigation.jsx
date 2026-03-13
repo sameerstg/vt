@@ -2,22 +2,60 @@
 import { dasboardNavigation } from "@/data/dashboardWorker";
 import Link from "next/link";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { clearAuthSession } from "@/utils/auth/mockAuth";
 export default function DashboardNavigation() {
   const [isActive, setActive] = useState(false);
   const path = usePathname();
-  const hiddenWorkerMenuPaths = new Set([
-    "/worker-dashboard/saved",
-    "/worker-dashboard/reviews",
-    "/worker-dashboard/invoice",
-    "/worker-dashboard/payouts",
-    "/worker-dashboard/statements",
-    "/worker-dashboard/manage-services",
-    "/worker-dashboard/manage-jobs",
-    "/worker-dashboard/manage-projects",
-    "/worker-dashboard/add-services",
-    "/worker-dashboard/create-projects",
+  const router = useRouter();
+  const tasksRootPath = "/worker-dashboard/tasks";
+  const visibleTaskChildPaths = new Set([]);
+  const hiddenTaskNavPaths = new Set([
+    "/worker-dashboard/available-tasks",
+    "/worker-dashboard/applied-tasks",
+    "/worker-dashboard/assigned-tasks",
+    "/worker-dashboard/in-progress",
+    "/worker-dashboard/completed-tasks",
   ]);
+  const allTaskPaths = new Set([...visibleTaskChildPaths, ...hiddenTaskNavPaths]);
+  const hiddenStartNavPaths = new Set([
+    "/worker-dashboard/proposal",
+    "/worker-dashboard/manage-projects",
+  ]);
+  const startPaths = new Set([
+    "/worker-dashboard",
+    tasksRootPath,
+    ...allTaskPaths,
+    "/worker-dashboard/payment-history",
+    "/worker-dashboard/proposal",
+    "/worker-dashboard/manage-projects",
+  ]);
+  const accountPaths = new Set([
+    "/worker-dashboard/my-profile",
+    "/login",
+  ]);
+  const dashboardItem = dasboardNavigation.find((item) => item.path === "/worker-dashboard");
+  const tasksItem = dasboardNavigation.find((item) => item.path === tasksRootPath);
+  const taskChildItems = dasboardNavigation.filter(
+    (item) => visibleTaskChildPaths.has(item.path) && !hiddenTaskNavPaths.has(item.path)
+  );
+  const otherStartItems = dasboardNavigation.filter(
+    (item) =>
+      startPaths.has(item.path) &&
+      !hiddenStartNavPaths.has(item.path) &&
+      item.path !== "/worker-dashboard" &&
+      item.path !== tasksRootPath &&
+      !allTaskPaths.has(item.path)
+  );
+
+  const handleNavClick = (event, item) => {
+    setActive(false);
+    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";
+    if (!isLogout) return;
+    event.preventDefault();
+    clearAuthSession();
+    router.push("/seller/login");
+  };
 
   return (
     <>
@@ -30,28 +68,35 @@ export default function DashboardNavigation() {
             <li>
               <p className="fz15 fw400 ff-heading mt30 pl30">Start</p>
             </li>
-            {dasboardNavigation
-              .slice(0, 8)
-              .filter((item) => !hiddenWorkerMenuPaths.has(item.path))
-              .map((item, i) => (
-              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} onClick={() => setActive(false)} key={i}>
-                <Link href={item.path}>
-                  <i className={`${item.icon} mr10`} />
-                  {item.name}
+            {dashboardItem && (
+              <li className={path == dashboardItem.path ? "mobile-dasboard-menu-active" : ""}>
+                <Link href={dashboardItem.path} onClick={(event) => handleNavClick(event, dashboardItem)}>
+                  <i className={`${dashboardItem.icon} mr10`} />
+                  {dashboardItem.name}
                 </Link>
               </li>
-            ))}
-            <li>
-              <p className="fz15 fw400 ff-heading mt30 pl30">
-                Organize and Manage
-              </p>
-            </li>
-            {dasboardNavigation
-              .slice(8, 18)
-              .filter((item) => !hiddenWorkerMenuPaths.has(item.path))
-              .map((item, i) => (
-              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''}  onClick={() => setActive(false)} key={i}>
-                <Link href={item.path}>
+            )}
+            {tasksItem && (
+              <>
+                <li className={path == tasksItem.path || allTaskPaths.has(path) ? "mobile-dasboard-menu-active" : ""}>
+                  <Link href={tasksItem.path} onClick={(event) => handleNavClick(event, tasksItem)}>
+                    <i className={`${tasksItem.icon} mr10`} />
+                    {tasksItem.name}
+                  </Link>
+                </li>
+                {taskChildItems.map((item) => (
+                  <li className={path == item.path ? "mobile-dasboard-menu-active" : ""} key={item.id}>
+                    <Link href={item.path} onClick={(event) => handleNavClick(event, item)} className="task-sub-item-mobile">
+                      <i className={`${item.icon} mr10`} />
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </>
+            )}
+            {otherStartItems.map((item) => (
+              <li className={path == item.path ? "mobile-dasboard-menu-active" : ""} key={item.id}>
+                <Link href={item.path} onClick={(event) => handleNavClick(event, item)}>
                   <i className={`${item.icon} mr10`} />
                   {item.name}
                 </Link>
@@ -60,9 +105,11 @@ export default function DashboardNavigation() {
             <li>
               <p className="fz15 fw400 ff-heading mt30 pl30">Account</p>
             </li>
-            {dasboardNavigation.slice(18, 20).map((item,i) => (
-              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''}  onClick={() => setActive(false)} key={i}>
-                <Link href={item.path}>
+            {dasboardNavigation
+              .filter((item) => accountPaths.has(item.path))
+              .map((item,i) => (
+              <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} key={i}>
+                <Link href={item.path} onClick={(event) => handleNavClick(event, item)}>
                   <i className={`${item.icon} mr10`} />
                   {item.name}
                 </Link>
@@ -71,6 +118,11 @@ export default function DashboardNavigation() {
           </ul>
         </div>
       </div>
+      <style jsx>{`
+        :global(.task-sub-item-mobile) {
+          padding-left: 45px !important;
+        }
+      `}</style>
     </>
   );
 }

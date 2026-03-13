@@ -21,9 +21,6 @@ export default function Footer13() {
                             >
                                 Privacy Policy
                             </a>
-                            <a className="fz17 fw500 text-white" href="#">
-                                Site Map
-                            </a>
                         </div>
                     </div>
                     <div className="col-md-5">

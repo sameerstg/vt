@@ -1,190 +1,154 @@
 "use client";
-import { useState } from "react";
+
+import React from "react";
+import { useEffect, useState } from "react";
 import SelectInput from "../option/SelectInput";
-import Link from "next/link";
+import {
+  AUTH_SESSION_EVENT,
+  getAuthSession,
+  saveMockUserProfile,
+} from "@/utils/auth/mockAuth";
+
+const skillOptions = [
+  { option: "Designer", value: "designer" },
+  { option: "UI/UX", value: "ui-ux" },
+  { option: "Developer", value: "developer" },
+  { option: "Programmer", value: "programmer" },
+  { option: "Video Editor", value: "video-editor" },
+];
+
+const pointOptions = [
+  { option: "60", value: "60" },
+  { option: "70", value: "70" },
+  { option: "75", value: "75" },
+  { option: "80", value: "80" },
+  { option: "90", value: "90" },
+];
+
+const createEmptySkill = () => ({
+  id: `skill-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+  skill: "",
+  point: "",
+});
+
+const getSelectState = (value, options) => {
+  const found = options.find((item) => item.value === value);
+  return found || { option: "Select", value: null };
+};
+
+function ensureSkills(items) {
+  const source = Array.isArray(items) ? items.slice(0, 3) : [];
+  while (source.length < 3) {
+    source.push(createEmptySkill());
+  }
+  return source;
+}
 
 export default function Skill() {
-  const [getSkill, setSkill] = useState({
-    option: "Designer",
-    value: null,
-  });
-  const [getPoint, setPoint] = useState({
-    option: "80",
-    value: null,
-  });
-  const [getSkill2, setSkill2] = useState({
-    option: "Developer",
-    value: null,
-  });
-  const [getPoint2, setPoint2] = useState({
-    option: "70",
-    value: null,
-  });
-  const [getSkill3, setSkill3] = useState({
-    option: "Video Editor",
-    value: null,
-  });
-  const [getPoint3, setPoint3] = useState({
-    option: "75",
-    value: null,
-  });
+  const [skills, setSkills] = useState(ensureSkills([]));
+  const [message, setMessage] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
-  // handlers
-  const skillHandler = (option, value) => {
-    setSkill({ option, value });
+  useEffect(() => {
+    const syncSession = () => {
+      const session = getAuthSession();
+      setSkills(ensureSkills(session?.skills));
+    };
+
+    syncSession();
+    window.addEventListener("storage", syncSession);
+    window.addEventListener(AUTH_SESSION_EVENT, syncSession);
+
+    return () => {
+      window.removeEventListener("storage", syncSession);
+      window.removeEventListener(AUTH_SESSION_EVENT, syncSession);
+    };
+  }, []);
+
+  const updateSkill = (id, field, value) => {
+    setSkills((current) =>
+      current.map((item) => (item.id === id ? { ...item, [field]: value } : item))
+    );
   };
-  const pointHandler = (option, value) => {
-    setPoint({ option, value });
+
+  const handleSave = async (event) => {
+    event.preventDefault();
+    setMessage("");
+    setIsSaving(true);
+
+    const sanitizedSkills = skills
+      .map((item) => ({
+        ...item,
+        skill: item.skill || "",
+        point: item.point || "",
+      }))
+      .filter((item) => item.skill || item.point);
+
+    const result = await saveMockUserProfile({
+      skills: sanitizedSkills,
+    });
+
+    setIsSaving(false);
+
+    if (!result.ok) {
+      setMessage(result.message || "Skills save failed.");
+      return;
+    }
+
+    setSkills(ensureSkills(sanitizedSkills));
+    setMessage("Skills saved.");
   };
-  const skillHandler2 = (option, value) => {
-    setSkill2({ option, value });
-  };
-  const pointHandler2 = (option, value) => {
-    setPoint2({ option, value });
-  };
-  const skillHandler3 = (option, value) => {
-    setSkill3({ option, value });
-  };
-  const pointHandler3 = (option, value) => {
-    setPoint3({ option, value });
-  };
+
   return (
-    <>
-      <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-        <div className="bdrb1 pb15 mb25">
-          <h5 className="list-title">Skills</h5>
-        </div>
-        <div className="col-lg-7">
-          <div className="row">
-            <form className="form-style1">
-              <div className="row">
-                <div className="col-sm-6">
-                  <div className="mb20">
-                    <SelectInput
-                      label="Skills 1"
-                      defaultSelect={getSkill}
-                      data={[
-                        {
-                          option: "Designer",
-                          value: "designer",
-                        },
-                        {
-                          option: "UI/UX",
-                          value: "ui-ux",
-                        },
-                      ]}
-                      handler={skillHandler}
-                    />
+    <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+      <div className="bdrb1 pb15 mb25">
+        <h5 className="list-title">Skills</h5>
+      </div>
+      <div className="col-lg-7">
+        <div className="row">
+          <form className="form-style1" onSubmit={handleSave}>
+            <div className="row">
+              {skills.map((item, index) => (
+                <React.Fragment key={item.id}>
+                  <div className="col-sm-6">
+                    <div className="mb20">
+                      <SelectInput
+                        label={`Skills ${index + 1}`}
+                        defaultSelect={getSelectState(item.skill, skillOptions)}
+                        data={skillOptions}
+                        handler={(option, value) => updateSkill(item.id, "skill", value)}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="mb20">
-                    <SelectInput
-                      label="Point"
-                      defaultSelect={getPoint}
-                      data={[
-                        {
-                          option: "80",
-                          value: "80",
-                        },
-                        {
-                          option: "90",
-                          value: "90",
-                        },
-                      ]}
-                      handler={pointHandler}
-                    />
+                  <div className="col-sm-6">
+                    <div className="mb20">
+                      <SelectInput
+                        label="Point"
+                        defaultSelect={getSelectState(item.point, pointOptions)}
+                        data={pointOptions}
+                        handler={(option, value) => updateSkill(item.id, "point", value)}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="mb20">
-                    <SelectInput
-                      label="Skills 2"
-                      defaultSelect={getSkill2}
-                      data={[
-                        {
-                          option: "Developer",
-                          value: "developer",
-                        },
-                        {
-                          option: "Programmer",
-                          value: "programmer",
-                        },
-                      ]}
-                      handler={skillHandler2}
-                    />
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="mb20">
-                    <SelectInput
-                      label="Point"
-                      defaultSelect={getPoint2}
-                      data={[
-                        {
-                          option: "70",
-                          value: "70",
-                        },
-                        {
-                          option: "80",
-                          value: "80",
-                        },
-                      ]}
-                      handler={pointHandler2}
-                    />
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="mb20">
-                    <SelectInput
-                      label="Skills 3"
-                      defaultSelect={getSkill3}
-                      data={[
-                        {
-                          option: "Video Editor",
-                          value: "video-editor",
-                        },
-                        {
-                          option: "Programmer",
-                          value: "programmer",
-                        },
-                      ]}
-                      handler={skillHandler3}
-                    />
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="mb20">
-                    <SelectInput
-                      label="Point"
-                      defaultSelect={getPoint3}
-                      data={[
-                        {
-                          option: "75",
-                          value: "75",
-                        },
-                        {
-                          option: "80",
-                          value: "80",
-                        },
-                      ]}
-                      handler={pointHandler3}
-                    />
-                  </div>
-                </div>
+                </React.Fragment>
+              ))}
+              {message && (
                 <div className="col-md-12">
-                  <div className="text-start">
-                    <Link className="ud-btn btn-thm" href="/contact">
-                      Save
-                      <i className="fal fa-arrow-right-long" />
-                    </Link>
-                  </div>
+                  <p className="text text-thm mb15">{message}</p>
+                </div>
+              )}
+              <div className="col-md-12">
+                <div className="text-start">
+                  <button className="ud-btn btn-thm" type="submit" disabled={isSaving}>
+                    {isSaving ? "Saving..." : "Save"}
+                    <i className="fal fa-arrow-right-long" />
+                  </button>
                 </div>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -41,7 +41,7 @@ export default function Breadcumb4() {
             height={300}
             width={532}
             className="service-v1-vector bounce-y d-none d-lg-block"
-            src="/images/blog/blog-3.jpg"
+            src="/images/blog/blog-20.jpg"
             alt="vector-img"
           />
 
@@ -62,15 +62,6 @@ export default function Breadcumb4() {
                     Give your visitor a smooth online experience with a solid UX
                     design
                   </p>
-                  <div className="d-flex align-items-center">
-                    <a
-                      onClick={() => setToggler(!toggler)}
-                      className="video-btn mr10 popup-iframe popup-youtube"
-                    >
-                      <i className="fal fa-play" />
-                    </a>
-                    <h6 className="mb-0">How VeriTask Works</h6>
-                  </div>
                 </div>
               </div>
             </div>

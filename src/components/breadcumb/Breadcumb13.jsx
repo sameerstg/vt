@@ -71,7 +71,7 @@ export default function Breadcumb13() {
                         </h6>
                       </div>
                     </div>
-                    <Link href="/contact" className="ud-btn btn-thm2">
+                    <Link href="/submit-proposal" className="ud-btn btn-thm2">
                       Apply For Job
                       <i className="fal fa-arrow-right-long" />
                     </Link>

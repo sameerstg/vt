@@ -129,10 +129,13 @@ export default function ServiceDetailPrice1({
                     <i className="fal fa-arrow-right-long" />
                   </Link>
                 ) : (
-                  <a className="ud-btn btn-thm">
+                  <Link
+                    className="ud-btn btn-thm"
+                    href={`/submit-proposal?plan=${encodeURIComponent(activePlan.tab)}&price=${encodeURIComponent(activePlan.price)}`}
+                  >
                     {activePlan.cta}
                     <i className="fal fa-arrow-right-long" />
-                  </a>
+                  </Link>
                 )}
               </div>
             </div>

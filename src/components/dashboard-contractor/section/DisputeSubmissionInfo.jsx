@@ -78,9 +78,6 @@ export default function DisputeSubmissionInfo() {
         <div className="col-lg-12">
           <div className="dashboard_title_area">
             <h2>Dispute Submission</h2>
-            <p className="text">
-              Client-initiated disputes on your active projects. Contractor view is read-only.
-            </p>
           </div>
         </div>
       </div>

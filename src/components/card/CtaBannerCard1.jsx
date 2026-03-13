@@ -16,7 +16,7 @@ export default function CtaBannerCard1() {
               height={70}
               width={70}
               className="wa h-100 w-100"
-              src="/images/testimonials/testi-1.png"
+              src="/images/testimonials/testi-1.jpg"
               alt="testi"
             />
             <div className="d-details ml15">

@@ -31,7 +31,7 @@ export default function About1() {
                     height={574}
                     width={691}
                     className="w100 object-fit-contain"
-                    src="/images/about/about-1.png"
+                    src="/images/about/about-1.jpg"
                     alt="object"
                   />
                 </div>

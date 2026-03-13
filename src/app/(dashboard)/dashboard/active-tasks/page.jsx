@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import ActiveTasksInfo from "@/components/dashboard/section/ActiveTasksInfo";
+import ClientTaskManagementInfo from "@/components/dashboard/section/ClientTaskManagementInfo";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
@@ -11,7 +11,7 @@ export default function Page() {
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <ActiveTasksInfo />
+        <ClientTaskManagementInfo initialTab="active" />
       </DashboardLayout>
     </>
   );

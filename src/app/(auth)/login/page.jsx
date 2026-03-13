@@ -1,11 +1,24 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Footer from "@/components/footer/Footer";
 import Header20 from "@/components/header/Header20";
 import Link from "next/link";
+import {
+    authenticateMockUser,
+    getAuthSession,
+    getMockUsers,
+    getRoleFlow,
+    setAuthSession,
+} from "@/utils/auth/mockAuth";
 
 export default function Page() {
+    const router = useRouter();
+    const demoUsers = getMockUsers();
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+    const [loginError, setLoginError] = useState("");
     const [forgotStep, setForgotStep] = useState(0);
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState(["", "", "", ""]);
@@ -15,12 +28,25 @@ export default function Page() {
     const otpRefs = useRef([]);
 
     const isOtpComplete = useMemo(() => otp.every((digit) => digit.length === 1), [otp]);
+    
+
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (forgotStep === 2) {
             otpRefs.current[0]?.focus();
         }
     }, [forgotStep]);
+
+    useEffect(() => {
+        const existingSession = getAuthSession();
+        if (!existingSession?.role) return;
+
+        const existingFlow = getRoleFlow(existingSession.role);
+        if (existingFlow?.dashboardPath) {
+            router.replace(existingFlow.dashboardPath);
+        }
+    }, [router]);
 
     const openForgotModal = () => {
         setForgotStep(1);
@@ -88,6 +114,25 @@ export default function Page() {
         closeForgotModal();
     };
 
+    const handleLogin = () => {
+        if (!loginEmail.trim() || !loginPassword.trim()) {
+            setLoginError("Please enter email and password.");
+            return;
+        }
+
+        const user = authenticateMockUser(loginEmail, loginPassword);
+        if (!user) {
+            setLoginError("Invalid credentials. Use demo users listed below.");
+            return;
+        }
+
+        setLoginError("");
+        setAuthSession(user);
+
+        const flow = getRoleFlow(user.role);
+        router.push(flow?.dashboardPath || "/");
+    };
+
     return (
         <>
             <div className="bgc-thm4">
@@ -103,7 +148,7 @@ export default function Page() {
                                     <h2 className="title">Log In</h2>
                                     <p className="paragraph">
                                         Give your visitor a smooth online
-                                        experience with a solid UX design
+                                        experience with a solid UX design 
                                     </p>
                                 </div>
                             </div>
@@ -134,27 +179,39 @@ export default function Page() {
                                             type="email"
                                             className="form-control"
                                             placeholder="example@gmail.com"
+                                            value={loginEmail}
+                                            onChange={(event) => setLoginEmail(event.target.value)}
                                         />
                                     </div>
                                     <div className="mb15">
                                         <label className="form-label fw600 dark-color">
-                                            Password
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="*******"
-                                        />
+    Password
+</label>
+
+<div style={{ position: "relative" }}>
+    <input
+        type={showPassword ? "text" : "password"}
+        className="form-control"
+        placeholder="*******"
+        value={loginPassword}
+        onChange={(event) => setLoginPassword(event.target.value)}
+    />
+
+    <i
+        className={showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}
+        onClick={() => setShowPassword(!showPassword)}
+        style={{
+            position: "absolute",
+            right: "15px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            cursor: "pointer",
+            color: "#666"
+        }}
+    ></i>
+</div>
                                     </div>
                                     <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb20">
-                                        <label className="custom_checkbox fz14 ff-heading">
-                                            Remember me
-                                            <input
-                                                type="checkbox"
-                                                defaultChecked="checked"
-                                            />
-                                            <span className="checkmark" />
-                                        </label>
                                         <button
                                             type="button"
                                             className="fz14 ff-heading p-0 border-0 bg-transparent"
@@ -167,11 +224,27 @@ export default function Page() {
                                         <button
                                             className="ud-btn btn-thm"
                                             type="button"
+                                            onClick={handleLogin}
                                         >
                                             Log In{" "}
                                             <i className="fal fa-arrow-right-long" />
                                         </button>
                                     </div>
+                                    {loginError && (
+                                        <p className="mb20" style={{ color: "#d93025", fontWeight: 500 }}>
+                                            {loginError}
+                                        </p>
+                                    )}
+                                    {/* <div className="mb20">
+                                        <p className="mb10 fw600 dark-color">Demo Users</p>
+                                        <ul className="mb0 ps-3">
+                                            {demoUsers.map((user) => (
+                                                <li key={user.id} className="fz14">
+                                                    {user.role}: {user.email} / {user.password}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div> */}
                                     <div className="hr_content mb20">
                                         <hr />
                                         <span className="hr_top_text">OR</span>
