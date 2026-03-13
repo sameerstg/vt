@@ -419,7 +419,7 @@ li {
 }
 .mailchimp-style1 button.active {
   opacity: 1;
-  background-color: var(--theme-color, #ff5a5f);
+  background-color: var(--theme-color, #37074C);
   color: #fff;
   padding: 8px 16px;
   border-radius: 4px;
@@ -429,6 +429,10 @@ li {
   transform: translateY(-50%);
   white-space: nowrap;
 }
+.mailchimp-style1 button:hover {
+  background-color: #1f4b3f;
+}
+
 .mailchimp-style1 button:disabled {
   cursor: not-allowed;
 }
