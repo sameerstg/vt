@@ -25,9 +25,9 @@ export const dasboardNavigation = [
   },
   {
     id: 5,
-    name: "Work Submission",
-    icon: "flaticon-user",
-    path: "/contractor-dashboard/team-management",
+    name: "Teams",
+    icon: "flaticon-users",
+    path: "/contractor-dashboard/team",
   },
   {
     id: 6,
