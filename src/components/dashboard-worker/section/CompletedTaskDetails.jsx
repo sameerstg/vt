@@ -9,25 +9,12 @@ import { workerTasks } from "@/data/workerTasks";
 export default function CompletedTaskDetails() {
   const router = useRouter();
   const searchParams = useSearchParams();
-<<<<<<< HEAD
-
   // URL se taskId aur title lein
   const taskId = searchParams.get('taskId');
   const taskTitle = searchParams.get('title') || 'Task Details';
 
   // Task ID ko number mein convert karein
   const taskIdNum = parseInt(taskId);
-
-=======
-  
-  // URL se taskId aur title lein
-  const taskId = searchParams.get('taskId');
-  const taskTitle = searchParams.get('title') || 'Task Details';
-  
-  // Task ID ko number mein convert karein
-  const taskIdNum = parseInt(taskId);
-  
->>>>>>> b2f4255c9895284eb7ef42cda174c4c5f7e60dee
   // Task find karein
   const task = useMemo(() => {
     if (isNaN(taskIdNum)) return null;
@@ -96,10 +83,7 @@ export default function CompletedTaskDetails() {
         <div className="col-lg-12">
           <div className="dashboard_title_area">
             <h2>Completed Task Details</h2>
-<<<<<<< HEAD
-=======
             <p className="text">Review your completed task history and details.</p>
->>>>>>> b2f4255c9895284eb7ef42cda174c4c5f7e60dee
           </div>
         </div>
       </div>
@@ -108,11 +92,6 @@ export default function CompletedTaskDetails() {
       <div className="row">
         <div className="col-xl-12">
           <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> b2f4255c9895284eb7ef42cda174c4c5f7e60dee
             {/* Top Navigation */}
             <div className="d-flex justify-content-between align-items-center mb30">
               <div>
@@ -165,12 +144,8 @@ export default function CompletedTaskDetails() {
                 <div className="bdr1 bdrs8 p20">
                   <h5 className="mb15">Task Description</h5>
                   <p className="mb0">
-<<<<<<< HEAD
                     This task involved {task.title.toLowerCase()} for {task.client}.
-=======
-                    This task involved {task.title.toLowerCase()} for {task.client}. 
->>>>>>> b2f4255c9895284eb7ef42cda174c4c5f7e60dee
-                    Successfully completed utilizing: {task.skills.join(', ')}.
+                    Successfully completed utilizing: {(task.skills || []).join(', ')}.
                   </p>
                 </div>
               </div>
