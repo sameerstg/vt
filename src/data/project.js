@@ -161,76 +161,45 @@ export const price1 = [
 export const ourTeam1 = [
   {
     id: 1,
-    img: "/images/team/team-1.jpg",
+    img: "/images/team/Rectangle 1.png", // your existing
     name: "Cody Fisher",
     skill: "Medical Assistant",
   },
   {
     id: 2,
-    img: "/images/team/team-2.jpg",
+    img: "/images/team/Rectangle 2.png",
     name: "Dianne Russell",
     skill: "Web Designer",
   },
   {
     id: 3,
-    img: "/images/team/team-3.jpg",
+    img: "/images/team/Rectangle 3.png",
     name: "Jerome Bell",
     skill: "Marketing Coordinator",
   },
   {
     id: 4,
-    img: "/images/team/team-4.jpg",
+    img: "/images/team/Rectangle 4.png",
     name: "Theresa Webb",
     skill: "Nursing Assistant",
   },
   {
     id: 5,
-    img: "/images/team/team-5.jpg",
+    img: "/images/team/Rectangle 5.png",
     name: "Cameron Williamson",
     skill: "Dog Trainer",
   },
+  // 5 new realistic members (replace img paths with actual downloads from Unsplash/Pexels)
+
   {
     id: 6,
-    img: "/images/team/team-1.jpg",
-    name: "Cody Fisher",
-    skill: "Medical Assistant",
-  },
-  {
-    id: 7,
-    img: "/images/team/team-2.jpg",
-    name: "Dianne Russell",
-    skill: "Web Designer",
-  },
-  {
-    id: 8,
-    img: "/images/team/team-3.jpg",
-    name: "Jerome Bell",
-    skill: "Marketing Coordinator",
-  },
-  {
-    id: 9,
-    img: "/images/team/team-4.jpg",
-    name: "Theresa Webb",
-    skill: "Nursing Assistant",
-  },
-  {
-    id: 10,
-    img: "/images/team/team-5.jpg",
+    img: "/images/team/Rectangle 6.png",
     name: "Cameron Williamson",
     skill: "Dog Trainer",
   },
-  {
-    id: 11,
-    img: "/images/team/team-1.jpg",
-    name: "Cody Fisher",
-    skill: "Medical Assistant",
-  },
-  {
-    id: 12,
-    img: "/images/team/team-2.jpg",
-    name: "Dianne Russell",
-    skill: "Web Designer",
-  },
+  
+
+
 ];
 
 export const testimonial = [

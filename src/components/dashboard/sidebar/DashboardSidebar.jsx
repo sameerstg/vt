@@ -17,6 +17,8 @@ export default function DashboardSidebar() {
     "/manage-projects",
     "/add-services",
     "/create-projects",
+    "/dashboard/task-details",
+    "/dashboard/create-task",
   ]);
 
   const primaryItems = dasboardNavigation

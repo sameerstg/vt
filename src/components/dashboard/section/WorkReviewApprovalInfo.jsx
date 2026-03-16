@@ -12,7 +12,6 @@ export default function WorkReviewApprovalInfo({ review }) {
   return (
     <ClientSectionLayout
       title="Work Review & Approval Page"
-      description="Approve or dispute submitted work."
     >
       <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
         <div className="bdrb1 pb15 mb20 d-flex justify-content-between align-items-center flex-wrap gap-2">

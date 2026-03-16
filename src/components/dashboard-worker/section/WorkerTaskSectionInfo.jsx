@@ -49,11 +49,11 @@ export default function WorkerTaskSectionInfo({ sectionKey }) {
       <div className="row">
         <div className="col-xl-12">
           <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-            <div className="d-flex justify-content-end mb20">
+            {/* <div className="d-flex justify-content-end mb20">
               <Link href="/worker-dashboard" className="ud-btn btn-light-default">
                 Back to Dashboard
               </Link>
-            </div>
+            </div> */}
 
             {sectionKey === "assigned" ? (
               <>
@@ -134,6 +134,7 @@ export default function WorkerTaskSectionInfo({ sectionKey }) {
                       <th scope="col">Amount</th>
                       <th scope="col">Method</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Status</th>
                     </tr>
                   </thead>
                   <tbody className="t-body">
@@ -144,6 +145,15 @@ export default function WorkerTaskSectionInfo({ sectionKey }) {
                         <td>{payment.amount}</td>
                         <td>{payment.method}</td>
                         <td>{payment.status}</td>
+                        <td>
+                          <Link
+                            href="/worker-dashboard/invoice-details"
+                            className="ud-btn btn-thm"
+                            style={{ padding: "5px 15px", fontSize: "12px" }}
+                          >
+                            Details<i className="fal fa-arrow-right-long ms-1" />
+                          </Link>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

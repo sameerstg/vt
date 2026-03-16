@@ -1,12 +1,9 @@
 import DashboardLayout from "@/components/dashboard-worker/DashboardLayout";
-import WorkerTaskSectionInfo from "@/components/dashboard-worker/section/WorkerTaskSectionInfo";
+import PaymentHistoryInfo from "@/components/dashboard-worker/section/PaymentHistoryInfo";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
-import { workerSectionConfig } from "@/data/workerTasks";
-
-const sectionKey = "payment_history";
 
 export const metadata = {
-  title: `Worker Dashboard | ${workerSectionConfig[sectionKey].title}`,
+  title: "Worker Dashboard | Payment History",
 };
 
 export default function page() {
@@ -14,7 +11,7 @@ export default function page() {
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <WorkerTaskSectionInfo sectionKey={sectionKey} />
+        <PaymentHistoryInfo />
       </DashboardLayout>
     </>
   );

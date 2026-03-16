@@ -1,15 +1,114 @@
 [
   {
     "id": "client-demo-1",
-    "name": "Client Demo",
+    "name": "Sarah Johnson",
     "email": "client@veritask.demo",
     "password": "Client@123",
     "role": "client",
-    "profileImage": "/images/front-view-business-woman-suit_23-2148603018.jpg"
+    "profileImage": "/images/front-view-business-woman-suit_23-2148603018.jpg",
+    "phone": "+12345678890",
+    "bio": "Hello",
+    "hourlyRate": "80",
+    "gender": "female",
+    "country": "germany",
+    "city": "berlin",
+    "language": "german",
+    "languageLevel": "advanced",
+    "skills": [
+      {
+        "id": "skill-1773380078605-b86ngv",
+        "skill": "programmer",
+        "point": "60"
+      },
+      {
+        "id": "skill-1773380078605-d8x1kt",
+        "skill": "designer",
+        "point": "70"
+      },
+      {
+        "id": "skill-1773380078605-nisrx6",
+        "skill": "ui-ux",
+        "point": "90"
+      }
+    ],
+    "createdTasks": [
+      {
+        "title": "First Task ",
+        "description": "First Task",
+        "category": "Development & IT",
+        "taskType": "individual",
+        "workMode": "virtual",
+        "location": "Remote",
+        "budget": "$1200",
+        "budgetModel": "fixed",
+        "deadline": "Mar 19, 2026",
+        "skills": [],
+        "milestones": [],
+        "id": "task-1773635498027",
+        "client": "Sarah Johnson",
+        "clientId": "client-demo-1",
+        "createdAt": "2026-03-16T04:31:38.027Z",
+        "status": "available",
+        "proposals": 1
+      },
+      {
+        "title": "E-Commerce Store Development",
+        "description": "A client wants an online store to sell products.\n\nRequirements:\n\nProduct listing\n\nShopping cart\n\nPayment gateway integration\n\nAdmin dashboard",
+        "category": "Writing & Translation",
+        "taskType": "individual",
+        "workMode": "virtual",
+        "location": "Remote",
+        "budget": "$1200",
+        "budgetModel": "fixed",
+        "deadline": "Mar 28, 2026",
+        "skills": [],
+        "milestones": [],
+        "id": "task-1773635697256",
+        "client": "Sarah Johnson",
+        "clientId": "client-demo-1",
+        "createdAt": "2026-03-16T04:34:57.256Z",
+        "status": "available",
+        "proposals": 1
+      }
+    ],
+    "receivedProposals": [
+      {
+        "id": "proposal-1773636600000",
+        "taskId": "task-1773635498027",
+        "taskTitle": "First Task ",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demo",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "accept",
+        "offerAmount": 799,
+        "timeline": "6",
+        "coverLetter": "hello",
+        "submittedAt": "2026-03-16T05:30:00.000Z",
+        "status": "pending"
+      },
+      {
+        "id": "proposal-1773640059273",
+        "taskId": "task-1773635697256",
+        "taskTitle": "E-Commerce Store Development",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demo",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "accept",
+        "offerAmount": 800,
+        "timeline": "6",
+        "coverLetter": "hello",
+        "submittedAt": "2026-03-16T05:47:39.273Z",
+        "status": "pending"
+      }
+    ]
   },
   {
     "id": "worker-demo-1",
-    "name": "Worker",
+    "name": "John Deo",
     "email": "abc@gmail.com",
     "password": "abc1234",
     "role": "worker",
@@ -38,7 +137,41 @@
         "point": "90"
       }
     ],
-    "profileImage": "data:image/jpeg;base64,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",
+    "profileImage": "data:image/jpeg;base64,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",
+    "submittedProposals": [
+      {
+        "id": "proposal-1773636600000",
+        "taskId": "task-1773635498027",
+        "taskTitle": "First Task ",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demo",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "accept",
+        "offerAmount": 799,
+        "timeline": "6",
+        "coverLetter": "hello",
+        "submittedAt": "2026-03-16T05:30:00.000Z",
+        "status": "pending"
+      },
+      {
+        "id": "proposal-1773640059273",
+        "taskId": "task-1773635697256",
+        "taskTitle": "E-Commerce Store Development",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demo",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "accept",
+        "offerAmount": 800,
+        "timeline": "6",
+        "coverLetter": "hello",
+        "submittedAt": "2026-03-16T05:47:39.273Z",
+        "status": "pending"
+      }
+    ],
     "education": [],
     "workExperience": [
       {
@@ -79,7 +212,7 @@
   },
   {
     "id": "contractor-demo-1",
-    "name": "Contractor Demo",
+    "name": "Emily Davis",
     "email": "contractor@veritask.demo",
     "password": "Contractor@123",
     "role": "contractor",
@@ -120,7 +253,7 @@
   },
   {
     "id": "client-user-1773125180382",
-    "name": "John Deo",
+    "name": "Jeff Bezos",
     "email": "johndeo@gmail.com",
     "password": "JohnDeo ",
     "role": "client",

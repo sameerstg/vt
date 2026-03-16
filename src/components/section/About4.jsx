@@ -96,7 +96,7 @@ export default function About4() {
                         height={90}
                         width={90}
                         className="rounded-circle mx-auto"
-                        src="/images/team/fl-2.png"
+                        src="/images/team/Ellipse 1.png"
                         alt="object"
                       />
                       <span className="online" />
@@ -148,7 +148,7 @@ export default function About4() {
                       height={129}
                       width={129}
                       className="img-1 spin-right"
-                      src="/images/about/element-1.png"
+                      src="/images/about/Ellipse1.png"
                       alt="object"
                     />
                     <Image

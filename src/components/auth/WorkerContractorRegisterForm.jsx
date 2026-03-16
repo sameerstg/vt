@@ -148,7 +148,7 @@ export default function WorkerContractorRegisterForm() {
           <p className="text mt20">
             Already have an account?{" "}
             <Link href="/seller/login" className="text-thm">
-              Worker Log In
+              Log In
             </Link>
           </p>
         </div>

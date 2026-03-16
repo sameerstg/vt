@@ -61,8 +61,8 @@ export default function Header1() {
                                             href="/"
                                         >
                                             <Image
-                                                height={40}
-                                                width={133}
+                                                height={35}
+                                                width={123}
                                                 src="/images/logo.png"
                                                 alt="Header Logo"
                                             />
@@ -73,7 +73,7 @@ export default function Header1() {
                                         >
                                             <Image
                                                 height={40}
-                                                width={133}
+                                                width={123}
                                                 src="/images/logo.png"
                                                 alt="Header Logo"
                                             />
@@ -84,10 +84,10 @@ export default function Header1() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-auto px-0">
+                            <div className="col-auto px-5">
                                 <div className="d-flex align-items-center header-right-cluster header-right-cluster--centered ">
                                     <Navigation />
-                                    {(!isSessionReady || !session) && (
+                                    {/* {(!isSessionReady || !session) && (
                                         <Link
                                             className="login-info bdrl1 pl15-lg pl30"
                                             data-bs-toggle="modal"
@@ -95,7 +95,7 @@ export default function Header1() {
                                         >
                                             <span className="flaticon-loupe" />
                                         </Link>
-                                    )}
+                                    )} */}
                                     {!isSessionReady ? null : session ? (
                                         <>
                                             <Link

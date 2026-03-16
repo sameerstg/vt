@@ -3,7 +3,7 @@
     "dashboardPath": "/dashboard",
     "allowedPathPrefix": "/dashboard",
     "sections": [
-      "Active Tasks",
+      "Active Task",
       "Pending Escrow Funding",
       "In Progress",
       "Completed",

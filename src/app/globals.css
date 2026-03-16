@@ -358,7 +358,7 @@ a {
 }
 .ui-social-media a i {
   transition: all 0.4s;
-  color: #222222;
+  color: #37047C;
 }
 .ui-social-media a:hover i {
   color: var(--primary-color) !important;
@@ -393,12 +393,12 @@ h6 a {
 
 /* Header alignment for logged-in actions */
 .header-right-cluster {
-  gap: 12px;
+  gap: 10px;
 }
 
 .header-right-cluster .login-info {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  margin-left: 10px !important;
+  margin-right: 10px !important;
 }
 
 .header-user-link {
@@ -479,6 +479,41 @@ h6 a {
     transform: rotate(360deg);
   }
 }
-.header-nav .ace-responsive-menu .visible_list a.list-item.ui-active .title {
+/* .header-nav .ace-responsive-menu .visible_list a.list-item.ui-active .title {
   color: #ffffff !important;
+} */
+
+
+
+/* Main navigation hover */
+.ace-responsive-menu.ui-navigation li:hover > .list-item .title {
+  color: #36047a;
+}
+
+/* Direct link hover */
+.ace-responsive-menu.ui-navigation .list-item:hover .title {
+  color: #36047a;
+}
+
+/* Active menu item */
+.ace-responsive-menu.ui-navigation .ui-active .title {
+  color: #36047a;
+}
+
+/* Submenu hover */
+.ace-responsive-menu.ui-navigation .sub-menu li:hover .title {
+  color: #36047a;
+}
+
+/* Header links hover */
+.header-nav .login-info.mx15-lg.mx30:hover,
+.header-nav .login-info.mr15-lg.mr30:hover {
+  color: #36047a;
+  transition: color 0.3s ease;
+}
+
+/* Sticky header hover fix */
+.header-nav.stricky-fixed .login-info.mx15-lg.mx30:hover,
+.header-nav.stricky-fixed .login-info.mr15-lg.mr30:hover {
+  color: #36047a;
 }

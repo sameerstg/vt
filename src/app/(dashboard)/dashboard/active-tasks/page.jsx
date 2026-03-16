@@ -3,7 +3,7 @@ import ClientTaskManagementInfo from "@/components/dashboard/section/ClientTaskM
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Client Dashboard | Active Tasks",
+  title: "Client Dashboard | Active Task",
 };
 
 export default function Page() {

@@ -106,6 +106,7 @@ export default function Footer() {
                                         {showMessage && (
                                             <div
                                                 style={{
+                                                    
                                                     marginTop: "10px",
                                                     padding: "10px",
                                                     borderRadius: "4px",

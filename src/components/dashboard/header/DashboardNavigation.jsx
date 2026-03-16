@@ -18,6 +18,24 @@ export default function DashboardNavigation() {
     router.push("/seller/login");
   };
 
+  const hiddenPaths = new Set([
+    "/dashboard/pending-escrow-funding",
+    "/dashboard/in-progress",
+    "/dashboard/completed",
+    "/dashboard/disputed",
+    "/manage-services",
+    "/manage-jobs",
+    "/manage-projects",
+    "/add-services",
+    "/create-projects",
+    "/dashboard/task-details",
+    "/dashboard/create-task",
+  ]);
+
+  const primaryItems = dasboardNavigation.slice(0, 13).filter(item => !hiddenPaths.has(item.path));
+  const secondaryItems = dasboardNavigation.slice(13, 24).filter(item => !hiddenPaths.has(item.path));
+  const accountItems = dasboardNavigation.slice(24, 26).filter(item => !hiddenPaths.has(item.path));
+
   return (
     <>
       <div className="dashboard_navigationbar d-block d-lg-none">
@@ -29,7 +47,7 @@ export default function DashboardNavigation() {
             <li>
               <p className="fz15 fw400 ff-heading mt30 pl30">Start</p>
             </li>
-            {dasboardNavigation.slice(0, 13).map((item,i) => (
+            {primaryItems.map((item,i) => (
               <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} key={i}>
                 <Link href={item.path} onClick={(event) => handleNavClick(event, item)}>
                   <i className={`${item.icon} mr10`} />
@@ -38,7 +56,7 @@ export default function DashboardNavigation() {
               </li>
             ))}
            
-            {dasboardNavigation.slice(13, 24).map((item,i) => (
+            {secondaryItems.map((item,i) => (
               <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} key={i}>
                 <Link href={item.path} onClick={(event) => handleNavClick(event, item)}>
                   <i className={`${item.icon} mr10`} />
@@ -49,7 +67,7 @@ export default function DashboardNavigation() {
             <li>
               <p className="fz15 fw400 ff-heading mt30 pl30">Account</p>
             </li>
-            {dasboardNavigation.slice(24, 26).map((item,i) => (
+            {accountItems.map((item,i) => (
               <li className={path == item.path ? 'mobile-dasboard-menu-active' : ''} key={i}>
                 <Link href={item.path} onClick={(event) => handleNavClick(event, item)}>
                   <i className={`${item.icon} mr10`} />

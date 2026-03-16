@@ -5,8 +5,60 @@ import Image from "next/image";
 import {
   AUTH_SESSION_EVENT,
   getAuthSession,
-  updateAuthSession,
+  saveMockUserProfile,
 } from "@/utils/auth/mockAuth";
+
+const hourlyOptions = [
+  { option: "$50", value: "50" },
+  { option: "$60", value: "60" },
+  { option: "$70", value: "70" },
+  { option: "$80", value: "80" },
+  { option: "$90", value: "90" },
+  { option: "$100", value: "100" },
+];
+
+const genderOptions = [
+  { option: "Male", value: "male" },
+  { option: "Female", value: "female" },
+  { option: "Other", value: "other" },
+];
+
+const countryOptions = [
+  { option: "United States", value: "usa" },
+  { option: "Canada", value: "canada" },
+  { option: "United Kingdom", value: "uk" },
+  { option: "Australia", value: "australia" },
+  { option: "Germany", value: "germany" },
+  { option: "Japan", value: "japan" },
+];
+
+const cityOptions = [
+  { option: "New York", value: "new-york" },
+  { option: "Toronto", value: "toronto" },
+  { option: "London", value: "london" },
+  { option: "Sydney", value: "sydney" },
+  { option: "Berlin", value: "berlin" },
+  { option: "Tokyo", value: "tokyo" },
+];
+
+const languageOptions = [
+  { option: "English", value: "english" },
+  { option: "French", value: "french" },
+  { option: "German", value: "german" },
+  { option: "Japanese", value: "japanese" },
+];
+
+const languageLevelOptions = [
+  { option: "Beginner", value: "beginner" },
+  { option: "Intermediate", value: "intermediate" },
+  { option: "Advanced", value: "advanced" },
+  { option: "Fluent", value: "fluent" },
+];
+
+const getSelectState = (value, options) => {
+  const found = options.find((item) => item.value === value);
+  return found || { option: "Select", value: null };
+};
 
 export default function ProfileDetails() {
   const [getHourly, setHourly] = useState({
@@ -53,6 +105,12 @@ export default function ProfileDetails() {
         phone: session.phone || "",
         intro: session.bio || "",
       });
+      setHourly(getSelectState(session.hourlyRate || "", hourlyOptions));
+      setGender(getSelectState(session.gender || "", genderOptions));
+      setCountry(getSelectState(session.country || "", countryOptions));
+      setCity(getSelectState(session.city || "", cityOptions));
+      setLanguage(getSelectState(session.language || "", languageOptions));
+      setLanLevel(getSelectState(session.languageLevel || "", languageLevelOptions));
       setSelectedImage(session.profileImage || null);
     };
 
@@ -80,8 +138,7 @@ export default function ProfileDetails() {
       const imageDataUrl = String(reader.result || "");
       if (!imageDataUrl) return;
       setSelectedImage(imageDataUrl);
-      updateAuthSession({ profileImage: imageDataUrl });
-      setMessage("Profile image updated.");
+      setMessage("Profile image selected. Click Save to persist.");
     };
     reader.readAsDataURL(file);
   };
@@ -90,16 +147,28 @@ export default function ProfileDetails() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSave = (event) => {
+  const handleSave = async (event) => {
     event.preventDefault();
 
-    updateAuthSession({
+    const updates = {
       name: formData.username.trim(),
       email: formData.email.trim(),
       phone: formData.phone.trim(),
       bio: formData.intro.trim(),
-      profileImage: selectedImage || undefined,
-    });
+      hourlyRate: getHourly.value || "",
+      gender: getGender.value || "",
+      country: getCountry.value || "",
+      city: getCity.value || "",
+      language: getLanguage.value || "",
+      languageLevel: getLanLevel.value || "",
+      profileImage: selectedImage || "",
+    };
+
+    const result = await saveMockUserProfile(updates);
+    if (!result.ok) {
+      setMessage(result.message || "Profile details save failed.");
+      return;
+    }
 
     setMessage("Profile details saved.");
   };
@@ -153,8 +222,7 @@ export default function ProfileDetails() {
                   className="tag-delt text-thm2"
                   onClick={() => {
                     setSelectedImage("/images/profile.jpg");
-                    updateAuthSession({ profileImage: "/images/profile.jpg" });
-                    setMessage("Profile image reset.");
+                    setMessage("Profile image reset. Click Save to persist.");
                   }}
                 >
                   <span className="flaticon-delete text-thm2" />
@@ -230,14 +298,7 @@ export default function ProfileDetails() {
                   <SelectInput
                     label="Hourly Rate"
                     defaultSelect={getHourly}
-                    data={[
-                      { option: "$50", value: "50" },
-                      { option: "$60", value: "60" },
-                      { option: "$70", value: "70" },
-                      { option: "$80", value: "80" },
-                      { option: "$90", value: "90" },
-                      { option: "$100", value: "100" },
-                    ]}
+                    data={hourlyOptions}
                     handler={hourlyHandler}
                   />
                 </div>
@@ -247,14 +308,7 @@ export default function ProfileDetails() {
                   <SelectInput
                     label="Gender"
                     defaultSelect={getGender}
-                    data={[
-                      { option: "Male", value: "male" },
-                      {
-                        option: "Female",
-                        value: "female",
-                      },
-                      { option: "Other", value: "other" },
-                    ]}
+                    data={genderOptions}
                     handler={genderHandler}
                   />
                 </div>
@@ -264,29 +318,7 @@ export default function ProfileDetails() {
                   <SelectInput
                     label="Country"
                     defaultSelect={getCountry}
-                    data={[
-                      {
-                        option: "United States",
-                        value: "usa",
-                      },
-                      {
-                        option: "Canada",
-                        value: "canada",
-                      },
-                      {
-                        option: "United Kingdom",
-                        value: "uk",
-                      },
-                      {
-                        option: "Australia",
-                        value: "australia",
-                      },
-                      {
-                        option: "Germany",
-                        value: "germany",
-                      },
-                      { option: "Japan", value: "japan" },
-                    ]}
+                    data={countryOptions}
                     handler={countryHandler}
                   />
                 </div>
@@ -296,29 +328,7 @@ export default function ProfileDetails() {
                   <SelectInput
                     label="City"
                     defaultSelect={getCity}
-                    data={[
-                      {
-                        option: "New York",
-                        value: "new-york",
-                      },
-                      {
-                        option: "Toronto",
-                        value: "toronto",
-                      },
-                      {
-                        option: "London",
-                        value: "london",
-                      },
-                      {
-                        option: "Sydney",
-                        value: "sydney",
-                      },
-                      {
-                        option: "Berlin",
-                        value: "berlin",
-                      },
-                      { option: "Tokyo", value: "tokyo" },
-                    ]}
+                    data={cityOptions}
                     handler={cityHandler}
                   />
                 </div>
@@ -328,24 +338,7 @@ export default function ProfileDetails() {
                   <SelectInput
                     label="Language"
                     defaultSelect={getLanguage}
-                    data={[
-                      {
-                        option: "English",
-                        value: "english",
-                      },
-                      {
-                        option: "French",
-                        value: "french",
-                      },
-                      {
-                        option: "German",
-                        value: "german",
-                      },
-                      {
-                        option: "Japanese",
-                        value: "japanese",
-                      },
-                    ]}
+                    data={languageOptions}
                     handler={languageHandler}
                   />
                 </div>
@@ -355,24 +348,7 @@ export default function ProfileDetails() {
                   <SelectInput
                     label="Languages Level"
                     defaultSelect={getLanLevel}
-                    data={[
-                      {
-                        option: "Beginner",
-                        value: "beginner",
-                      },
-                      {
-                        option: "Intermediate",
-                        value: "intermediate",
-                      },
-                      {
-                        option: "Advanced",
-                        value: "advanced",
-                      },
-                      {
-                        option: "Fluent",
-                        value: "fluent",
-                      },
-                    ]}
+                    data={languageLevelOptions}
                     handler={lanLevelHandler}
                   />
                 </div>

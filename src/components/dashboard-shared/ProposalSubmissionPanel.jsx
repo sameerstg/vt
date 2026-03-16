@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { taskDiscoveryItems } from "@/data/taskDiscovery";
+import { getAuthSession, getAllClientTasks, submitProposal } from "@/utils/auth/mockAuth";
 
 const SUBMITTED_PROPOSALS_KEY = "vt_submitted_proposals";
 
@@ -10,10 +11,26 @@ export default function ProposalSubmissionPanel() {
   const searchParams = useSearchParams();
   const preselectedTaskId = searchParams.get("taskId") || "";
   const preselectedTaskTitle = searchParams.get("taskTitle") || "";
+  const urlClientId = searchParams.get("clientId") || "";
+  const urlClientEmail = searchParams.get("clientEmail") || "";
+
+  const [dynamicTasks, setDynamicTasks] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    setDynamicTasks(getAllClientTasks());
+    setCurrentUser(getAuthSession());
+  }, []);
+
+  const allAvailableTasks = useMemo(() => {
+    return [...taskDiscoveryItems, ...dynamicTasks];
+  }, [dynamicTasks]);
+
   const matchedTaskById = useMemo(
-    () => taskDiscoveryItems.find((task) => task.id === preselectedTaskId) || null,
-    [preselectedTaskId]
+    () => allAvailableTasks.find((task) => String(task.id) === String(preselectedTaskId)) || null,
+    [preselectedTaskId, allAvailableTasks]
   );
+
   const [offerType, setOfferType] = useState("accept");
   const [selectedTaskId, setSelectedTaskId] = useState(preselectedTaskId || "");
   const [offerAmount, setOfferAmount] = useState("");
@@ -25,18 +42,24 @@ export default function ProposalSubmissionPanel() {
 
   const selectedTask = useMemo(() => {
     if (selectedTaskId) {
-      return taskDiscoveryItems.find((task) => task.id === selectedTaskId) || null;
+      return allAvailableTasks.find((task) => String(task.id) === String(selectedTaskId)) || null;
     }
     return matchedTaskById;
-  }, [matchedTaskById, selectedTaskId]);
+  }, [matchedTaskById, selectedTaskId, allAvailableTasks]);
 
   const selectedTaskTitle = selectedTask?.title || preselectedTaskTitle || "";
   const selectedTaskValid = Boolean(selectedTaskTitle);
+  // Ensure we have a clientId either from the resolved task or the URL
+  const resolvedClientId = selectedTask?.clientId || urlClientId;
+  const clientIdValid = Boolean(resolvedClientId);
+
   const amountValid = Number(offerAmount) > 0;
   const timelineValid = timeline.trim().length > 0;
-  const canSubmit = selectedTaskValid && amountValid && timelineValid && termsAccepted;
+  
+  // Requirement: selectedTask must be resolved (or have URL fallback) to ensure clientId is captured
+  const canSubmit = selectedTaskValid && clientIdValid && amountValid && timelineValid && termsAccepted;
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitAttempted(true);
     if (!canSubmit) {
@@ -49,17 +72,22 @@ export default function ProposalSubmissionPanel() {
         id: `proposal-${Date.now()}`,
         taskId: selectedTask?.id || preselectedTaskId || "",
         taskTitle: selectedTaskTitle,
+        clientId: resolvedClientId || "client-demo-1", 
+        clientEmail: selectedTask?.clientEmail || urlClientEmail || "client@veritask.demo",
+        workerId: currentUser?.id || "worker-demo",
+        workerName: currentUser?.name || "Demo Worker",
+        workerEmail: currentUser?.email || "worker@veritask.demo",
         offerType,
         offerAmount: Number(offerAmount),
         timeline: timeline.trim(),
         coverLetter: coverLetter.trim(),
         submittedAt: new Date().toISOString(),
+        status: "pending"
       };
-      const previous = JSON.parse(window.localStorage.getItem(SUBMITTED_PROPOSALS_KEY) || "[]");
-      const next = Array.isArray(previous) ? [payload, ...previous] : [payload];
-      window.localStorage.setItem(SUBMITTED_PROPOSALS_KEY, JSON.stringify(next));
+      
+      await submitProposal(payload);
     } catch {
-      // Keep UI responsive even if localStorage is not available.
+      // Keep UI responsive
     }
 
     setIsSubmitted(true);
@@ -79,8 +107,8 @@ export default function ProposalSubmissionPanel() {
                 onChange={(event) => setSelectedTaskId(event.target.value)}
               >
                 <option value="">Select task</option>
-                {taskDiscoveryItems.map((task) => (
-                  <option key={task.id} value={task.id}>
+                {allAvailableTasks.map((task) => (
+                  <option key={task.id} value={String(task.id)}>
                     {task.title}
                   </option>
                 ))}
