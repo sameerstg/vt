@@ -18,7 +18,7 @@ export default function SellerLoginPage() {
               <div className="main-title text-center">
                 <h2 className="title">Log In</h2>
                 <p className="paragraph">
-                  Sign in to manage your seller account and start offering services.
+                  Access your account and manage your services.
                 </p>
               </div>
             </div>

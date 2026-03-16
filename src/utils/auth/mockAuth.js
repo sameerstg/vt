@@ -47,7 +47,32 @@ function getAllUsers() {
   merged.forEach((user) => {
     const key = String(user?.email || "").toLowerCase();
     if (!key) return;
-    uniqueByEmail.set(key, user);
+    
+    if (uniqueByEmail.has(key)) {
+      const existing = uniqueByEmail.get(key);
+      uniqueByEmail.set(key, { 
+        ...existing, 
+        ...user,
+        // Special merging for arrays to avoid losing data
+        createdTasks: [...new Set([...(existing.createdTasks || []), ...(user.createdTasks || [])].map(t => t.id))].map(id => {
+          const t1 = (existing.createdTasks || []).find(t => t.id === id);
+          const t2 = (user.createdTasks || []).find(t => t.id === id);
+          return { ...(t1 || {}), ...(t2 || {}) };
+        }),
+        receivedProposals: [...new Set([...(existing.receivedProposals || []), ...(user.receivedProposals || [])].map(p => p.id))].map(id => {
+          const p1 = (existing.receivedProposals || []).find(p => p.id === id);
+          const p2 = (user.receivedProposals || []).find(p => p.id === id);
+          return { ...(p1 || {}), ...(p2 || {}) };
+        }),
+        submittedProposals: [...new Set([...(existing.submittedProposals || []), ...(user.submittedProposals || [])].map(p => p.id))].map(id => {
+          const p1 = (existing.submittedProposals || []).find(p => p.id === id);
+          const p2 = (user.submittedProposals || []).find(p => p.id === id);
+          return { ...(p1 || {}), ...(p2 || {}) };
+        })
+      });
+    } else {
+      uniqueByEmail.set(key, user);
+    }
   });
 
   return Array.from(uniqueByEmail.values());
@@ -273,6 +298,217 @@ export async function changeMockUserPassword({
   } catch {
     return { ok: false, message: "Failed to change password." };
   }
+}
+
+export async function getMockTaskById(taskId) {
+  const users = getMockUsers();
+  for (const user of users) {
+    if (user.createdTasks) {
+      const task = user.createdTasks.find((t) => String(t.id) === String(taskId));
+      if (task) return task;
+    }
+  }
+  return null;
+}
+
+export async function createMockTask(task) {
+  const current = getAuthSession();
+  if (!current?.id) {
+    return { ok: false, message: "No active user session." };
+  }
+
+  try {
+    const response = await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        clientId: current.id,
+        task: task,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.ok && data.task) {
+      // Update local registered users
+      const raw = window.localStorage.getItem("vt_registered_mock_users");
+      let registeredUsers = [];
+      try {
+        registeredUsers = JSON.parse(raw) || [];
+      } catch (e) {}
+
+      const nextCreatedTasks = [...(current.createdTasks || []), data.task];
+      const userIndex = registeredUsers.findIndex(u => u.id === current.id);
+      if (userIndex !== -1) {
+        registeredUsers[userIndex].createdTasks = nextCreatedTasks;
+      } else {
+        // For demo users not yet in registeredUsers, add them now
+        registeredUsers.push({
+          ...current,
+          createdTasks: nextCreatedTasks
+        });
+      }
+      window.localStorage.setItem("vt_registered_mock_users", JSON.stringify(registeredUsers));
+
+      // Update current session
+      updateAuthSession({ createdTasks: nextCreatedTasks });
+    }
+    return data;
+  } catch (error) {
+    return { ok: false, message: "Failed to create task." };
+  }
+}
+
+export function getClientTasks(clientId) {
+  const users = getAllUsers();
+  const user = users.find(u => String(u.id) === String(clientId));
+  if (!user || !user.createdTasks) return [];
+  
+  return user.createdTasks.map(task => ({
+    ...task,
+    client: user.name,
+    clientId: user.id,
+    clientEmail: user.email,
+  }));
+}
+
+export function getAllClientTasks() {
+  const users = getAllUsers();
+  let tasks = [];
+  users.forEach(user => {
+    if (user.role === "client" && user.createdTasks) {
+      const userTasks = user.createdTasks.map(task => ({
+        ...task,
+        client: user.name,
+        clientId: user.id,
+        clientEmail: user.email,
+        status: "available" // All dynamic tasks should be available to workers
+      }));
+      tasks = [...tasks, ...userTasks];
+    }
+  });
+  return tasks;
+}
+
+export async function submitProposal(payload) {
+  if (typeof window === "undefined") return { ok: false };
+
+  try {
+    // 1. Save to global proposals list in localStorage (for immediate client-side UI updates)
+    const SUBMITTED_PROPOSALS_KEY = "vt_submitted_proposals";
+    const previousProposals = JSON.parse(window.localStorage.getItem(SUBMITTED_PROPOSALS_KEY) || "[]");
+    const nextProposals = [payload, ...previousProposals];
+    window.localStorage.setItem(SUBMITTED_PROPOSALS_KEY, JSON.stringify(nextProposals));
+
+    // 2. Clear old state in registeredUsers (the API will handle the true persistence)
+    // We still keep the localStorage associate for offline/immediate use
+    let registeredUsers = getRegisteredUsers();
+    
+    // Update Worker
+    const workerIndex = registeredUsers.findIndex(u => String(u.id) === String(payload.workerId));
+    if (workerIndex !== -1) {
+      if (!registeredUsers[workerIndex].submittedProposals) registeredUsers[workerIndex].submittedProposals = [];
+      registeredUsers[workerIndex].submittedProposals.push(payload);
+    }
+
+    // Update Client
+    const clientIndex = registeredUsers.findIndex(u => String(u.id) === String(payload.clientId));
+    if (clientIndex !== -1) {
+      if (!registeredUsers[clientIndex].receivedProposals) registeredUsers[clientIndex].receivedProposals = [];
+      registeredUsers[clientIndex].receivedProposals.push(payload);
+    }
+
+    setRegisteredUsers(registeredUsers);
+
+    // 3. Persistent Save to mockUsers.json via API
+    try {
+      await fetch("/api/proposals", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+    } catch (apiErr) {
+      console.warn("API save failed, falling back to localStorage only", apiErr);
+    }
+
+    return { ok: true, proposal: payload };
+  } catch (error) {
+    console.error("Proposal submission error:", error);
+    return { ok: false, message: "Failed to save proposal data." };
+  }
+}
+
+export function getProposalsForClient(clientId) {
+  if (typeof window === "undefined") return [];
+  
+  // 1. Get global proposals from localStorage
+  const raw = window.localStorage.getItem("vt_submitted_proposals");
+  let globalProposals = [];
+  try {
+    globalProposals = JSON.parse(raw) || [];
+  } catch {}
+
+  // 2. Get proposals associated with users (from mockUsers.json or registeredUsers)
+  const allUsers = getAllUsers();
+  const userProposals = [];
+  allUsers.forEach(u => {
+    if (u.receivedProposals) userProposals.push(...u.receivedProposals);
+    if (u.submittedProposals) userProposals.push(...u.submittedProposals);
+  });
+
+  // Merge and deduplicate by ID
+  const all = [...globalProposals, ...userProposals];
+  const unique = Array.from(new Map(all.map(p => [p.id, p])).values());
+
+  return unique.filter(p => String(p.clientId) === String(clientId));
+}
+
+export function getProposalCountForTask(taskId) {
+  if (typeof window === "undefined") return 0;
+  
+  // Reuse the logic from getProposalsForClient or similar pooling
+  const raw = window.localStorage.getItem("vt_submitted_proposals");
+  let globalProposals = [];
+  try {
+    globalProposals = JSON.parse(raw) || [];
+  } catch {}
+
+  const allUsers = getAllUsers();
+  const userProposals = [];
+  allUsers.forEach(u => {
+    if (u.receivedProposals) userProposals.push(...u.receivedProposals);
+    if (u.submittedProposals) userProposals.push(...u.submittedProposals);
+  });
+
+  const all = [...globalProposals, ...userProposals];
+  const unique = Array.from(new Map(all.map(p => [p.id, p])).values());
+
+  return unique.filter(p => String(p.taskId) === String(taskId)).length;
+}
+
+export function getWorkerAppliedTasks(workerId) {
+  if (typeof window === "undefined") return [];
+  
+  const allUsers = getAllUsers();
+  const worker = allUsers.find(u => String(u.id) === String(workerId));
+  if (!worker || !worker.submittedProposals) return [];
+
+  // Map proposals back to a task-like structure for the dashboard
+  return worker.submittedProposals.map(p => {
+    // Try to find the actual client name
+    const client = allUsers.find(u => String(u.id) === String(p.clientId) || u.email === p.clientEmail);
+    
+    return {
+      id: p.taskId,
+      title: p.taskTitle,
+      client: client?.name || p.clientEmail || "Client",
+      budget: `$${p.offerAmount}`,
+      deadline: p.timeline ? (isNaN(p.timeline) ? p.timeline : `${p.timeline} Days`) : "N/A",
+      skills: ["Applied"],
+      status: "applied",
+      submittedAt: p.submittedAt,
+      proposalId: p.id
+    };
+  });
 }
 
 export function getRoleFlow(role) {

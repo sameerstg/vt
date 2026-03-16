@@ -1,23 +1,28 @@
 export const workerSectionConfig = {
   available: {
     title: "Available Tasks",
-    path: "/worker-dashboard/available-tasks",
+    path: "/worker-dashboard/tasks?tab=available",
+    description: "Browse and apply for new opportunities matching your profile."
   },
   applied: {
     title: "Applied Tasks",
-    path: "/worker-dashboard/applied-tasks",
+    path: "/worker-dashboard/tasks?tab=applied",
+    description: "Track the status of proposals you've submitted to clients."
   },
   assigned: {
     title: "Assigned Tasks",
-    path: "/worker-dashboard/assigned-tasks",
+    path: "/worker-dashboard/tasks?tab=assigned",
+    description: "Review tasks currently assigned to you and waiting for execution."
   },
   in_progress: {
     title: "In Progress",
-    path: "/worker-dashboard/in-progress",
+    path: "/worker-dashboard/tasks?tab=in_progress",
+    description: "Manage milestones and work updates for your active projects."
   },
   completed: {
     title: "Completed",
-    path: "/worker-dashboard/completed-tasks",
+    path: "/worker-dashboard/tasks?tab=completed",
+    description: "Review and access deliverables for your finished contracts."
   },
   payment_history: {
     title: "Payment History",
@@ -35,6 +40,10 @@ export const workerTasks = [
     skills: ["Figma", "UI/UX"],
     status: "available",
     isEligible: true,
+    category: "Design",
+    location: "United States",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
   {
     id: 1002,
@@ -45,6 +54,10 @@ export const workerTasks = [
     skills: ["React", "Chart.js"],
     status: "available",
     isEligible: true,
+    category: "Development",
+    location: "Remote",
+    taskType: "Hourly",
+    budgetModel: "Hourly",
   },
   {
     id: 1003,
@@ -55,46 +68,10 @@ export const workerTasks = [
     skills: ["Product Design", "UX Writing"],
     status: "available",
     isEligible: false,
-  },
-  {
-    id: 1004,
-    title: "WordPress Bug Fixes",
-    client: "Brixon Media",
-    budget: "$180",
-    deadline: "Mar 08, 2026",
-    skills: ["WordPress", "PHP"],
-    status: "applied",
-    isEligible: true,
-  },
-  {
-    id: 1005,
-    title: "Mobile App QA Cycle",
-    client: "HealthConnect",
-    budget: "$320",
-    deadline: "Mar 11, 2026",
-    skills: ["QA", "Test Cases"],
-    status: "applied",
-    isEligible: true,
-  },
-  {
-    id: 1006,
-    title: "Email Template Build",
-    client: "Adlytic",
-    budget: "$240",
-    deadline: "Mar 09, 2026",
-    skills: ["HTML", "Responsive Email"],
-    status: "assigned",
-    isEligible: true,
-  },
-  {
-    id: 1007,
-    title: "API Integration Sprint",
-    client: "Paymesh",
-    budget: "$850",
-    deadline: "Mar 18, 2026",
-    skills: ["Node.js", "REST"],
-    status: "assigned",
-    isEligible: true,
+    category: "Design",
+    location: "Canada",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
   {
     id: 1008,
@@ -105,6 +82,10 @@ export const workerTasks = [
     skills: ["Next.js", "TypeScript"],
     status: "in_progress",
     isEligible: true,
+    category: "Development",
+    location: "Remote",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
   {
     id: 1009,
@@ -115,6 +96,10 @@ export const workerTasks = [
     skills: ["WCAG", "Audits"],
     status: "in_progress",
     isEligible: true,
+    category: "QA",
+    location: "United Kingdom",
+    taskType: "Hourly",
+    budgetModel: "Hourly",
   },
   {
     id: 1010,
@@ -125,6 +110,10 @@ export const workerTasks = [
     skills: ["Vercel", "CI/CD"],
     status: "completed",
     isEligible: true,
+    category: "Development",
+    location: "United States",
+    taskType: "Fixed",
+    budgetModel: "Fixed Price",
   },
   {
     id: 1011,
@@ -135,6 +124,10 @@ export const workerTasks = [
     skills: ["Docs", "Product"],
     status: "completed",
     isEligible: true,
+    category: "Writing",
+    location: "Remote",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
   },
 ];
 
@@ -165,11 +158,65 @@ export const paymentHistory = [
   },
 ];
 
+import { getMockUsers } from "@/utils/auth/mockAuth";
+
 export const getWorkerTasksBySection = (sectionKey) => {
+  const users = getMockUsers();
+  const currentSession = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem("vt_auth_session") || "null") : null;
+
+  // Resolve client info for all tasks in mockUsers.json
+  const extraTasks = [];
+  users.forEach(user => {
+    if (user.createdTasks) {
+      user.createdTasks.forEach(task => {
+        extraTasks.push({
+          ...task,
+          client: task.client || user.name,
+          clientId: task.clientId || user.id,
+          clientEmail: task.clientEmail || user.email,
+          status: task.status || "available",
+          skills: Array.isArray(task.skills) ? task.skills : (task.skills ? [task.skills] : []),
+          deadline: task.deadline ? (isNaN(task.deadline) ? task.deadline : `${task.deadline} Days`) : "TBD",
+          budget: task.budget || `$${task.budgetAmount || 0}`
+        });
+      });
+    }
+  });
+
+  const allTasks = [...workerTasks, ...extraTasks];
+
   if (sectionKey === "available") {
-    return workerTasks.filter((task) => task.status === "available" && task.isEligible);
+    return allTasks.filter((task) => task.status === "available" && (task.isEligible !== false));
   }
 
-  return workerTasks.filter((task) => task.status === sectionKey);
+  // If it's applied tasks, we should check proposals for the current worker
+  if (sectionKey === "applied" && currentSession?.id) {
+    const allProposals = [];
+    users.forEach(u => {
+      if (u.submittedProposals) allProposals.push(...u.submittedProposals);
+    });
+
+    // Also check localStorage for immediate proposals
+    if (typeof window !== "undefined") {
+      try {
+        const localProposals = JSON.parse(window.localStorage.getItem("vt_submitted_proposals") || "[]");
+        allProposals.push(...localProposals);
+      } catch (e) {}
+    }
+
+    const workerProposals = allProposals.filter(p => String(p.workerId) === String(currentSession.id));
+    const proposalTasks = workerProposals.map(p => ({
+      id: p.taskId || p.id,
+      title: p.taskTitle,
+      client: p.clientEmail || "Client",
+      budget: `$${p.offerAmount}`,
+      deadline: p.timeline ? `${p.timeline} Days` : "N/A",
+      status: "applied"
+    }));
+
+    return [...allTasks.filter((task) => task.status === "applied"), ...proposalTasks];
+  }
+
+  return allTasks.filter((task) => task.status === sectionKey);
 };
 

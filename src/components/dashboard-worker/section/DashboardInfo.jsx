@@ -1,25 +1,51 @@
+"use client";
+
 import DashboardNavigation from "../header/DashboardNavigation";
 import Link from "next/link";
 import LineChart from "../chart/LineChart";
+import { useState, useEffect, useMemo } from "react";
 import {
   getWorkerTasksBySection,
   workerSectionConfig,
 } from "@/data/workerTasks";
+import { getAuthSession, getWorkerAppliedTasks } from "@/utils/auth/mockAuth";
 
 export default function DashboardInfo() {
+  const [session, setSession] = useState(null);
+  const [dynamicAppliedTasks, setDynamicAppliedTasks] = useState([]);
+
+  useEffect(() => {
+    const currentSession = getAuthSession();
+    setSession(currentSession);
+    if (currentSession?.id) {
+      const applied = getWorkerAppliedTasks(currentSession.id);
+      setDynamicAppliedTasks(applied);
+    }
+  }, []);
+
   const availableTasks = getWorkerTasksBySection("available");
-  const appliedTasks = getWorkerTasksBySection("applied");
   const assignedTasks = getWorkerTasksBySection("assigned");
   const inProgressTasks = getWorkerTasksBySection("in_progress");
   const completedTasks = getWorkerTasksBySection("completed");
 
-  const sectionCards = [
-    { key: "available", tasks: availableTasks },
-    { key: "applied", tasks: appliedTasks },
-    { key: "assigned", tasks: assignedTasks },
-    { key: "in_progress", tasks: inProgressTasks },
-    { key: "completed", tasks: completedTasks },
-  ];
+  const sectionCards = useMemo(() => {
+    const rawCards = [
+      { key: "available", tasks: availableTasks },
+      { 
+        key: "applied", 
+        tasks: [...getWorkerTasksBySection("applied"), ...dynamicAppliedTasks] 
+      },
+      { key: "assigned", tasks: assignedTasks },
+      { key: "in_progress", tasks: inProgressTasks },
+      { key: "completed", tasks: completedTasks },
+    ];
+
+    // Deduplicate tasks within each section by their ID
+    return rawCards.map(section => ({
+      ...section,
+      tasks: Array.from(new Map(section.tasks.map(t => [String(t.id), t])).values())
+    }));
+  }, [availableTasks, dynamicAppliedTasks, assignedTasks, inProgressTasks, completedTasks]);
 
   return (
     <>
@@ -37,7 +63,7 @@ export default function DashboardInfo() {
         </div>
 
         {/* Statistics */}
-        <div className="row">
+        <div className="row g-4 mb30">
           <div className="col-sm-6 col-xxl-4">
             <div className="d-flex align-items-center justify-content-between statistics_funfact">
               <div className="details">
@@ -85,31 +111,33 @@ export default function DashboardInfo() {
         </div>
 
         {/* Line Chart */}
-        <div className="row">
+        <div className="row mb30">
           <div className="col-xl-12">
-            <LineChart />
+            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative border-none" style={{ border: '1px solid #e8edf6' }}>
+              <LineChart />
+            </div>
           </div>
         </div>
 
         {/* Task Sections */}
-        <div className="row">
+        <div className="row g-4">
           {sectionCards.map((section) => (
             <div className="col-xl-6" key={section.key}>
-              <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-                <div className="d-flex justify-content-between bdrb1 pb15 mb20">
-                  <h5 className="title">
+              <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative h-100 border-none" style={{ border: '1px solid #e8edf6' }}>
+                <div className="d-flex justify-content-between align-items-center bdrb1 pb15 mb20">
+                  <h5 className="title mb-0">
                     {workerSectionConfig[section.key].title}
                   </h5>
 
                   <Link
                     href={workerSectionConfig[section.key].path}
-                    className="text-decoration-underline text-thm6"
+                    className="text-decoration-underline fz14 text-thm6"
                   >
                     View All
                   </Link>
                 </div>
 
-                <p className="text mb15">
+                <p className="text mb20 fz14 text-muted">
                   {workerSectionConfig[section.key].description}
                 </p>
 
@@ -117,19 +145,20 @@ export default function DashboardInfo() {
                   {section.tasks.slice(0, 3).map((task) => (
                     <li
                       key={task.id}
-                      className="d-flex justify-content-between mb10 p10 bdrs4"
+                      className="d-flex justify-content-between align-items-center mb10 p15 bdrs4"
                       style={{
                         backgroundColor: "#f7f7f7",
                         listStyle: "none",
+                        border: "1px solid #f0f2f7"
                       }}
                     >
-                      <span className="fw500">{task.title}</span>
-                      <span className="text-thm6">{task.budget}</span>
+                      <span className="fw500 fz15">{task.title}</span>
+                      <span className="fw600 text-thm6">{task.budget}</span>
                     </li>
                   ))}
 
                   {section.tasks.length === 0 && (
-                    <li style={{ listStyle: "none" }}>
+                    <li className="text-muted fz14 mt20" style={{ listStyle: "none" }}>
                       No tasks found.
                     </li>
                   )}

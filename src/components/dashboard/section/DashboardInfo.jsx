@@ -1,5 +1,7 @@
+"use client";
 import DashboardNavigation from "../header/DashboardNavigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import DoughnutChart from "../chart/DoughnutChart";
 import LineChart from "../chart/LineChart";
 import {
@@ -12,12 +14,14 @@ import {
 } from "@/data/clientDashboard";
 
 export default function DashboardInfo() {
+  const router = useRouter();
   const sectionCards = [
     {
       key: "active",
-      title: "Active Tasks",
+      title: "Projects",
       description: "Tasks currently open and receiving proposals.",
       path: "/dashboard/active-tasks",
+      createPath: "/dashboard/create-task",
       items: activeTasks.map((task) => ({
         id: task.title,
         title: task.title,
@@ -80,12 +84,11 @@ export default function DashboardInfo() {
           <div className="col-lg-12">
             <div className="dashboard_title_area">
               <h2>Client Dashboard</h2>
-              <p className="text">Manage posted tasks and track progress.</p>
             </div>
           </div>
         </div>
 
-        <div className="row">
+        <div className="row g-4 mb30">
           {taskStats.map((item, index) => (
             <div key={index} className="col-sm-6 col-xxl-4">
               <div className="d-flex align-items-center justify-content-between statistics_funfact">
@@ -102,38 +105,64 @@ export default function DashboardInfo() {
           ))}
         </div>
 
-        <div className="row">
+        <div className="row mb30">
           <div className="col-xl-8">
-            <LineChart />
+            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative" style={{ border: '1px solid #e8edf6' }}>
+              <LineChart />
+            </div>
           </div>
           <div className="col-xl-4">
-            <DoughnutChart />
+            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative" style={{ border: '1px solid #e8edf6' }}>
+              <DoughnutChart />
+            </div>
           </div>
         </div>
 
-        <div className="row">
+        <div className="row g-4">
           {sectionCards.map((section) => (
             <div className="col-xl-6" key={section.key}>
-              <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-                <div className="d-flex justify-content-between bdrb1 pb15 mb20">
-                  <h5 className="title">{section.title}</h5>
-                  <Link href={section.path} className="text-decoration-underline text-thm6">
-                    View All
-                  </Link>
+              <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative h-100" style={{ border: '1px solid #e8edf6' }}>
+                <div className="d-flex justify-content-between align-items-center bdrb1 pb15 mb20">
+                  <h5 className="title mb-0">{section.title}</h5>
+                  {section.key === "active" && (
+                    <button
+                      onClick={() => router.push(section.createPath)}
+                      className="ud-btn btn-thm"
+                      style={{ padding: "5px 15px", fontSize: "12px" }}
+                    >
+                      + Create Task<i className="fal fa-arrow-right-long ms-1" />
+                    </button>
+                  )}
                 </div>
-                <p className="text mb15">{section.description}</p>
+                <p className="text mb20 fz14 text-muted">
+                  {section.description}
+                </p>
                 <ul className="mb0 ps-0">
                   {section.items.slice(0, 3).map((item) => (
                     <li
                       key={item.id}
-                      className="d-flex justify-content-between mb10 p10 bdrs4"
-                      style={{ backgroundColor: "#f7f7f7", listStyle: "none" }}
+                      className="d-flex justify-content-between align-items-center mb10 p15 bdrs4"
+                      style={{
+                        backgroundColor: "#f7f7f7",
+                        listStyle: "none",
+                        border: "1px solid #f0f2f7"
+                      }}
                     >
-                      <span className="fw500">{item.title}</span>
-                      <span className="text-thm6">{item.meta}</span>
+                      <span className="fw500 fz15">{item.title}</span>
+                      <span className="fw600 text-thm6">{item.meta}</span>
                     </li>
                   ))}
+                  {section.items.length === 0 && (
+                    <li className="text-muted fz14 mt20" style={{ listStyle: "none" }}>
+                      No tasks found.
+                    </li>
+                  )}
                 </ul>
+                <div className="text-end mt15">
+                  <Link href={section.path} className="text-decoration-underline fz14 text-thm6">
+                    View All
+                  </Link>
+                </div>
               </div>
             </div>
           ))}

@@ -61,7 +61,7 @@ export default function AboutArea1() {
                         <i className="fal fa-arrow-right-long" />
                       </Link>
                       <Link className="ud-btn btn-white2" href="/seller/login">
-                        Worker Login
+                        Login
                         <i className="fal fa-arrow-right-long" />
                       </Link>
                     </div>
@@ -96,7 +96,7 @@ export default function AboutArea1() {
                         <i className="fal fa-arrow-right-long" />
                       </Link>
                       <Link className="ud-btn btn-white2" href="/seller/login">
-                        Worker Login
+                        Login
                         <i className="fal fa-arrow-right-long" />
                       </Link>
                     </div>

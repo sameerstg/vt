@@ -3,6 +3,7 @@ import DashboardNavigation from "../header/DashboardNavigation";
 import StatementCard1 from "../card/StatementCard1";
 import { statement } from "@/data/dashboardWorker";
 
+
 export default function StatementInfo() {
   return (
     <>
@@ -88,6 +89,7 @@ export default function StatementInfo() {
                       <th scope="col">Detail</th>
                       <th scope="col">Price</th>
                       <th scope="col">Amount</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody className="t-body">

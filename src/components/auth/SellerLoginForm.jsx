@@ -49,11 +49,11 @@ export default function SellerLoginForm() {
   return (
     <div className="log-reg-form search-modal form-style1 bgc-white p50 p30-sm default-box-shadow1 bdrs12">
       <div className="mb30">
-        <h4>Welcome back, Seller!</h4>
+        <h4>Welcome back!</h4>
         <p className="text">
-          New seller?{" "}
+          New here?{" "}
           <Link href="/seller/register" className="text-thm">
-            Create seller account
+            Sign up
           </Link>
         </p>
       </div>

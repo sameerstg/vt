@@ -7,7 +7,7 @@ export const dasboardNavigation = [
   },
   {
     id: 2,
-    name: "Active Tasks",
+    name: "Projects",
     icon: "flaticon-contract",
     path: "/dashboard/active-tasks",
   },

@@ -14,7 +14,6 @@ export default function EscrowFundingInfo() {
   return (
     <ClientSectionLayout
       title="Escrow Funding Page"
-      description="Fund task escrow before start."
     >
       <div className="row">
         <div className="col-xl-8">

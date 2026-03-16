@@ -3,6 +3,8 @@
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { taskDiscoveryItems } from "@/data/taskDiscovery";
+import { getAllClientTasks } from "@/utils/auth/mockAuth";
+import WorkerTaskFilters from "./WorkerTaskFilters";
 
 const FOREIGN_LOCATIONS = [
   "United States",
@@ -31,55 +33,82 @@ export default function TaskDiscoveryPanel({
   const [location, setLocation] = useState("all");
   const [taskType, setTaskType] = useState("all");
   const [budgetModel, setBudgetModel] = useState("all");
+  const [workMode, setWorkMode] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const tasksPerPage = 5;
 
-  const categoryOptions = useMemo(
-    () => ["all", ...new Set(taskDiscoveryItems.map((item) => item.category))],
-    []
-  );
+  const [dynamicTasks, setDynamicTasks] = useState([]);
+
+  useEffect(() => {
+    setDynamicTasks(getAllClientTasks());
+  }, []);
+
+  const allTasks = useMemo(() => {
+    return [...taskDiscoveryItems, ...dynamicTasks];
+  }, [dynamicTasks]);
+
+  // Standardized catalogs from CreateTaskInfo
+  const categoryOptions = [
+    "all",
+    "Development & IT",
+    "Design & Creative",
+    "Digital Marketing",
+    "Writing & Translation",
+    "Music & Audio",
+    "Video & Animation",
+    "Engineering & Architecture",
+    "Finance & Accounting",
+  ];
 
   const locationOptions = useMemo(
     () => [
       "all",
       ...new Set([
-        ...taskDiscoveryItems.map((item) => item.location),
+        ...allTasks.map((item) => item.location),
         ...FOREIGN_LOCATIONS,
       ]),
     ],
-    []
+    [allTasks]
   );
 
-  const taskTypeOptions = useMemo(
-    () => ["all", ...new Set(taskDiscoveryItems.map((item) => item.taskType))],
-    []
-  );
-
-  const budgetModelOptions = useMemo(
-    () => ["all", ...new Set(taskDiscoveryItems.map((item) => item.budgetModel))],
-    []
-  );
+  const taskTypeOptions = ["all", "Individual", "Contractor"];
+  const budgetModelOptions = ["all", "Fixed", "Milestone"];
+  const workModeOptions = ["all", "Virtual", "Physical"];
 
   const filteredTasks = useMemo(() => {
-    return taskDiscoveryItems
+    const query = searchQuery.trim().toLowerCase();
+    return allTasks
       .filter((item) => (category === "all" ? true : item.category === category))
       .filter((item) => (location === "all" ? true : item.location === location))
-      .filter((item) => (taskType === "all" ? true : item.taskType === taskType))
+      .filter((item) => (taskType === "all" ? true : (item.taskType || "").toLowerCase() === taskType.toLowerCase()))
       .filter((item) =>
-        budgetModel === "all" ? true : item.budgetModel === budgetModel
+        budgetModel === "all" ? true : (item.budgetModel || "").toLowerCase() === budgetModel.toLowerCase()
       )
+      .filter((item) => {
+        if (workMode === "all") return true;
+        const mode = (item.workMode || "").toLowerCase();
+        return mode === workMode.toLowerCase();
+      })
+      .filter((item) => {
+        if (!query) return true;
+        return (
+          item.title.toLowerCase().includes(query) ||
+          (item.client || "").toLowerCase().includes(query)
+        );
+      })
       .sort((a, b) => {
         const aRank = getLocationPriorityRank(a.location, preferredLocation);
         const bRank = getLocationPriorityRank(b.location, preferredLocation);
         if (aRank !== bRank) return aRank - bRank;
-        return a.id.localeCompare(b.id);
+        return String(a.id).localeCompare(String(b.id));
       });
-  }, [budgetModel, category, location, preferredLocation, taskType]);
+  }, [allTasks, budgetModel, category, location, preferredLocation, taskType, workMode, searchQuery]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [category, location, taskType, budgetModel]);
+  }, [category, location, taskType, budgetModel, workMode, searchQuery]);
 
   const totalPages = Math.max(
     1,
@@ -95,6 +124,8 @@ export default function TaskDiscoveryPanel({
     const query = new URLSearchParams({
       taskId: task.id,
       taskTitle: task.title,
+      clientId: task.clientId || "",
+      clientEmail: task.clientEmail || "",
     });
     router.push(`${proposalPath}?${query.toString()}`);
   };
@@ -103,71 +134,21 @@ export default function TaskDiscoveryPanel({
     <div className="row g-4">
       {/* FILTERS */}
       <div className="col-xl-12">
-        <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-          <h5 className="title mb20">Required Filters</h5>
-
-          <div className="row g-3">
-            <div className="col-md-6 col-xl-3">
-              <label className="form-label fw500">Category</label>
-              <select
-                className="form-select"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                {categoryOptions.map((item) => (
-                  <option key={item} value={item}>
-                    {item === "all" ? "All Categories" : item}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="col-md-6 col-xl-3">
-              <label className="form-label fw500">Location</label>
-              <select
-                className="form-select"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              >
-                {locationOptions.map((item) => (
-                  <option key={item} value={item}>
-                    {item === "all" ? "All Locations" : item}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="col-md-6 col-xl-3">
-              <label className="form-label fw500">Task Type</label>
-              <select
-                className="form-select"
-                value={taskType}
-                onChange={(e) => setTaskType(e.target.value)}
-              >
-                {taskTypeOptions.map((item) => (
-                  <option key={item} value={item}>
-                    {item === "all" ? "All Task Types" : item}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="col-md-6 col-xl-3">
-              <label className="form-label fw500">Budget Model</label>
-              <select
-                className="form-select"
-                value={budgetModel}
-                onChange={(e) => setBudgetModel(e.target.value)}
-              >
-                {budgetModelOptions.map((item) => (
-                  <option key={item} value={item}>
-                    {item === "all" ? "All Budget Models" : item}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+        <WorkerTaskFilters
+          category={category}
+          setCategory={setCategory}
+          location={location}
+          setLocation={setLocation}
+          taskType={taskType}
+          setTaskType={setTaskType}
+          budgetModel={budgetModel}
+          setBudgetModel={setBudgetModel}
+          workMode={workMode}
+          setWorkMode={setWorkMode}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          locationOptions={locationOptions}
+        />
       </div>
 
       {/* TASK LIST */}
@@ -180,11 +161,12 @@ export default function TaskDiscoveryPanel({
               <thead className="t-head">
                 <tr>
                   <th>Task</th>
+                  <th>Client</th>
                   <th>Category</th>
                   <th>Location</th>
-                  <th>Task Type</th>
-                  <th>Budget Model</th>
+                  <th>Mode</th>
                   <th>Budget</th>
+                  <th>Action</th>
                 </tr>
               </thead>
 
@@ -193,23 +175,41 @@ export default function TaskDiscoveryPanel({
                   <tr
                     key={task.id}
                     className="task-row-hover"
-                    role="button"
-                    tabIndex={0}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => openProposalPage(task)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        openProposalPage(task);
-                      }
-                    }}
                   >
-                    <td>{task.title}</td>
+                    <td className="fw500">{task.title}</td>
+                    <td>{task.client || "VT Verified"}</td>
                     <td>{task.category}</td>
                     <td>{task.location}</td>
-                    <td>{task.taskType}</td>
-                    <td>{task.budgetModel}</td>
+                    <td className="text-capitalize">{task.workMode || "Virtual"}</td>
                     <td>{task.budget}</td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const query = new URLSearchParams({
+                              taskId: task.id,
+                              title: task.title,
+                            });
+                            router.push(`/worker-dashboard/available-tasks/details?${query.toString()}`);
+                          }}
+                          className="ud-btn btn-light-default"
+                          style={{ padding: "5px 15px", fontSize: "12px" }}
+                        >
+                          Details
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openProposalPage(task);
+                          }}
+                          className="ud-btn btn-thm"
+                          style={{ padding: "5px 15px", fontSize: "12px" }}
+                        >
+                          Apply<i className="fal fa-arrow-right-long ms-1" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
 
@@ -265,46 +265,13 @@ export default function TaskDiscoveryPanel({
       </div>
 
       <style jsx>{`
-        .task-row-hover td {
-          transition: background-color 0.2s ease;
-        }
-
-        .task-row-hover:hover td {
-          background-color: #f5f7ff;
-        }
-
-        .task-row-hover:hover td:first-child {
-          color: #5b2eff;
-          font-weight: 600;
-        }
-
-        .worker-pagination {
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
-
-        .worker-pagination__page,
-        .worker-pagination__nav {
-          min-width: 42px;
-          height: 42px;
-          border-radius: 10px;
-          border: 1px solid #dbe1ee;
-          background: #ffffff;
-          font-weight: 600;
-        }
-
-        .worker-pagination__page.is-active {
-          border-color: #5b2dff;
-          background: #f4f0ff;
-          color: #5b2dff;
-        }
-
-        .worker-pagination__nav:disabled {
-          opacity: 0.45;
-          cursor: not-allowed;
-        }
+        .task-row-hover td { transition: background-color 0.2s ease; }
+        .task-row-hover:hover td { background-color: #f7f7f7; }
+        .task-row-hover:hover td:first-child { color: #5b2dff; font-weight: 600; }
+        .worker-pagination { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .worker-pagination__page, .worker-pagination__nav { min-width: 42px; height: 42px; border-radius: 4px; border: 1px solid #dbe1ee; background: #ffffff; font-weight: 600; }
+        .worker-pagination__page.is-active { border-color: #5b2dff; background: #f7f7f7; color: #5b2dff; }
+        .worker-pagination__nav:disabled { opacity: 0.45; cursor: not-allowed; }
       `}</style>
     </div>
   );

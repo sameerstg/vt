@@ -1,6 +1,6 @@
 export const taskStats = [
   {
-    title: "Active Tasks",
+    title: "Active Task",
     value: 8,
     note: "Currently live and accepting proposals",
     icon: "flaticon-contract",
@@ -32,9 +32,7 @@ export const taskStats = [
 ];
 
 export const activeTasks = [
-  { title: "Website UX Audit", budget: "$450", proposals: 9, status: "Active" },
-  { title: "Mobile App QA Testing", budget: "$700", proposals: 5, status: "Active" },
-  { title: "SEO Content Plan", budget: "$300", proposals: 11, status: "Active" },
+
 ];
 
 export const pendingEscrow = [

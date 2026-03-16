@@ -1,17 +1,17 @@
 import DashboardLayout from "@/components/dashboard-worker/DashboardLayout";
-import PaymentHistoryInfo from "@/components/dashboard-worker/section/PaymentHistoryInfo";
+import AssignedTaskDetails from "@/components/dashboard-worker/section/AssignedTaskDetails";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Worker Dashboard | Payment History",
+  title: "Assigned Task Details | Worker Dashboard",
 };
 
-export default function page() {
+export default function AssignedTaskDetailsPage() {
   return (
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <PaymentHistoryInfo />
+        <AssignedTaskDetails />
       </DashboardLayout>
     </>
   );

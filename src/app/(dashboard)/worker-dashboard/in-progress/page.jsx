@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/dashboard-worker/DashboardLayout";
-import WorkerTaskSectionInfo from "@/components/dashboard-worker/section/WorkerTaskSectionInfo";
+import TasksInfo from "@/components/dashboard-worker/section/TasksInfo";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 import { workerSectionConfig } from "@/data/workerTasks";
 
@@ -14,7 +14,11 @@ export default function page() {
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <WorkerTaskSectionInfo sectionKey={sectionKey} />
+        <TasksInfo 
+          initialFilter={sectionKey} 
+          pageTitle={workerSectionConfig[sectionKey].title}
+          pageDescription={workerSectionConfig[sectionKey].description}
+        />
       </DashboardLayout>
     </>
   );

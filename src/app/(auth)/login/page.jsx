@@ -28,7 +28,7 @@ export default function Page() {
     const otpRefs = useRef([]);
 
     const isOtpComplete = useMemo(() => otp.every((digit) => digit.length === 1), [otp]);
-    
+
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -147,8 +147,7 @@ export default function Page() {
                                 <div className="main-title text-center">
                                     <h2 className="title">Log In</h2>
                                     <p className="paragraph">
-                                        Give your visitor a smooth online
-                                        experience with a solid UX design 
+                                        Access your account to manage jobs, projects, and opportunities.
                                     </p>
                                 </div>
                             </div>
@@ -185,31 +184,31 @@ export default function Page() {
                                     </div>
                                     <div className="mb15">
                                         <label className="form-label fw600 dark-color">
-    Password
-</label>
+                                            Password
+                                        </label>
 
-<div style={{ position: "relative" }}>
-    <input
-        type={showPassword ? "text" : "password"}
-        className="form-control"
-        placeholder="*******"
-        value={loginPassword}
-        onChange={(event) => setLoginPassword(event.target.value)}
-    />
+                                        <div style={{ position: "relative" }}>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                className="form-control"
+                                                placeholder="*******"
+                                                value={loginPassword}
+                                                onChange={(event) => setLoginPassword(event.target.value)}
+                                            />
 
-    <i
-        className={showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}
-        onClick={() => setShowPassword(!showPassword)}
-        style={{
-            position: "absolute",
-            right: "15px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            cursor: "pointer",
-            color: "#666"
-        }}
-    ></i>
-</div>
+                                            <i
+                                                className={showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                style={{
+                                                    position: "absolute",
+                                                    right: "15px",
+                                                    top: "50%",
+                                                    transform: "translateY(-50%)",
+                                                    cursor: "pointer",
+                                                    color: "#666"
+                                                }}
+                                            ></i>
+                                        </div>
                                     </div>
                                     <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb20">
                                         <button

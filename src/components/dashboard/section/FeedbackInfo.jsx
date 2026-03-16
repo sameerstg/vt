@@ -19,7 +19,6 @@ export default function FeedbackInfo({ item }) {
   return (
     <ClientSectionLayout
       title="Feedback"
-      description="Post-completion rating."
     >
       <div className="row">
         <div className="col-xl-5">

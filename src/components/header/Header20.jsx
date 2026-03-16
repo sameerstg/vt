@@ -70,7 +70,7 @@ export default function Header20() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-auto">
+                            <div className="col-auto px-5 ">
                                 <div className="d-flex align-items-center header-right-cluster">
                                     <Navigation />
                                     {/* {(!isSessionReady || !session) && (
