@@ -6,7 +6,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import DashboardNavigation from "../header/DashboardNavigation";
 import { workerTasks } from "@/data/workerTasks";
+<<<<<<< HEAD
 import { getAuthSession, getWorkerAppliedTasks } from "@/utils/auth/mockAuth";
+=======
+>>>>>>> b2f4255c9895284eb7ef42cda174c4c5f7e60dee
 
 export default function AppliedTaskDetails() {
   const router = useRouter();
@@ -16,6 +19,7 @@ export default function AppliedTaskDetails() {
   const taskId = searchParams.get('taskId');
   const taskTitle = searchParams.get('title') || 'Task Details';
 
+<<<<<<< HEAD
   // Task find karein
   const task = useMemo(() => {
     // 1. Check static workerTasks
@@ -32,6 +36,16 @@ export default function AppliedTaskDetails() {
 
     return null;
   }, [taskId]);
+=======
+  // Task ID ko number mein convert karein
+  const taskIdNum = parseInt(taskId);
+
+  // Task find karein
+  const task = useMemo(() => {
+    if (isNaN(taskIdNum)) return null;
+    return workerTasks.find(t => t.id === taskIdNum);
+  }, [taskIdNum]);
+>>>>>>> b2f4255c9895284eb7ef42cda174c4c5f7e60dee
 
   // Agar task nahi mila ya taskId nahi hai
   if (!taskId || !task) {
