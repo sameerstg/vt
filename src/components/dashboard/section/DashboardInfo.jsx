@@ -130,7 +130,7 @@ export default function DashboardInfo() {
                       className="ud-btn btn-thm"
                       style={{ padding: "5px 15px", fontSize: "12px" }}
                     >
-                      + Create Task<i className="fal fa-arrow-right-long ms-1" />
+                      + Create Project<i className="fal fa-arrow-right-long ms-1" />
                     </button>
                   )}
                 </div>

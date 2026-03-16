@@ -155,7 +155,7 @@ export default function ClientTaskManagementInfo({ initialTab = "active" }) {
             <table className="table-style3 table at-savesearch align-middle mb-0">
               <thead className="t-head">
                 <tr>
-                  <th scope="col">Task Title</th>
+                  <th scope="col">Project Title</th>
                   <th scope="col">Budget</th>
                   <th scope="col">Proposals</th>
                   <th scope="col">Status</th>
@@ -302,7 +302,7 @@ export default function ClientTaskManagementInfo({ initialTab = "active" }) {
             className="ud-btn btn-thm"
             style={{ padding: "8px 20px" }}
           >
-            Create Task<i className="fal fa-arrow-right-long ms-1" />
+            Create Project<i className="fal fa-arrow-right-long ms-1" />
           </button>
         )
       }

@@ -1,6 +1,6 @@
 export const taskStats = [
   {
-    title: "Active Task",
+    title: "Active Project",
     value: 8,
     note: "Currently live and accepting proposals",
     icon: "flaticon-contract",
