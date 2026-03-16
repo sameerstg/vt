@@ -13,7 +13,8 @@ export default function DashboardSidebar() {
   const teamsSubMenuPaths = [
     "/contractor-dashboard/team",
     "/contractor-dashboard/team/assign-projects",
-    "/contractor-dashboard/team/assign-milestones"
+    "/contractor-dashboard/team/assign-milestones",
+    "/contractor-dashboard/team/monitor-milestones"
   ];
   // Open Teams menu if any sub-menu item is active
   const isTeamsActive = teamsSubMenuPaths.some((p) => path.startsWith(p));
@@ -33,6 +34,7 @@ export default function DashboardSidebar() {
     "/contractor-dashboard/team",
     "/contractor-dashboard/team/assign-projects",
     "/contractor-dashboard/team/assign-milestones",
+    "/contractor-dashboard/team/monitor-milestones",
     "/contractor-dashboard/dispute-submission",
   ]);
   const accountPaths = new Set([
@@ -106,6 +108,13 @@ export default function DashboardSidebar() {
                 >
                   <i className="flaticon-briefcase mr15" />
                   <span>Assign Milestones</span>
+                </Link>
+                <Link
+                  href="/contractor-dashboard/team/monitor-milestones"
+                  className={`items-center cursor-pointer d-flex align-items-center mb-1 ${path === "/contractor-dashboard/team/monitor-milestones" ? "-is-active" : ""}`}
+                >
+                  <i className="fal fa-desktop mr15" />
+                  <span>Monitor Milestones</span>
                 </Link>
               </div>
             )}

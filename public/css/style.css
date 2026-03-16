@@ -14168,3 +14168,57 @@ hr {
 .rc-slider .rc-slider-tracks {
   background-color: var(--primary-color);
 }
+
+/* Custom Monitor UI Styles */
+.monitor-rows-container .animate-pulse {
+  animation: status-pulse 2s infinite;
+}
+
+@keyframes status-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(235, 164, 18, 0.4); }
+  70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(235, 164, 18, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(235, 164, 18, 0); }
+}
+
+.shadow-inner {
+  box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.06) !important;
+}
+
+.hover-shadow-md:hover {
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05) !important;
+  transform: translateY(-2px);
+}
+
+.bdrs-tl-0 { border-top-left-radius: 0 !important; }
+.bdrs-tr-0 { border-top-right-radius: 0 !important; }
+
+.bg-danger-light { background-color: #fff5f5 !important; }
+.bg-warning-light { background-color: #fffbef !important; }
+.bg-success-light { background-color: #f0fdf4 !important; }
+.bg-light-danger { background-color: #fee2e2 !important; color: #dc2626 !important; }
+.bg-light-thm { background-color: #e6f1f0 !important; color: #5bbb7b !important; }
+
+.btn-xs {
+  padding: 5px 12px !important;
+  font-size: 12px !important;
+}
+
+.btn-light-danger:hover {
+  background-color: #dc2626 !important;
+  color: #fff !important;
+}
+
+.btn-light-thm:hover {
+  background-color: #5bbb7b !important;
+  color: #fff !important;
+}
+
+.stats-card-mini {
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.stats-card-mini:hover {
+  background-color: #fff !important;
+  border-color: var(--primary-color);
+}

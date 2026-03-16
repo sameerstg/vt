@@ -32,6 +32,7 @@ export const dasboardNavigation = [
       { name: "Team Members", path: "/contractor-dashboard/team" },
       { name: "Assign Projects", path: "/contractor-dashboard/team/assign-projects" },
       { name: "Assign Milestones", path: "/contractor-dashboard/team/assign-milestones" },
+      { name: "Monitor Milestones", path: "/contractor-dashboard/team/monitor-milestones" },
     ]
   },
   {

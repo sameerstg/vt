@@ -6,10 +6,34 @@ import React from "react";
 export default function TeamManagementInfo({ activeTab = "overview" }) {
   // Placeholder team members with multiple projects
   const [teamMembers, setTeamMembers] = React.useState([
-    { id: 1, name: "Ahsan Raza", email: "ahsan.raza@veritask.com", userId: "w-1001", projects: [{ name: "UI Fix Batch", milestones: [{ name: "Component Styling", price: 50, deadline: "2024-04-20" }] }, { name: "QA Regression Pass", milestones: [] }] },
-    { id: 2, name: "Sara Khan", email: "sara.khan@veritask.com", userId: "w-1002", projects: [{ name: "QA Regression Pass", milestones: [{ name: "Login Flow", price: 75, deadline: "2024-04-25" }, { name: "Checkout Process", price: 100, deadline: "2024-04-30" }] }] },
-    { id: 3, name: "Bilal Ahmed", email: "bilal.ahmed@veritask.com", userId: "w-1003", projects: [{ name: "Client Delivery Notes", milestones: [] }, { name: "UI Fix Batch", milestones: [{ name: "Icon Integration", price: 30, deadline: "2024-05-01" }] }] },
+    { id: 1, name: "Ahsan Raza", email: "ahsan.raza@veritask.com", userId: "w-1001", projects: [{ name: "UI Fix Batch", milestones: [{ name: "Component Styling", price: 50, deadline: "2024-04-20", status: "working" }, { name: "Responsive Layout", price: 80, deadline: "2024-04-22", status: "submitted" }] }, { name: "QA Regression Pass", milestones: [] }] },
+    { id: 2, name: "Sara Khan", email: "sara.khan@veritask.com", userId: "w-1002", projects: [{ name: "QA Regression Pass", milestones: [{ name: "Login Flow", price: 75, deadline: "2024-04-25", status: "working" }, { name: "Checkout Process", price: 100, deadline: "2024-04-30", status: "revision" }] }] },
+    { id: 3, name: "Bilal Ahmed", email: "bilal.ahmed@veritask.com", userId: "w-1003", projects: [{ name: "Client Delivery Notes", milestones: [] }, { name: "UI Fix Batch", milestones: [{ name: "Icon Integration", price: 30, deadline: "2024-05-01", status: "completed" }] }] },
   ]);
+
+  const [reviewModal, setReviewModal] = React.useState({ show: false, milestone: null, mode: "review" }); // mode: 'review' or 'concern'
+  const [concernText, setConcernText] = React.useState("");
+  const [monitorFilter, setMonitorFilter] = React.useState("all"); // all, submitted, revision, completed, working
+
+  const updateMilestoneStatus = (memberId, projectName, milestoneName, newStatus) => {
+    setTeamMembers(prev => prev.map(m => {
+      if (m.id === memberId) {
+        return {
+          ...m,
+          projects: m.projects.map(p => {
+            if (p.name === projectName) {
+              return {
+                ...p,
+                milestones: p.milestones.map(ms => ms.name === milestoneName ? { ...ms, status: newStatus } : ms)
+              };
+            }
+            return p;
+          })
+        };
+      }
+      return m;
+    }));
+  };
 
   // Demo project list with milestones
   const projectMilestones = {
@@ -133,11 +157,18 @@ export default function TeamManagementInfo({ activeTab = "overview" }) {
               {activeTab === "overview" && "Team Roster"}
               {activeTab === "projects" && "Project Pipeline"}
               {activeTab === "milestones" && "Milestone Matrix"}
+              {activeTab === "monitor" && "Delivery Monitor"}
             </h5>
             <div className="d-flex align-items-center gap-3 mt-1">
-              <span className="text-muted fz13"><i className="fal fa-users me-1 text-thm"></i> {teamMembers.length} Members</span>
-              <span className="text-muted fz13"><i className="fal fa-briefcase me-1 text-thm"></i> {teamMembers.reduce((acc, m) => acc + m.projects.length, 0)} Projects</span>
-              <span className="text-muted fz13"><i className="fal fa-tasks me-1 text-thm"></i> {teamMembers.reduce((acc, m) => acc + m.projects.reduce((pAcc, p) => pAcc + p.milestones.length, 0), 0)} Milestones</span>
+              <span className="text-muted fz13 fw500"><i className="fal fa-users me-1 text-thm"></i> {teamMembers.length} Members</span>
+              <span className="text-muted fz13 fw500"><i className="fal fa-briefcase me-1 text-thm"></i> {teamMembers.reduce((acc, m) => acc + m.projects.length, 0)} Projects</span>
+              <span className="text-muted fz13 fw500 ps-3 border-start"><i className="fal fa-tasks me-1 text-thm"></i> {teamMembers.reduce((acc, m) => acc + m.projects.reduce((pAcc, p) => pAcc + p.milestones.length, 0), 0)} Total Milestones</span>
+              {activeTab === "monitor" && (
+                <span className="text-warning fz13 fw600 ps-3 border-start">
+                  <i className="fas fa-exclamation-triangle me-1"></i> 
+                  {teamMembers.reduce((acc, m) => acc + m.projects.reduce((pAcc, p) => pAcc + p.milestones.filter(ms => ms.status === "submitted").length, 0), 0)} Awaiting Review
+                </span>
+              )}
             </div>
           </div>
           <div className="mt-3 mt-sm-0">
@@ -147,6 +178,79 @@ export default function TeamManagementInfo({ activeTab = "overview" }) {
           </div>
         </div>
 
+        {activeTab === "monitor" && (
+          <div className="row g-3 mb25">
+            <div className="col-sm-6 col-lg-4">
+              <div className="stats-card-mini bg-warning-light p20 bdrs12 border border-warning shadow-xs">
+                <div className="d-flex align-items-center justify-content-between mb10">
+                  <div className="bdrs50 bg-white text-warning d-flex align-items-center justify-content-center shadow-sm" style={{ width: 32, height: 32 }}>
+                    <i className="fas fa-clock"></i>
+                  </div>
+                  <span className="badge bg-warning text-white rounded-pill">Urgent</span>
+                </div>
+                <h3 className="mb0 ff-heading fw700 text-dark">
+                  {teamMembers.reduce((acc, m) => acc + m.projects.reduce((pAcc, p) => pAcc + p.milestones.filter(ms => ms.status === "submitted").length, 0), 0)}
+                </h3>
+                <p className="text-muted fz13 mb0 fw500">Waitlisted for Review</p>
+              </div>
+            </div>
+            <div className="col-sm-6 col-lg-4">
+              <div className="stats-card-mini bgc-thm-light p20 bdrs12 border border-thm shadow-xs">
+                <div className="d-flex align-items-center justify-content-between mb10">
+                  <div className="bdrs50 bg-white text-thm d-flex align-items-center justify-content-center shadow-sm" style={{ width: 32, height: 32 }}>
+                    <i className="fas fa-dollar-sign"></i>
+                  </div>
+                  <span className="badge bgc-thm text-white rounded-pill">Budget</span>
+                </div>
+                <h3 className="mb0 ff-heading fw700 text-dark">
+                  ${teamMembers.reduce((acc, m) => acc + m.projects.reduce((pAcc, p) => pAcc + p.milestones.reduce((mAcc, ms) => mAcc + ms.price, 0), 0), 0)}
+                </h3>
+                <p className="text-muted fz13 mb0 fw500">Total Pipeline Value</p>
+              </div>
+            </div>
+            <div className="col-sm-6 col-lg-4">
+              <div className="stats-card-mini bg-success-light p20 bdrs12 border border-success shadow-xs">
+                <div className="d-flex align-items-center justify-content-between mb10">
+                  <div className="bdrs50 bg-white text-success d-flex align-items-center justify-content-center shadow-sm" style={{ width: 32, height: 32 }}>
+                    <i className="fas fa-shield-check"></i>
+                  </div>
+                  <span className="badge bg-success text-white rounded-pill">Quality</span>
+                </div>
+                <h3 className="mb0 ff-heading fw700 text-dark">
+                  {(() => {
+                    const total = teamMembers.reduce((acc, m) => acc + m.projects.reduce((pAcc, p) => pAcc + p.milestones.length, 0), 0);
+                    const done = teamMembers.reduce((acc, m) => acc + m.projects.reduce((pAcc, p) => pAcc + p.milestones.filter(ms => ms.status === "completed" || ms.status === "submitted_to_client").length, 0), 0);
+                    return total > 0 ? Math.round((done / total) * 100) : 0;
+                  })()}%
+                </h3>
+                <p className="text-muted fz13 mb0 fw500">Execution Velocity</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "monitor" && (
+          <div className="d-flex align-items-center justify-content-between mb25 bg-light-subtle p-3 bdrs12 border border-dashed shadow-xs">
+            <div className="d-flex gap-2 flex-wrap">
+              {[
+                { id: "all", label: "Global View", icon: "fa-layer-group", color: "thm" },
+                { id: "submitted", label: "Review Required", icon: "fa-clock", color: "warning" },
+                { id: "revision", label: "Needs Revision", icon: "fa-history", color: "danger" },
+                { id: "working", label: "Development", icon: "fa-code", color: "thm" },
+                { id: "completed", label: "Internal QC Passed", icon: "fa-clipboard-check", color: "success" }
+              ].map(f => (
+                <button
+                  key={f.id}
+                  onClick={() => setMonitorFilter(f.id)}
+                  className={`ud-btn btn-xs bdrs12 transition-all border-0 px-3 ${monitorFilter === f.id ? `bgc-${f.color || "thm"} text-white shadow-md fw600` : "bg-white text-muted hover-bgc-thm-light border"}`}
+                >
+                  <i className={`fal ${f.icon} me-2`}></i> {f.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="packages_table table-responsive">
           <table className="table-style3 table at-savesearch">
             <thead className="t-head">
@@ -155,6 +259,12 @@ export default function TeamManagementInfo({ activeTab = "overview" }) {
                 {activeTab === "overview" && <th className="fz13 uppercase text-muted fw600 py-3">Contact Details</th>}
                 {activeTab === "projects" && <th className="fz13 uppercase text-muted fw600 py-3">Workload Distribution</th>}
                 {activeTab === "milestones" && <th className="fz13 uppercase text-muted fw600 py-3">Delivery Status</th>}
+                {activeTab === "monitor" && (
+                  <>
+                    <th className="fz13 uppercase text-muted fw600 py-3">Project & Milestone</th>
+                    <th className="fz13 uppercase text-muted fw600 py-3">Execution Progress</th>
+                  </>
+                )}
                 <th className="fz13 uppercase text-muted fw600 py-3 text-end pe-4">Control Center</th>
               </tr>
             </thead>
@@ -172,6 +282,122 @@ export default function TeamManagementInfo({ activeTab = "overview" }) {
                       </div>
                     </div>
                   </td>
+                  {activeTab === "monitor" && (
+                    <td className="vam" colSpan="3">
+                      <div className="monitor-rows-container">
+                        {(() => {
+                          let allMs = member.projects.flatMap(p => p.milestones.map(ms => ({ ...ms, projName: p.name })));
+                          if (monitorFilter !== "all") {
+                            allMs = allMs.filter(ms => ms.status === monitorFilter);
+                          }
+                          
+                          if (allMs.length === 0) {
+                            return (
+                              <div className="p20 text-center bg-light bdrs12 italic text-muted fz13 border border-dashed">
+                                No milestones found matching "{monitorFilter}".
+                              </div>
+                            );
+                          }
+
+                          return allMs.map((ms, msIdx) => {
+                            const isOverdue = ms.deadline && new Date(ms.deadline) < new Date() && ms.status !== "completed";
+                            const isClose = ms.deadline && !isOverdue && (new Date(ms.deadline) - new Date()) < (3 * 24 * 60 * 60 * 1000); // 3 days
+
+                            return (
+                              <div key={msIdx} className={`d-flex align-items-center justify-content-between p15 mb10 bdrs12 border bg-white shadow-sm transition-all hover-shadow-md position-relative overflow-hidden ${isOverdue ? "border-danger-subtle" : ""}`}>
+                                {isOverdue && <div className="position-absolute h-100 bg-danger" style={{ width: 4, left: 0, top: 0 }}></div>}
+                                {isClose && <div className="position-absolute h-100 bg-warning" style={{ width: 4, left: 0, top: 0 }}></div>}
+                                
+                                <div style={{ width: "35%" }}>
+                                  <span className="d-block text-muted fz10 uppercase fw700 mb1 tracking-wide" style={{ letterSpacing: "0.5px" }}>{ms.projName}</span>
+                                  <h6 className="mb0 ff-heading fw600 fz15 d-flex align-items-center">
+                                    {ms.name}
+                                    {isOverdue && <span className="ms-2 badge bg-danger text-white fz10 fw400 bdrs4">OVERDUE</span>}
+                                  </h6>
+                                </div>
+
+                                <div style={{ width: "25%" }} className="text-center">
+                                  {ms.status === "working" && (
+                                    <div className="d-flex flex-column align-items-center">
+                                      <span className="badge bgc-thm-light text-thm py-2 px-3 bdrs20 fz11 fw600"><i className="fal fa-spinner fa-spin me-2"></i>In Progress</span>
+                                      <div className="w-75 mt2 bg-light bdrs10 overflow-hidden" style={{ height: 4 }}>
+                                        <div className="bgc-thm h-full" style={{ width: "65%" }}></div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {ms.status === "submitted" && (
+                                    <span className="badge bg-warning-light text-warning py-2 px-3 bdrs20 fz11 fw600 border border-warning-subtle shadow-sm animate-pulse">
+                                      <i className="fas fa-eye me-2"></i>Review Needed
+                                    </span>
+                                  )}
+                                  {ms.status === "revision" && (
+                                    <span className="badge bg-danger-light text-danger py-2 px-3 bdrs20 fz11 fw600 border border-danger-subtle">
+                                      <i className="fal fa-history me-2"></i>Fixing Issues
+                                    </span>
+                                  )}
+                                  {ms.status === "completed" && (
+                                    <span className="badge bg-success-light text-success py-2 px-3 bdrs20 fz11 fw600 border border-success-subtle">
+                                      <i className="fas fa-check-double me-2"></i>Approved by You
+                                    </span>
+                                  )}
+                                  {ms.status === "submitted_to_client" && (
+                                    <span className="badge bgc-thm text-white py-2 px-3 bdrs20 fz11 fw600 shadow-sm">
+                                      <i className="fal fa-external-link-square me-2"></i>Awaiting Client
+                                    </span>
+                                  )}
+                                </div>
+
+                                <div style={{ width: "20%" }} className="text-end pe-4">
+                                  <div className="fw700 text-dark fz16">${ms.price}</div>
+                                  <div className={`fz12 fw500 ${isOverdue ? "text-danger" : isClose ? "text-warning" : "text-muted"}`}>
+                                    <i className={`fal ${isOverdue ? "fa-exclamation-triangle" : "fa-calendar-alt"} me-1`}></i>
+                                    {ms.deadline || "Flexible"}
+                                  </div>
+                                </div>
+
+                                <div style={{ width: "20%" }} className="text-end pe-2">
+                                  <div className="d-flex gap-2 justify-content-end">
+                                    {ms.status === "submitted" && (
+                                      <>
+                                        <button 
+                                          className="ud-btn btn-thm btn-xs bdrs12 shadow-sm py-1" 
+                                          onClick={() => updateMilestoneStatus(member.id, ms.projName, ms.name, "completed")}
+                                          title="Approve for Internal Review"
+                                        >
+                                          <i className="fal fa-check me-1"></i> Approve
+                                        </button>
+                                        <button className="ud-btn btn-light-danger btn-xs bdrs12 shadow-sm py-1 px-3" onClick={() => setReviewModal({ show: true, milestone: { ...ms, memberId: member.id }, mode: "concern" })}>
+                                          <i className="fal fa-comment-alt-exclamation"></i>
+                                        </button>
+                                      </>
+                                    )}
+                                    {ms.status === "completed" && (
+                                      <button 
+                                        className="ud-btn btn-dark btn-xs bdrs12 shadow-sm py-1 flex-grow-1" 
+                                        onClick={() => updateMilestoneStatus(member.id, ms.projName, ms.name, "submitted_to_client")}
+                                      >
+                                        <i className="fal fa-paper-plane me-1"></i> Submit to Client
+                                      </button>
+                                    )}
+                                    {ms.status === "revision" && (
+                                      <button className="ud-btn btn-light-thm btn-xs bdrs12 shadow-sm py-1" onClick={() => setReviewModal({ show: true, milestone: { ...ms, memberId: member.id }, mode: "review" })}>
+                                        <i className="fal fa-info-circle me-1"></i> View Issues
+                                      </button>
+                                    )}
+                                    {(ms.status === "working" || ms.status === "submitted_to_client") && (
+                                      <button className="ud-btn btn-light btn-xs bdrs12 border shadow-sm py-1" onClick={() => setReviewModal({ show: true, milestone: { ...ms, memberId: member.id }, mode: "review" })}>
+                                        <i className="fal fa-envelope me-1"></i> Chat
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          });
+                        })()}
+                      </div>
+                    </td>
+                  )}
                   {activeTab === "overview" && (
                     <td className="vam">
                       <div className="fz13 text-muted">
@@ -228,44 +454,46 @@ export default function TeamManagementInfo({ activeTab = "overview" }) {
                       </div>
                     </td>
                   )}
-                  <td className="vam text-end pe-4">
-                    <div className="d-flex gap-2 justify-content-end">
-                      {activeTab === "milestones" && (
-                        <button
-                          className="ud-btn btn-light-thm btn-xs bdrs12 cursor-pointer shadow-sm"
-                          onClick={() => setDetailsModal({ show: true, member })}
-                          title="View Details"
-                        >
-                          <i className="fal fa-eye"></i> Details
-                        </button>
-                      )}
-                      
-                      {(activeTab === "projects" || activeTab === "milestones") && (
-                        <button
-                          className="ud-btn btn-thm btn-xs bdrs12 cursor-pointer shadow-sm"
-                          onClick={() => {
-                            setAssignModal({ show: true, member });
-                          }}
-                          title={activeTab === "projects" ? "Modify Projects" : "Assign Milestones"}
-                        >
-                          <i className={`fal ${activeTab === "projects" ? "fa-edit" : "fa-calendar-check"} me-1`}></i>
-                          {activeTab === "projects" ? "Modify" : "Assign"}
-                        </button>
-                      )}
+                  {activeTab !== "monitor" && (
+                    <td className="vam text-end pe-4">
+                      <div className="d-flex gap-2 justify-content-end">
+                        {activeTab === "milestones" && (
+                          <button
+                            className="ud-btn btn-light-thm btn-xs bdrs12 cursor-pointer shadow-sm"
+                            onClick={() => setDetailsModal({ show: true, member })}
+                            title="View Details"
+                          >
+                            <i className="fal fa-eye"></i> Details
+                          </button>
+                        )}
+                        
+                        {(activeTab === "projects" || activeTab === "milestones") && (
+                          <button
+                            className="ud-btn btn-thm btn-xs bdrs12 cursor-pointer shadow-sm"
+                            onClick={() => {
+                              setAssignModal({ show: true, member });
+                            }}
+                            title={activeTab === "projects" ? "Modify Projects" : "Assign Milestones"}
+                          >
+                            <i className={`fal ${activeTab === "projects" ? "fa-edit" : "fa-calendar-check"} me-1`}></i>
+                            {activeTab === "projects" ? "Modify" : "Assign"}
+                          </button>
+                        )}
 
-                      <button 
-                        className="ud-btn btn-light-danger btn-xs bdrs12 cursor-pointer shadow-sm" 
-                        onClick={() => {
-                          if(confirm(`Are you sure you want to remove ${member.name} from the team?`)) {
-                            setTeamMembers(prev => prev.filter(tm => tm.id !== member.id));
-                          }
-                        }}
-                        title="Remove Member"
-                      >
-                        <i className="fal fa-trash-alt"></i> {activeTab === "overview" ? " Remove" : ""}
-                      </button>
-                    </div>
-                  </td>
+                        <button 
+                          className="ud-btn btn-light-danger btn-xs bdrs12 cursor-pointer shadow-sm" 
+                          onClick={() => {
+                            if(confirm(`Are you sure you want to remove ${member.name} from the team?`)) {
+                              setTeamMembers(prev => prev.filter(tm => tm.id !== member.id));
+                            }
+                          }}
+                          title="Remove Member"
+                        >
+                          <i className="fal fa-trash-alt"></i> {activeTab === "overview" ? " Remove" : ""}
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -692,6 +920,91 @@ export default function TeamManagementInfo({ activeTab = "overview" }) {
                       </span>
                     </div>
                     <button type="button" className="ud-btn btn-thm w-100 bdrs12" onClick={() => setDetailsModal({ show: false, member: null })}>Close Details</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Review & Messaging Modal */}
+          {reviewModal.show && reviewModal.milestone && (
+            <div className="modal fade show d-block" style={{ background: "rgba(0,0,0,0.4)" }}>
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content bdrs12 border-0 shadow-lg">
+                  <div className="modal-header pb20 border-bottom">
+                    <h4 className="modal-title ff-heading fw600 text-thm fz18">
+                      {reviewModal.mode === "concern" ? "Raise Execution Concern" : "Communication Thread"}
+                    </h4>
+                    <button type="button" className="btn-close shadow-none cursor-pointer" onClick={() => {
+                      setReviewModal({ show: false, milestone: null });
+                      setConcernText("");
+                    }}></button>
+                  </div>
+                  <div className="modal-body p25">
+                    <div className="d-flex align-items-center mb20 p15 bdrs12 bgc-thm-light border border-thm-light">
+                      <div className="bdrs50 bgc-thm text-white d-flex align-items-center justify-content-center me-3" style={{ width: 42, height: 42 }}>
+                        <i className={`fal ${reviewModal.mode === "concern" ? "fa-exclamation-triangle" : "fa-comments-alt"}`}></i>
+                      </div>
+                      <div>
+                        <span className="d-block text-muted fz11 uppercase fw600">{reviewModal.milestone.projName}</span>
+                        <h6 className="mb0 ff-heading fw600 text-thm">{reviewModal.milestone.name}</h6>
+                      </div>
+                    </div>
+
+                    <div className="mb15">
+                      <label className="heading-color ff-heading fw600 mb10">
+                        {reviewModal.mode === "concern" ? "Provide detailed feedback to the teammate" : "Project Messages"}
+                      </label>
+                      {reviewModal.mode === "review" && (
+                        <div className="bgc-thm-light p20 bdrs12 mb20 border border-thm-light shadow-inner" style={{ maxHeight: 250, overflowY: "auto" }}>
+                          <div className="mb20">
+                            <div className="d-flex align-items-center mb-1">
+                              <div className="bdrs50 bgc-white text-thm fz10 fw700 d-flex align-items-center justify-content-center border border-thm me-2" style={{ width: 24, height: 24 }}>CT</div>
+                              <span className="fw600 fz12 text-thm">Contractor</span>
+                            </div>
+                            <div className="p15 bg-white bdrs12 bdrs-tl-0 shadow-sm fz13 border border-light-subtle position-relative ms-1">
+                              Please ensure the mobile breakpoints are handled correctly and assets are optimized.
+                            </div>
+                            <small className="text-muted fz10 mt-1 d-block ms-1">Today, 10:45 AM</small>
+                          </div>
+                          
+                          <div className="text-end mb20">
+                            <div className="d-flex align-items-center justify-content-end mb-1">
+                              <span className="fw600 fz12 text-dark me-2">Teammate</span>
+                              <div className="bdrs50 bgc-thm text-white fz10 fw700 d-flex align-items-center justify-content-center" style={{ width: 24, height: 24 }}>AR</div>
+                            </div>
+                            <div className="p15 bgc-thm text-white bdrs12 bdrs-tr-0 shadow-sm fz13 text-start d-inline-block border border-thm-dark position-relative me-1" style={{ maxWidth: "85%" }}>
+                              I've updated the figma files and optimized all SVG exports. Working on the CSS implementation now.
+                            </div>
+                            <small className="text-muted fz10 mt-1 d-block me-1">Today, 11:30 AM</small>
+                          </div>
+                        </div>
+                      )}
+                      <textarea
+                        className="form-control bdrs12 p15 h120"
+                        placeholder={reviewModal.mode === "concern" ? "Specify what needs to be changed..." : "Type your message here..."}
+                        value={concernText}
+                        onChange={(e) => setConcernText(e.target.value)}
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="modal-footer border-0 p25 pt0 gap-2">
+                    <button type="button" className="ud-btn btn-light-dark bdrs12 flex-grow-1" onClick={() => {
+                        setReviewModal({ show: false, milestone: null });
+                        setConcernText("");
+                    }}>Discard</button>
+                    {reviewModal.mode === "concern" ? (
+                      <button type="button" className="ud-btn btn-danger bdrs12 flex-grow-1" disabled={!concernText.trim()} onClick={() => {
+                        updateMilestoneStatus(reviewModal.milestone.memberId, reviewModal.milestone.projName, reviewModal.milestone.name, "revision");
+                        setReviewModal({ show: false, milestone: null });
+                        setConcernText("");
+                      }}>Flag for Revision</button>
+                    ) : (
+                      <button type="button" className="ud-btn btn-thm bdrs12 flex-grow-1" disabled={!concernText.trim()} onClick={() => {
+                        setReviewModal({ show: false, milestone: null });
+                        setConcernText("");
+                      }}>Send Message</button>
+                    )}
                   </div>
                 </div>
               </div>
