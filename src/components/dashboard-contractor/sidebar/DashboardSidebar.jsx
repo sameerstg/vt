@@ -12,9 +12,8 @@ export default function DashboardSidebar() {
   // Sub-menu paths for Teams tab
   const teamsSubMenuPaths = [
     "/contractor-dashboard/team",
-    "/contractor-dashboard/audit",
-    "/contractor-dashboard/escrow",
-    "/contractor-dashboard/payroll"
+    "/contractor-dashboard/team/assign-projects",
+    "/contractor-dashboard/team/assign-milestones"
   ];
   // Open Teams menu if any sub-menu item is active
   const isTeamsActive = teamsSubMenuPaths.some((p) => path.startsWith(p));
@@ -32,6 +31,8 @@ export default function DashboardSidebar() {
     "/contractor-dashboard/manage-projects",
     "/contractor-dashboard/team-management",
     "/contractor-dashboard/team",
+    "/contractor-dashboard/team/assign-projects",
+    "/contractor-dashboard/team/assign-milestones",
     "/contractor-dashboard/dispute-submission",
   ]);
   const accountPaths = new Set([
@@ -59,7 +60,7 @@ export default function DashboardSidebar() {
                 <Link
                   href={item.path}
                   onClick={(event) => handleNavClick(event, item)}
-                  className={`items-center ${path === item.path ? "-is-active" : ""
+                  className={`items-center cursor-pointer ${path === item.path ? "-is-active" : ""
                     }`}
                 >
                   <i className={`${item.icon} mr15`} />
@@ -70,54 +71,41 @@ export default function DashboardSidebar() {
 
           {/* Teams tab with sub-menu */}
           <div className="sidebar_list_item mb-1">
-            <div
-              className={`items-center ${isTeamsActive ? "-is-active" : ""}`}
-              style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-              onClick={() =>
-                setManualTeamsOpen((prev) =>
-                  prev === null ? true : !prev
-                )
-              }
+            <a
+              className={`items-center cursor-pointer d-flex align-items-center`}
+              onClick={(e) => {
+                e.preventDefault();
+                setManualTeamsOpen((prev) => (prev === null ? true : !prev));
+              }}
             >
-              <i className="flaticon-users mr15" />
-              <span style={{ fontWeight: 500, fontSize: 15 }}>Teams</span>
-              <span style={{ marginLeft: "auto", fontSize: 14 }}>
+              <i className="fal fa-users mr15" />
+              Teams
+              <span className="ms-auto">
                 {teamsMenuOpen ? "▼" : "▶"}
               </span>
-            </div>
+            </a>
             {teamsMenuOpen && (
-              <div style={{ marginLeft: 32 }}>
+              <div className="ms-4">
                 <Link
                   href="/contractor-dashboard/team"
-                  className={`items-center ${path === "/contractor-dashboard/team" ? "-is-active" : ""}`}
-                  style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
+                  className={`items-center cursor-pointer d-flex align-items-center mb-1 ${path === "/contractor-dashboard/team" ? "-is-active" : ""}`}
                 >
-                  <i className="flaticon-users mr15" />
-                  <span>Team Management</span>
+                  <i className="fal fa-users mr15" />
+                  <span>Team Members</span>
                 </Link>
                 <Link
-                  href="/contractor-dashboard/audit"
-                  className={`items-center ${path === "/contractor-dashboard/audit" ? "-is-active" : ""}`}
-                  style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
+                  href="/contractor-dashboard/team/assign-projects"
+                  className={`items-center cursor-pointer d-flex align-items-center mb-1 ${path === "/contractor-dashboard/team/assign-projects" ? "-is-active" : ""}`}
                 >
-                  <i className="flaticon-document mr15" />
-                  <span>Audit Logs</span>
+                  <i className="flaticon-presentation mr15" />
+                  <span>Assign Projects</span>
                 </Link>
                 <Link
-                  href="/contractor-dashboard/escrow"
-                  className={`items-center ${path === "/contractor-dashboard/escrow" ? "-is-active" : ""}`}
-                  style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
+                  href="/contractor-dashboard/team/assign-milestones"
+                  className={`items-center cursor-pointer d-flex align-items-center mb-1 ${path === "/contractor-dashboard/team/assign-milestones" ? "-is-active" : ""}`}
                 >
-                  <i className="flaticon-money mr15" />
-                  <span>Escrow Overview</span>
-                </Link>
-                <Link
-                  href="/contractor-dashboard/payroll"
-                  className={`items-center ${path === "/contractor-dashboard/payroll" ? "-is-active" : ""}`}
-                  style={{ display: "flex", alignItems: "center", marginBottom: 8 }}
-                >
-                  <i className="flaticon-money mr15" />
-                  <span>Payroll Management</span>
+                  <i className="flaticon-briefcase mr15" />
+                  <span>Assign Milestones</span>
                 </Link>
               </div>
             )}
@@ -130,7 +118,7 @@ export default function DashboardSidebar() {
                 <Link
                   href={item.path}
                   onClick={(event) => handleNavClick(event, item)}
-                  className={`items-center ${path === item.path ? "-is-active" : ""
+                  className={`items-center cursor-pointer ${path === item.path ? "-is-active" : ""
                     }`}
                 >
                   <i className={`${item.icon} mr15`} />
@@ -139,28 +127,13 @@ export default function DashboardSidebar() {
               </div>
             ))}
 
-          {dasboardNavigation
-            .filter((item) => organizePaths.has(item.path) && item.name !== "Teams")
-            .map((item, i) => (
-              <div key={i} className="sidebar_list_item mb-1">
-                <Link
-                  href={item.path}
-                  onClick={(event) => handleNavClick(event, item)}
-                  className={`items-center ${path === item.path ? "-is-active" : ""
-                    }`}
-                >
-                  <i className={`${item.icon} mr15`} />
-                  {item.name}
-                </Link>
-              </div>
-            ))}
 
           {dasboardNavigation.filter((item) => accountPaths.has(item.path)).map((item, i) => (
             <div key={i} className="sidebar_list_item mb-1">
               <Link
                 href={item.path}
                 onClick={(event) => handleNavClick(event, item)}
-                className={`items-center ${path === item.path ? "-is-active" : ""
+                className={`items-center cursor-pointer ${path === item.path ? "-is-active" : ""
                   }`}
               >
                 <i className={`${item.icon} mr15`} />

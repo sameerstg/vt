@@ -26,8 +26,13 @@ export const dasboardNavigation = [
   {
     id: 5,
     name: "Teams",
-    icon: "flaticon-users",
+    icon: "fal fa-users",
     path: "/contractor-dashboard/team",
+    children: [
+      { name: "Team Members", path: "/contractor-dashboard/team" },
+      { name: "Assign Projects", path: "/contractor-dashboard/team/assign-projects" },
+      { name: "Assign Milestones", path: "/contractor-dashboard/team/assign-milestones" },
+    ]
   },
   {
     id: 6,
