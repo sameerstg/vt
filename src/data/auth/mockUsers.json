@@ -69,6 +69,25 @@
         "createdAt": "2026-03-16T04:34:57.256Z",
         "status": "available",
         "proposals": 1
+      },
+      {
+        "title": "This is Testing Project",
+        "description": "This is Testing Project",
+        "category": "Development & IT",
+        "taskType": "individual",
+        "workMode": "virtual",
+        "location": "Remote",
+        "budget": "$1200",
+        "budgetModel": "fixed",
+        "deadline": "Mar 27, 2026",
+        "milestones": [],
+        "attachments": [],
+        "id": "task-1773661918201",
+        "client": "Sarah Johnson",
+        "clientId": "client-demo-1",
+        "createdAt": "2026-03-16T11:51:58.201Z",
+        "status": "available",
+        "proposals": 1
       }
     ],
     "receivedProposals": [
@@ -102,6 +121,22 @@
         "timeline": "6",
         "coverLetter": "hello",
         "submittedAt": "2026-03-16T05:47:39.273Z",
+        "status": "pending"
+      },
+      {
+        "id": "proposal-1773661962769",
+        "taskId": "task-1773661918201",
+        "taskTitle": "This is Testing Project",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demo",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "accept",
+        "offerAmount": 800,
+        "timeline": "9",
+        "coverLetter": "DGDSAFADFAQ",
+        "submittedAt": "2026-03-16T11:52:42.769Z",
         "status": "pending"
       }
     ]
@@ -169,6 +204,22 @@
         "timeline": "6",
         "coverLetter": "hello",
         "submittedAt": "2026-03-16T05:47:39.273Z",
+        "status": "pending"
+      },
+      {
+        "id": "proposal-1773661962769",
+        "taskId": "task-1773661918201",
+        "taskTitle": "This is Testing Project",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demo",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "accept",
+        "offerAmount": 800,
+        "timeline": "9",
+        "coverLetter": "DGDSAFADFAQ",
+        "submittedAt": "2026-03-16T11:52:42.769Z",
         "status": "pending"
       }
     ],

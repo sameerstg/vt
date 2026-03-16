@@ -72,8 +72,6 @@ export const workerTasks = [
     location: "Canada",
     taskType: "Fixed",
     budgetModel: "Milestone",
-<<<<<<< HEAD
-=======
   },
   {
     id: 1004,
@@ -130,7 +128,6 @@ export const workerTasks = [
     location: "United States",
     taskType: "Hourly",
     budgetModel: "Hourly",
->>>>>>> b2f4255c9895284eb7ef42cda174c4c5f7e60dee
   },
   {
     id: 1008,
