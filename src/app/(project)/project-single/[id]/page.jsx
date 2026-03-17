@@ -9,14 +9,15 @@ export const metadata = {
     title: "Freeio - Freelance Marketplace React/Next Js Template | Project Signle",
 };
 
-export default function page() {
+export default async function page({ params }) {
+    const { id } = await params;
     return (
         <>
             <Header20 />
             <TabSection1 />
-            <Breadcumb10 path={["Home", "Services", "Design & Creative"]} />
-            <Breadcumb11 />
-            <ProjectDetail1 />
-        </>
+      <Breadcumb10 path={["Home", "Services", "Design & Creative"]} />
+      <Breadcumb11 />
+      <ProjectDetail1 id={id} />
+    </>
     );
 }

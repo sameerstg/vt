@@ -11,25 +11,23 @@ import { getAuthSession, getWorkerAppliedTasks } from "@/utils/auth/mockAuth";
 import WorkerTaskFilters from "@/components/dashboard-shared/WorkerTaskFilters";
 
 const TASK_SECTIONS = [
-  { key: "available", label: "Available Tasks", path: "/worker-dashboard/available-tasks" },
-  { key: "applied", label: "Applied Tasks", path: "/worker-dashboard/applied-tasks" },
-  { key: "assigned", label: "Assigned Tasks", path: "/worker-dashboard/assigned-tasks" },
-  { key: "in_progress", label: "In Progress", path: "/worker-dashboard/in-progress" },
-  { key: "completed", label: "Completed Tasks", path: "/worker-dashboard/completed-tasks" },
+  { key: "applied", label: "Applied Projects", path: "/worker-dashboard/applied-tasks" },
+  { key: "assigned", label: "Assigned Projects", path: "/worker-dashboard/assigned-tasks" },
+  { key: "in_progress", label: "In Progress Projects", path: "/worker-dashboard/in-progress" },
+  { key: "completed", label: "Completed Projects", path: "/worker-dashboard/completed-tasks" },
   { key: "work_submission", label: "Work Submission", path: "/worker-dashboard/manage-projects" },
 ];
 
 const sectionLabelMap = {
-  available: "Available Tasks",
-  applied: "Applied Tasks",
-  assigned: "Assigned Tasks",
-  in_progress: "In Progress Tasks",
-  completed: "Completed Tasks",
+  applied: "Applied Projects",
+  assigned: "Assigned Projects",
+  in_progress: "In Progress Projects",
+  completed: "Completed Projects",
 };
 
 export default function TasksInfo({
-  initialFilter = "available",
-  pageTitle = "Active Task",
+  initialFilter = "applied",
+  pageTitle = "Projects",
   pageDescription = "",
 }) {
   const searchParams = useSearchParams();

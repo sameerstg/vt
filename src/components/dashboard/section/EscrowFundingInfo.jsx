@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import ClientSectionLayout from "./ClientSectionLayout";
 
 const milestones = [
@@ -9,7 +11,11 @@ const milestones = [
 ];
 
 export default function EscrowFundingInfo() {
-  const taskBudget = 320;
+  const searchParams = useSearchParams();
+  const taskName = searchParams.get("task") || "Landing Page Redesign";
+  const workerName = searchParams.get("worker") || "Daniel Carter";
+  const rawAmount = searchParams.get("amount") || "$320";
+  const taskBudget = Number(String(rawAmount).replace(/[^0-9.]/g, "")) || 320;
   const platformFee = 16;
   const totalPayable = taskBudget + platformFee;
 
@@ -48,6 +54,12 @@ export default function EscrowFundingInfo() {
 
   return (
     <ClientSectionLayout title="Escrow Funding Page">
+      <div className="mb20">
+        <Link href="/dashboard/active-tasks?tab=pending" className="ud-btn btn-light-default">
+          ← Back to List
+        </Link>
+      </div>
+
       <div className="row">
         <div className="col-xl-8">
 
@@ -58,8 +70,8 @@ export default function EscrowFundingInfo() {
 
             <div className="row">
               <div className="col-sm-6">
-                <p><strong>Task:</strong> Landing Page Redesign</p>
-                <p><strong>Worker:</strong> Daniel Carter</p>
+                <p><strong>Task:</strong> {taskName}</p>
+                <p><strong>Worker:</strong> {workerName}</p>
                 <p><strong>Budget Model:</strong> Milestone</p>
               </div>
 

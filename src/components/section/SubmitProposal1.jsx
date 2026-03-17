@@ -1,6 +1,5 @@
 "use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const timelineOptions = [
   { value: "", label: "Select timeline" },
@@ -11,13 +10,39 @@ const timelineOptions = [
   { value: "1-month+", label: "1 month+" },
 ];
 
+import { useSearchParams } from "next/navigation";
+import { getTaskById, getAuthSession, saveProposal } from "@/utils/auth/mockAuth";
+import { project1 } from "@/data/product";
+
 export default function SubmitProposal1() {
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
+
   const [currency, setCurrency] = useState("USD");
   const [price, setPrice] = useState("");
   const [timeline, setTimeline] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [toasts, setToasts] = useState([]);
+  const [task, setTask] = useState(null);
+  const [attachments, setAttachments] = useState([]);
+
+  useEffect(() => {
+    if (!taskId) return;
+    const staticTask = project1.find(p => String(p.id) === String(taskId));
+    if (staticTask) {
+      setTask({
+        title: staticTask.title,
+        budget: `$${staticTask.price.min} - $${staticTask.price.max}`,
+        budgetModel: staticTask.projectType === "Fixed" ? "fixed" : "milestone"
+      });
+    } else {
+      const dynamicTask = getTaskById(taskId);
+      if (dynamicTask) {
+        setTask(dynamicTask);
+      }
+    }
+  }, [taskId]);
 
   const addToast = (type, message) => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -42,6 +67,16 @@ export default function SubmitProposal1() {
     return errors;
   };
 
+  const handleFileUpload = (event) => {
+    const files = Array.from(event.target.files);
+    const newFileNames = files.map(f => f.name);
+    setAttachments(prev => [...new Set([...prev, ...newFileNames])]);
+  };
+
+  const removeAttachment = (name) => {
+    setAttachments(prev => prev.filter(a => a !== name));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const errors = validate();
@@ -52,10 +87,45 @@ export default function SubmitProposal1() {
       return;
     }
 
-    addToast("success", "Proposal submitted successfully.");
-    setPrice("");
-    setTimeline("");
-    setCoverLetter("");
+    const session = getAuthSession();
+    if (!session?.id) {
+      addToast("error", "Please login to submit a proposal.");
+      return;
+    }
+
+    if (!taskId || !task) {
+      addToast("error", "Project information missing.");
+      return;
+    }
+
+    const payload = {
+      id: `proposal-${Date.now()}`,
+      taskId: taskId,
+      taskTitle: task.title,
+      clientId: task.clientId || "static",
+      clientEmail: task.clientEmail || "static@freeio.com",
+      workerId: session.id,
+      workerName: session.name || session.email.split('@')[0],
+      workerEmail: session.email,
+      offerAmount: price,
+      timeline: timeline,
+      coverLetter: coverLetter,
+      attachments: attachments,
+      status: "pending",
+      submittedAt: new Date().toISOString()
+    };
+
+    saveProposal(payload).then(res => {
+      if (res.ok) {
+        addToast("success", "Proposal submitted successfully.");
+        setPrice("");
+        setTimeline("");
+        setCoverLetter("");
+        setAttachments([]);
+      } else {
+        addToast("error", res.message || "Failed to submit proposal.");
+      }
+    });
   };
 
   const inputClass = (name) =>
@@ -143,10 +213,11 @@ export default function SubmitProposal1() {
             <div className="col-lg-5">
               <div className="position-relative mt40">
                 <div className="main-title">
-                  <h4 className="form-title mb25">Submit Proposal</h4>
+                  <h4 className="form-title mb25">
+                    Proposal for: {task?.title || "Project"}
+                  </h4>
                   <p className="text">
-                    Send your price, expected timeline, and optional cover letter to start
-                    the conversation.
+                    Budget: {task?.budget || "N/A"} ({task?.budgetModel === "fixed" ? "Fixed Price" : "Milestone Based"})
                   </p>
                 </div>
 
@@ -267,6 +338,67 @@ export default function SubmitProposal1() {
                             {fieldErrors.coverLetter}
                           </small>
                         )}
+                      </div>
+                    </div>
+
+                    <div className="col-md-12">
+                      <div className="mb20">
+                        <label className="heading-color ff-heading fw500 mb10">Attachments (optional)</label>
+                        <div className="row g-3">
+                          {attachments.map((name, i) => (
+                            <div key={i} className="col-6 col-lg-4">
+                              <div className="project-attach p-3 border bdrs8 position-relative bgc-white shadow-sm d-flex align-items-center">
+                                <div className="icon flex-shrink-0 bgc-thm4 bdrs4 p-2 me-3" style={{ background: '#f5f1ff' }}>
+                                  <span className="flaticon-page text-thm" style={{ fontSize: '20px', color: '#5b2dff' }} />
+                                </div>
+                                <div className="overflow-hidden flex-grow-1">
+                                  <h6 className="title fz13 mb-0 text-truncate" title={name}>{name}</h6>
+                                  <p className="fz12 text-uppercase mb-0 text-muted">{name.split('.').pop()}</p>
+                                </div>
+                                <button 
+                                  type="button"
+                                  className="position-absolute btn btn-sm text-danger-hover"
+                                  onClick={() => removeAttachment(name)}
+                                  style={{ 
+                                    top: '5px', 
+                                    right: '5px',
+                                    fontSize: '18px',
+                                    padding: '0 5px',
+                                    color: '#ff4b4b'
+                                  }}
+                                  title="Remove attachment"
+                                >
+                                  <i className="fal fa-times-circle" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                          <div className="col-6 col-lg-4">
+                            <label className="w-100 h-100 mb-0">
+                              <div 
+                                className="upload-img d-flex flex-column align-items-center justify-content-center border bdrs8 bgc-white shadow-sm"
+                                style={{ 
+                                  minHeight: '80px', 
+                                  cursor: 'pointer', 
+                                  borderStyle: 'dashed',
+                                  borderColor: '#5b2dff',
+                                  transition: 'all 0.3s ease'
+                                }}
+                                onMouseOver={(e) => { e.currentTarget.style.backgroundColor = '#f5f1ff'; }}
+                                onMouseOut={(e) => { e.currentTarget.style.backgroundColor = '#fff'; }}
+                              >
+                                <span className="flaticon-upload text-thm mb-1" style={{ fontSize: '24px', color: '#5b2dff' }} />
+                                <span className="fz14 fw500 text-thm" style={{ color: '#5b2dff' }}>Upload Files</span>
+                                <input
+                                  type="file"
+                                  className="d-none"
+                                  onChange={handleFileUpload}
+                                  multiple
+                                />
+                              </div>
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
 

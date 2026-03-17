@@ -30,6 +30,7 @@ export default function DashboardNavigation() {
     "/create-projects",
     "/dashboard/task-details",
     "/dashboard/create-task",
+    "/dashboard/proposal-review",
   ]);
 
   const primaryItems = dasboardNavigation.slice(0, 13).filter(item => !hiddenPaths.has(item.path));

@@ -2,6 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function ProjectCard1({ data }) {
+  const getTimeAgo = (date) => {
+    if (!date) return "2 hours ago";
+    const now = new Date();
+    const past = new Date(date);
+    const diffInMs = now - past;
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    if (diffInHours < 1) {
+      const diffInMins = Math.floor(diffInMs / (1000 * 60));
+      return `${diffInMins} minutes ago`;
+    }
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    return `${Math.floor(diffInHours / 24)} days ago`;
+  };
+
   return (
     <>
       <div className="freelancer-style1 bdr1 hover-box-shadow row ms-0 align-items-lg-center">
@@ -12,8 +26,8 @@ export default function ProjectCard1({ data }) {
                 height={60}
                 width={60}
                 className="rounded-circle mx-auto"
-                src={data.img}
-                alt="rounded-circle"
+                src={data.img || "/images/team/client-1.png"}
+                alt="profile"
               />
               <span className="online-badge2" />
             </div>
@@ -25,15 +39,15 @@ export default function ProjectCard1({ data }) {
               </p>
               <p className="mb-0 fz14 list-inline-item mb5-sm pe-1">
                 <i className="flaticon-30-days fz16 vam text-thm2 me-1 bdrl1 pl15 pl0-xs bdrn-xs" />{" "}
-                2 hours ago
+                {getTimeAgo(data.createdAt)}
               </p>
               <p className="mb-0 fz14 list-inline-item mb5-sm">
                 <i className="flaticon-contract fz16 vam text-thm2 me-1 bdrl1 pl15 pl0-xs bdrn-xs" />{" "}
-                1 Received
+                {data.proposals || 0} Received
               </p>
               <p className="text mt10">{data.brief}</p>
               <div className="skill-tags d-flex align-items-center justify-content-start">
-                {data.tags.map((item, i) => (
+                {data.tags?.map((item, i) => (
                   <span key={i} className={`tag ${i === 1 ? "mx10" : ""}`}>
                     {item}
                   </span>
@@ -46,9 +60,11 @@ export default function ProjectCard1({ data }) {
           <div className="details">
             <div className="text-lg-end">
               <h4>
-                ${data.price.min} - ${data.price.max}
+                {data.price.min === data.price.max 
+                  ? `$${data.price.min}` 
+                  : `$${data.price.min} - $${data.price.max}`}
               </h4>
-              <p className="text">Hourly Rate</p>
+              <p className="text">{data.projectType || "Fixed Price"}</p>
             </div>
             <div className="d-grid mt15">
               <Link
