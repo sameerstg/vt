@@ -1,6 +1,9 @@
+import { getServiceBrowseHrefByTitle } from "@/data/serviceCatalog";
 import Link from "next/link";
 
 export default function BrowserCategoryCard4({ data }) {
+  const href = getServiceBrowseHrefByTitle(data?.title);
+
   return (
     <>
       <div className="iconbox-style1 bdr1 default-box-shadow1">
@@ -10,7 +13,7 @@ export default function BrowserCategoryCard4({ data }) {
         <div className="details mt20">
           <p className="text mb5">{data.skill} skills</p>
           <h5 className="title">
-            <Link href="/job-1">{data.title}</Link>
+            <Link href={href}>{data.title}</Link>
           </h5>
         </div>
       </div>

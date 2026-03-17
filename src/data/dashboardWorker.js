@@ -423,3 +423,69 @@ export const managejob = [
     status: 1,
   },
 ];
+
+export const assignedTask = {
+  id: "VT-2048",
+  status: "In Progress",
+  client: "Acme Growth Studio",
+  category: "Development & IT",
+  location: "Remote",
+  budgetModel: "Fixed Price",
+  offerAmount: "$1,200",
+  timeline: "2 weeks",
+  dueDate: "March 28, 2026",
+  startDate: "March 14, 2026",
+  priority: "High",
+  title: "Build contractor dashboard milestone workflow",
+  description:
+    "Implement the worker-side milestone progress flow, polish the client review states, and prepare the final submission for client approval.",
+  deliverables: [
+    "Milestone progress UI updates",
+    "Submission note and messaging thread",
+    "Responsive QA pass for assigned task screens",
+  ],
+};
+
+export const assignedTaskMessages = [
+  {
+    id: 1,
+    sender: "Client",
+    senderName: "Acme Growth Studio",
+    time: "2 hours ago",
+    text: "Please share the first milestone update once the worker dashboard cards are ready.",
+  },
+  {
+    id: 2,
+    sender: "Worker",
+    senderName: "You",
+    time: "1 hour ago",
+    text: "The milestone cards are in progress. I will submit the first draft today.",
+  },
+];
+
+export const assignedTaskMilestones = [
+  {
+    id: 1,
+    title: "Audit and issue breakdown",
+    status: "Completed",
+    dueDate: "March 16, 2026",
+    amount: "$180",
+    progress: 100,
+  },
+  {
+    id: 2,
+    title: "Dashboard UI implementation",
+    status: "In Progress",
+    dueDate: "March 21, 2026",
+    amount: "$520",
+    progress: 70,
+  },
+  {
+    id: 3,
+    title: "QA, revisions, and handoff",
+    status: "Pending",
+    dueDate: "March 28, 2026",
+    amount: "$500",
+    progress: 0,
+  },
+];

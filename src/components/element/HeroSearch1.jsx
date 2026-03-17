@@ -10,9 +10,15 @@ const searchResult = [
   "mobile app design",
 ];
 
-export default function HeroSearch1() {
+export default function HeroSearch1({
+  value,
+  onChange,
+  onSubmit,
+  suggestions = searchResult,
+}) {
   const [isSearchDropdownOpen, setSearchDropdownOpen] = useState(false);
-  const [getSelectedResult, setSelectedResult] = useState("");
+  const [internalValue, setInternalValue] = useState("");
+  const inputValue = value ?? internalValue;
 
   // search dropdown
   const focusDropdown = () => {
@@ -23,12 +29,29 @@ export default function HeroSearch1() {
   };
 
   const selectSearch = (select) => {
-    setSelectedResult(select);
+    if (value === undefined) {
+      setInternalValue(select);
+    }
+    onChange?.(select);
+    setSearchDropdownOpen(false);
+  };
+
+  const handleChange = (nextValue) => {
+    if (value === undefined) {
+      setInternalValue(nextValue);
+    }
+    onChange?.(nextValue);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSubmit?.(inputValue);
+    setSearchDropdownOpen(false);
   };
 
   return (
     <>
-      <form className="form-search position-relative">
+      <form className="form-search position-relative" onSubmit={handleSubmit}>
         <div className="box-search">
           <span className="icon far fa-magnifying-glass" />
           <input
@@ -38,8 +61,8 @@ export default function HeroSearch1() {
             placeholder="What are you looking for?"
             onFocus={focusDropdown}
             onBlur={blurDropdown}
-            value={getSelectedResult}
-            onChange={(e) => setSelectedResult(e.target.value)}
+            value={inputValue}
+            onChange={(e) => handleChange(e.target.value)}
           />
           <div
             className="search-suggestions"
@@ -60,15 +83,16 @@ export default function HeroSearch1() {
             <h6 className="fz14 ml30 mt25 mb-3">Popular Search</h6>
             <div className="box-suggestions">
               <ul className="px-0 m-0 pb-4">
-                {searchResult.map((item, index) => (
+                {suggestions.map((item, index) => (
                   <li
                     key={index}
-                    className={
-                      getSelectedResult === item ? "ui-list-active" : ""
-                    }
+                    className={inputValue === item ? "ui-list-active" : ""}
                   >
                     <div
-                      onClick={() => selectSearch(item)}
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        selectSearch(item);
+                      }}
                       className="info-product"
                     >
                       <div className="item_title">{item}</div>

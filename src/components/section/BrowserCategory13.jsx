@@ -1,4 +1,5 @@
 "use client";
+import { getServiceBrowseHrefByTitle } from "@/data/serviceCatalog";
 
 import { browserCategory } from "@/data/project";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -27,7 +28,7 @@ export default function BrowserCategory13() {
           </div>
           <div className="col-lg-3">
             <div className="text-start text-lg-end mb-4 mb-lg-3">
-              <Link className="ud-btn2" href="/service-single">
+              <Link className="ud-btn2" href="/services">
                 All Categories<i className="fal fa-arrow-right-long"></i>
               </Link>
             </div>
@@ -43,7 +44,9 @@ export default function BrowserCategory13() {
                 <div className="details mt20">
                   <p className="text mb5">{elm.skill} skills</p>
                   <h5 className="title">
-                    <Link href="/service-1">{elm.title}</Link>
+                    <Link href={getServiceBrowseHrefByTitle(elm.title)}>
+                      {elm.title}
+                    </Link>
                   </h5>
                 </div>
               </div>
@@ -86,7 +89,9 @@ export default function BrowserCategory13() {
                         <div className="details mt20">
                           <p className="text mb5">{item.skill} skills</p>
                           <h4 className="title">
-                            <Link href="/service-1">{item.title}</Link>
+                            <Link href={getServiceBrowseHrefByTitle(item.title)}>
+                              {item.title}
+                            </Link>
                           </h4>
                           <p className="mb-0">{item.brif}</p>
                         </div>

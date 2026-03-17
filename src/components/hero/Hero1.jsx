@@ -1,22 +1,19 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import { EffectFade, Navigation } from "swiper/modules";
 import HeroSearch1 from "../element/HeroSearch1";
 import { useRouter } from "next/navigation";
+import {
+  findServiceBrowseMatch,
+  getServiceBrowseHrefByTitle,
+  serviceCategories,
+} from "@/data/serviceCatalog";
 
-const role = [
-  "Select Role",
-  "Graphics & Design",
-  "Digital Marketing",
-  "Writing & Translation",
-  "Video & Animation",
-  "Music & Audio",
-  "Programming & Tech",
-];
+const roleOptions = serviceCategories.map((category) => category.title);
 
 const popular = [
   "Designer",
@@ -28,21 +25,71 @@ const popular = [
   "Engineer",
 ];
 
-const hero = ["/images/home/slide-5.jpg", "/images/home/slide-2.jpg", "/images/home/slide-4.png"];
+const hero = [
+  "/images/home/slide-5.jpg",
+  "/images/home/slide-2.jpg",
+  "/images/home/slide-4.png",
+];
 
 export default function Hero1() {
-  const [getSelectedRole, setSelectedRole] = useState(null);
-
-  // role handler
-  const roleHandler = (select) => {
-    setSelectedRole(select);
-  };
-
   const router = useRouter();
-  // search handler
-  const searchHandler = () => {
-    router.push("/freelancer-1");
+  const [selectedRole, setSelectedRole] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [isRoleMenuOpen, setIsRoleMenuOpen] = useState(false);
+  const roleDropdownRef = useRef(null);
+
+  const heroSuggestions = useMemo(
+    () =>
+      serviceCategories
+        .flatMap((category) => category.subcategories)
+        .slice(0, 6)
+        .map((item) => item.title),
+    [],
+  );
+
+  const buildSearchHref = (rawQuery = searchValue) => {
+    const trimmedQuery = rawQuery.trim();
+    const selectedCategory = serviceCategories.find(
+      (category) => category.title === selectedRole,
+    );
+
+    let href = selectedRole
+      ? getServiceBrowseHrefByTitle(selectedRole, { preferSubcategory: false })
+      : "/services";
+
+    if (trimmedQuery) {
+      const matchedRoute = findServiceBrowseMatch(trimmedQuery, {
+        preferredCategorySlug: selectedCategory?.slug,
+      });
+
+      href = matchedRoute?.href || href;
+    }
+
+    if (!trimmedQuery) {
+      return href;
+    }
+
+    const params = new URLSearchParams({ search: trimmedQuery });
+    return `${href}?${params.toString()}`;
   };
+
+  const searchHandler = (rawQuery = searchValue) => {
+    router.push(buildSearchHref(rawQuery));
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!roleDropdownRef.current?.contains(event.target)) {
+        setIsRoleMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
 
   return (
     <>
@@ -109,45 +156,58 @@ export default function Hero1() {
                     <div className="row">
                       <div className="col-md-5 col-lg-6 col-xl-6">
                         <div className="advance-search-field mb10-sm bdrr1 bdrn-sm">
-                          <HeroSearch1 />
+                          <HeroSearch1
+                            value={searchValue}
+                            onChange={setSearchValue}
+                            onSubmit={searchHandler}
+                            suggestions={heroSuggestions}
+                          />
                         </div>
                       </div>
                       <div className="col-md-4 col-lg-4 col-xl-4 d-none d-md-block">
-                        <div className="bselect-style1">
-                          <div className="dropdown bootstrap-select">
+                        <div className="bselect-style1" ref={roleDropdownRef}>
+                          <div className={`dropdown bootstrap-select ${isRoleMenuOpen ? "show" : ""}`}>
                             <button
                               type="button"
                               className="btn dropdown-toggle btn-light"
-                              data-bs-toggle="dropdown"
+                              aria-expanded={isRoleMenuOpen}
+                              onClick={() => setIsRoleMenuOpen((prev) => !prev)}
                             >
                               <div className="filter-option">
                                 <div className="filter-option-inner">
                                   <div className="filter-option-inner-inner">
-                                    {getSelectedRole !== null
-                                      ? getSelectedRole
-                                      : "Select Role"}
+                                    {selectedRole || "Select Role"}
                                   </div>
                                 </div>
                               </div>
                             </button>
-                            <div className="dropdown-menu">
-                              <div className="inner show">
-                                <ul className="dropdown-menu inner show">
-                                  {role.map((item, index) => (
-                                    <li
-                                      onClick={() => roleHandler(item)}
-                                      key={index}
-                                      className="selected active"
+                            <div className={`dropdown-menu${isRoleMenuOpen ? " show" : ""}`}>
+                              <div className={`inner${isRoleMenuOpen ? " show" : ""}`}>
+                                <ul className={`dropdown-menu inner${isRoleMenuOpen ? " show" : ""}`}>
+                                  <li>
+                                    <button
+                                      type="button"
+                                      className={`dropdown-item${selectedRole === "" ? " active" : ""}`}
+                                      onClick={() => {
+                                        setSelectedRole("");
+                                        setIsRoleMenuOpen(false);
+                                      }}
                                     >
-                                      <a
-                                        className={`dropdown-item selected ${
-                                          getSelectedRole === item
-                                            ? "active"
-                                            : ""
-                                        }`}
+                                      <span className="text">Select Role</span>
+                                    </button>
+                                  </li>
+                                  {roleOptions.map((item) => (
+                                    <li key={item}>
+                                      <button
+                                        type="button"
+                                        className={`dropdown-item${selectedRole === item ? " active" : ""}`}
+                                        onClick={() => {
+                                          setSelectedRole(item);
+                                          setIsRoleMenuOpen(false);
+                                        }}
                                       >
                                         <span className="text">{item}</span>
-                                      </a>
+                                      </button>
                                     </li>
                                   ))}
                                 </ul>
@@ -159,7 +219,7 @@ export default function Hero1() {
                       <div className="col-md-3 col-lg-2 col-xl-2 ps-md-0">
                         <div className="text-center text-xl-end">
                           <button
-                            onClick={searchHandler}
+                            onClick={() => searchHandler()}
                             className="ud-btn btn-thm w-100 px-4"
                             type="button"
                           >
@@ -174,13 +234,18 @@ export default function Hero1() {
                       Popular Searches
                     </p>
                     {popular.map((elm, i) => (
-                      <a
-                        key={i}
-                        className="text-white"
+                      <button
+                        key={elm}
+                        type="button"
+                        className="text-white bg-transparent border-0 p-0"
                         style={{ marginRight: "5px" }}
+                        onClick={() => {
+                          setSearchValue(elm);
+                          searchHandler(elm);
+                        }}
                       >
-                        {`${elm}${i != popular.length - 1 ? "," : " "}`}
-                      </a>
+                        {`${elm}${i !== popular.length - 1 ? "," : " "}`}
+                      </button>
                     ))}
                   </div>
                 </div>

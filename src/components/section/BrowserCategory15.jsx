@@ -1,4 +1,5 @@
 "use client";
+import { getServiceBrowseHrefByTitle } from "@/data/serviceCatalog";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -88,7 +89,9 @@ export default function BrowserCategory15() {
                         <div className="details mt20">
                           <p className="text mb5">{elm.skill} skills</p>
                           <h4 className="title">
-                            <Link href="/service-1">{elm.title}</Link>
+                            <Link href={getServiceBrowseHrefByTitle(elm.title)}>
+                              {elm.title}
+                            </Link>
                           </h4>
                           <p className="mb-0">{elm.brif}</p>
                         </div>

@@ -10,7 +10,7 @@ import LocationDropdown1 from "../dropdown/LocationDropdown1";
 import ServiceCategoryDropdown1 from "../dropdown/ServiceCategoryDropdown1";
 import ServiceModeDropdown1 from "../dropdown/ServiceModeDropdown1";
 
-export default function ListingOption1() {
+export default function ListingOption1({ categoryItems }) {
   const listingToggle = toggleStore((state) => state.listingToggleHandler);
 
   return (
@@ -61,7 +61,7 @@ export default function ListingOption1() {
                     <i className="fa fa-angle-down ms-2" />
                   </button>
                   <div className="dropdown-menu dd4 pb20">
-                    <ServiceCategoryDropdown1 />
+                    <ServiceCategoryDropdown1 items={categoryItems} />
                   </div>
                 </li>
                 <li className="list-inline-item position-relative d-none d-xl-inline-block">

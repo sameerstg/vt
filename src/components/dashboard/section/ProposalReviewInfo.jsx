@@ -3,26 +3,24 @@
 import ClientSectionLayout from "./ClientSectionLayout";
 import { getAuthSession, getProposalsForClient } from "@/utils/auth/mockAuth";
 import Link from "next/link";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 
 export default function ProposalReviewInfo() {
   const [proposals, setProposals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProposalId, setSelectedProposalId] = useState(null);
 
-  const refreshProposals = () => {
+  const refreshProposals = useCallback(() => {
     const session = getAuthSession();
-    console.log("Current Session:", session);
     if (session?.id) {
       const clientProposals = getProposalsForClient(session.id);
-      console.log("Proposals found for client:", session.id, clientProposals);
       setProposals(clientProposals);
       if (clientProposals.length > 0 && !selectedProposalId) {
         setSelectedProposalId(clientProposals[0].id);
       }
     }
     setLoading(false);
-  };
+  }, [selectedProposalId]);
 
   useEffect(() => {
     refreshProposals();
@@ -35,7 +33,7 @@ export default function ProposalReviewInfo() {
     };
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+  }, [refreshProposals]);
 
   const selected = useMemo(() => {
     return proposals.find((item) => item.id === selectedProposalId) || proposals[0];

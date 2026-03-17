@@ -1,26 +1,28 @@
 "use client";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { serviceCategories } from "@/data/serviceCatalog";
 
 const categories = [
-  "All Categories",
-  "Graphics Design",
-  "Digital Marketing",
-  "Writing Translation",
-  "Video Animation",
-  "Music Audio",
-  "Programming Tech",
-  "Business",
-  "Lifestyle",
-  "Trending",
+  { title: "All Categories", href: "/services" },
+  ...serviceCategories.map((category) => ({
+    title: category.title,
+    href: `/services/${category.slug}`,
+  })),
 ];
 
 // categories_list_section overflow-hidden
 
 export default function TabSection1() {
-  const [getCurrentTab, setCurrentTab] = useState("All Categories");
-
   const path = usePathname();
+  const normalizedPath = path === "/service-1" ? "/services" : path;
+  const activeHref =
+    categories.find(
+      (item) =>
+        item.href !== "/services" &&
+        (normalizedPath === item.href ||
+          normalizedPath.startsWith(`${item.href}/`)),
+    )?.href || "/services";
 
   return (
     <>
@@ -36,12 +38,12 @@ export default function TabSection1() {
                 <ul className="mb0 d-flex ps-0">
                   {categories.map((item, index) => (
                     <li key={index}>
-                      <a
-                        onClick={() => setCurrentTab(item)}
-                        className={getCurrentTab == item ? "active" : ""}
+                      <Link
+                        href={item.href}
+                        className={activeHref === item.href ? "active" : ""}
                       >
-                        {item}
-                      </a>
+                        {item.title}
+                      </Link>
                     </li>
                   ))}
                 </ul>

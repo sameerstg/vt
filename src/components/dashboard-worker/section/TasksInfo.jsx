@@ -27,6 +27,13 @@ const sectionLabelMap = {
   completed: "Completed Tasks",
 };
 
+const FOREIGN_LOCATIONS = [
+  "United States",
+  "United Kingdom",
+  "United Arab Emirates",
+  "Canada",
+];
+
 export default function TasksInfo({
   initialFilter = "available",
   pageTitle = "Active Task",
@@ -57,13 +64,6 @@ export default function TasksInfo({
     "Video & Animation",
     "Engineering & Architecture",
     "Finance & Accounting",
-  ];
-
-  const FOREIGN_LOCATIONS = [
-    "United States",
-    "United Kingdom",
-    "United Arab Emirates",
-    "Canada",
   ];
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import {
   adminUsers,
   adminVerificationRequests,
 } from "@/data/dashboardAdmin";
+import { getAdminUserSummary } from "@/data/adminUserSummary";
 
 const getAccountStatusClass = (status = "") => {
   const normalized = status.toLowerCase();
@@ -84,6 +85,7 @@ export default function UserManagementInfo() {
   }, [verificationRequests]);
 
   const dashboardStats = useMemo(() => {
+    const userSummary = getAdminUserSummary();
     const pendingKyc = verificationRequests.filter(
       (request) => request.reviewStatus === "Pending"
     ).length;
@@ -102,7 +104,11 @@ export default function UserManagementInfo() {
     }, 0);
 
     return {
-      totalUsers: usersWithLiveVerification.length,
+      totalUsers: userSummary.totalUsers,
+      clients: userSummary.clients,
+      workers: userSummary.workers,
+      contractors: userSummary.contractors,
+      admins: userSummary.admins,
       pendingKyc,
       verifiedUsers,
       flaggedUsers,
@@ -210,26 +216,36 @@ export default function UserManagementInfo() {
           <div className="kpi-card">
             <p>Total Users</p>
             <h4>{dashboardStats.totalUsers}</h4>
+            <span className="kpi-card-meta">
+              {dashboardStats.admins} admin account{dashboardStats.admins === 1 ? "" : "s"}
+            </span>
           </div>
         </div>
         <div className="col-sm-6 col-xl-3">
           <div className="kpi-card">
-            <p>Pending KYC</p>
-            <h4>{dashboardStats.pendingKyc}</h4>
+            <p>Clients</p>
+            <h4>{dashboardStats.clients}</h4>
+            <span className="kpi-card-meta">
+              {dashboardStats.pendingKyc} pending KYC request{dashboardStats.pendingKyc === 1 ? "" : "s"}
+            </span>
           </div>
         </div>
         <div className="col-sm-6 col-xl-3">
           <div className="kpi-card">
-            <p>Verified Users</p>
-            <h4>{dashboardStats.verifiedUsers}</h4>
+            <p>Workers</p>
+            <h4>{dashboardStats.workers}</h4>
+            <span className="kpi-card-meta">
+              {dashboardStats.verifiedUsers} verified profile{dashboardStats.verifiedUsers === 1 ? "" : "s"}
+            </span>
           </div>
         </div>
         <div className="col-sm-6 col-xl-3">
           <div className="kpi-card">
-            <p>Flagged + Docs Pending</p>
-            <h4>
-              {dashboardStats.flaggedUsers} + {dashboardStats.docsPendingReview}
-            </h4>
+            <p>Contractors</p>
+            <h4>{dashboardStats.contractors}</h4>
+            <span className="kpi-card-meta">
+              {dashboardStats.flaggedUsers} flagged, {dashboardStats.docsPendingReview} docs pending
+            </span>
           </div>
         </div>
       </div>
@@ -785,6 +801,14 @@ export default function UserManagementInfo() {
         .kpi-card h4 {
           margin-bottom: 0;
           color: #1e293b;
+        }
+
+        .kpi-card-meta {
+          display: inline-block;
+          margin-top: 6px;
+          color: #7b8698;
+          font-size: 13px;
+          font-weight: 400;
         }
 
         .table-style3 .t-body tr {
