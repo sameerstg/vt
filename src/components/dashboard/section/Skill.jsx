@@ -99,56 +99,5 @@ export default function Skill() {
     setMessage("Skills saved.");
   };
 
-  return (
-    <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-      <div className="bdrb1 pb15 mb25">
-        <h5 className="list-title">Skills</h5>
-      </div>
-      <div className="col-lg-7">
-        <div className="row">
-          <form className="form-style1" onSubmit={handleSave}>
-            <div className="row">
-              {skills.map((item, index) => (
-                <React.Fragment key={item.id}>
-                  <div className="col-sm-6">
-                    <div className="mb20">
-                      <SelectInput
-                        label={`Skills ${index + 1}`}
-                        defaultSelect={getSelectState(item.skill, skillOptions)}
-                        data={skillOptions}
-                        handler={(option, value) => updateSkill(item.id, "skill", value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="mb20">
-                      <SelectInput
-                        label="Point"
-                        defaultSelect={getSelectState(item.point, pointOptions)}
-                        data={pointOptions}
-                        handler={(option, value) => updateSkill(item.id, "point", value)}
-                      />
-                    </div>
-                  </div>
-                </React.Fragment>
-              ))}
-              {message && (
-                <div className="col-md-12">
-                  <p className="text text-thm mb15">{message}</p>
-                </div>
-              )}
-              <div className="col-md-12">
-                <div className="text-start">
-                  <button className="ud-btn btn-thm" type="submit" disabled={isSaving}>
-                    {isSaving ? "Saving..." : "Save"}
-                    <i className="fal fa-arrow-right-long" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+  
 }

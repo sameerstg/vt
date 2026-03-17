@@ -61,38 +61,22 @@ const getSelectState = (value, options) => {
 };
 
 export default function ProfileDetails() {
-  const [getHourly, setHourly] = useState({
-    option: "Select",
-    value: null,
-  });
-  const [getGender, setGender] = useState({
-    option: "Select",
-    value: null,
-  });
-  const [getCountry, setCountry] = useState({
-    option: "Select",
-    value: null,
-  });
-  const [getCity, setCity] = useState({
-    option: "Select",
-    value: null,
-  });
-  const [getLanguage, setLanguage] = useState({
-    option: "Select",
-    value: null,
-  });
-  const [getLanLevel, setLanLevel] = useState({
-    option: "Select",
-    value: null,
-  });
+  const [getHourly, setHourly] = useState({ option: "Select", value: null });
+  const [getGender, setGender] = useState({ option: "Select", value: null });
+  const [getCountry, setCountry] = useState({ option: "Select", value: null });
+  const [getCity, setCity] = useState({ option: "Select", value: null });
+  const [getLanguage, setLanguage] = useState({ option: "Select", value: null });
+  const [getLanLevel, setLanLevel] = useState({ option: "Select", value: null });
+
   const [selectedImage, setSelectedImage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     phone: "",
     intro: "",
   });
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const syncSession = () => {
@@ -105,16 +89,21 @@ export default function ProfileDetails() {
         phone: session.phone || "",
         intro: session.bio || "",
       });
+
       setHourly(getSelectState(session.hourlyRate || "", hourlyOptions));
       setGender(getSelectState(session.gender || "", genderOptions));
       setCountry(getSelectState(session.country || "", countryOptions));
       setCity(getSelectState(session.city || "", cityOptions));
       setLanguage(getSelectState(session.language || "", languageOptions));
-      setLanLevel(getSelectState(session.languageLevel || "", languageLevelOptions));
+      setLanLevel(
+        getSelectState(session.languageLevel || "", languageLevelOptions)
+      );
+
       setSelectedImage(session.profileImage || null);
     };
 
     syncSession();
+
     window.addEventListener("storage", syncSession);
     window.addEventListener(AUTH_SESSION_EVENT, syncSession);
 
@@ -137,14 +126,17 @@ export default function ProfileDetails() {
     reader.onload = () => {
       const imageDataUrl = String(reader.result || "");
       if (!imageDataUrl) return;
+
       setSelectedImage(imageDataUrl);
-      setMessage("Profile image selected. Click Save to persist.");
     };
     reader.readAsDataURL(file);
   };
 
   const onChangeField = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const handleSave = async (event) => {
@@ -165,33 +157,16 @@ export default function ProfileDetails() {
     };
 
     const result = await saveMockUserProfile(updates);
+
     if (!result.ok) {
-      setMessage(result.message || "Profile details save failed.");
       return;
     }
 
-    setMessage("Profile details saved.");
-  };
+    setSuccessMessage("Your profile has been updated successfully.");
 
-  // handlers
-  const hourlyHandler = (option, value) => {
-    setHourly({ option, value });
-  };
-  const genderHandler = (option, value) => {
-    setGender({ option, value });
-  };
-
-  const countryHandler = (option, value) => {
-    setCountry({ option, value });
-  };
-  const cityHandler = (option, value) => {
-    setCity({ option, value });
-  };
-  const languageHandler = (option, value) => {
-    setLanguage({ option, value });
-  };
-  const lanLevelHandler = (option, value) => {
-    setLanLevel({ option, value });
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 3000);
   };
 
   return (
@@ -200,6 +175,13 @@ export default function ProfileDetails() {
         <div className="bdrb1 pb15 mb25">
           <h5 className="list-title">Profile Details</h5>
         </div>
+
+        {successMessage && (
+          <div className="alert alert-success mb20">
+            {successMessage}
+          </div>
+        )}
+
         <div className="col-xl-7">
           <div className="profile-box d-sm-flex align-items-center mb30">
             <div className="profile-img mb20-sm">
@@ -216,17 +198,9 @@ export default function ProfileDetails() {
                 alt="profile"
               />
             </div>
+
             <div className="profile-content ml20 ml0-xs">
               <div className="d-flex align-items-center my-3">
-                <a
-                  className="tag-delt text-thm2"
-                  onClick={() => {
-                    setSelectedImage("/images/profile.jpg");
-                    setMessage("Profile image reset. Click Save to persist.");
-                  }}
-                >
-                  <span className="flaticon-delete text-thm2" />
-                </a>
                 <label>
                   <input
                     type="file"
@@ -237,145 +211,81 @@ export default function ProfileDetails() {
                   <a className="upload-btn ml10">Upload Images</a>
                 </label>
               </div>
+
               <p className="text mb-0">
                 Max file size is 1MB, Minimum dimension: 330x300 And Suitable
-                files are .jpg &amp; .png
+                files are .jpg & .png
               </p>
-              {message && <p className="text text-thm mt10 mb-0">{message}</p>}
             </div>
           </div>
         </div>
+
         <div className="col-lg-7">
           <form className="form-style1" onSubmit={handleSave}>
             <div className="row">
               <div className="col-sm-6">
                 <div className="mb20">
-                  <label className="heading-color ff-heading fw500 mb10">
-                    Username
-                  </label>
+                  <label className="heading-color fw500 mb10">Username</label>
                   <input
                     type="text"
                     className="form-control"
                     value={formData.username}
-                    onChange={(event) =>
-                      onChangeField("username", event.target.value)
+                    onChange={(e) =>
+                      onChangeField("username", e.target.value)
                     }
                   />
                 </div>
               </div>
+
               <div className="col-sm-6">
                 <div className="mb20">
-                  <label className="heading-color ff-heading fw500 mb10">
+                  <label className="heading-color fw500 mb10">
                     Email Address
                   </label>
                   <input
                     type="email"
                     className="form-control"
                     value={formData.email}
-                    onChange={(event) =>
-                      onChangeField("email", event.target.value)
-                    }
+                    onChange={(e) => onChangeField("email", e.target.value)}
                   />
                 </div>
               </div>
+
               <div className="col-sm-6">
                 <div className="mb20">
-                  <label className="heading-color ff-heading fw500 mb10">
+                  <label className="heading-color fw500 mb10">
                     Phone Number
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     value={formData.phone}
-                    onChange={(event) =>
-                      onChangeField("phone", event.target.value)
-                    }
+                    onChange={(e) => onChangeField("phone", e.target.value)}
                   />
                 </div>
               </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Hourly Rate"
-                    defaultSelect={getHourly}
-                    data={hourlyOptions}
-                    handler={hourlyHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Gender"
-                    defaultSelect={getGender}
-                    data={genderOptions}
-                    handler={genderHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Country"
-                    defaultSelect={getCountry}
-                    data={countryOptions}
-                    handler={countryHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="City"
-                    defaultSelect={getCity}
-                    data={cityOptions}
-                    handler={cityHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Language"
-                    defaultSelect={getLanguage}
-                    data={languageOptions}
-                    handler={languageHandler}
-                  />
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="mb20">
-                  <SelectInput
-                    label="Languages Level"
-                    defaultSelect={getLanLevel}
-                    data={languageLevelOptions}
-                    handler={lanLevelHandler}
-                  />
-                </div>
-              </div>
+
               <div className="col-md-12">
                 <div className="mb10">
-                  <label className="heading-color ff-heading fw500 mb10">
+                  <label className="heading-color fw500 mb10">
                     Introduce Yourself
                   </label>
+
                   <textarea
                     cols={30}
                     rows={6}
-                    placeholder="Description"
+                    className="form-control"
                     value={formData.intro}
-                    onChange={(event) =>
-                      onChangeField("intro", event.target.value)
-                    }
+                    onChange={(e) => onChangeField("intro", e.target.value)}
                   />
                 </div>
               </div>
+
               <div className="col-md-12">
-                <div className="text-start">
-                  <button className="ud-btn btn-thm" type="submit">
-                    Save
-                    <i className="fal fa-arrow-right-long" />
-                  </button>
-                </div>
+                <button className="ud-btn btn-thm" type="submit">
+                  Save
+                  <i className="fal fa-arrow-right-long"></i>
+                </button>
               </div>
             </div>
           </form>

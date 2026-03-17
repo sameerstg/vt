@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import ClientSectionLayout from "./ClientSectionLayout";
 
 const milestones = [
@@ -11,36 +13,71 @@ export default function EscrowFundingInfo() {
   const platformFee = 16;
   const totalPayable = taskBudget + platformFee;
 
+  const [paymentMethod, setPaymentMethod] = useState("Bank Transfer");
+  const [amount, setAmount] = useState(totalPayable);
+  const [confirmed, setConfirmed] = useState(false);
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleConfirmPayment = () => {
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    if (!paymentMethod) {
+      setErrorMessage("Please select a payment method.");
+      return;
+    }
+
+    if (!amount || amount <= 0) {
+      setErrorMessage("Please enter a valid amount.");
+      return;
+    }
+
+    if (!confirmed) {
+      setErrorMessage("Please confirm the escrow funding checkbox.");
+      return;
+    }
+
+    setSuccessMessage("Payment created successfully. Escrow funding has been initiated.");
+
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 4000);
+  };
+
   return (
-    <ClientSectionLayout
-      title="Escrow Funding Page"
-    >
+    <ClientSectionLayout title="Escrow Funding Page">
       <div className="row">
         <div className="col-xl-8">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+
+          <div className="ps-widget bgc-white bdrs4 p30 mb30">
             <div className="bdrb1 pb15 mb20">
               <h5 className="title mb-0">Escrow Summary</h5>
             </div>
+
             <div className="row">
               <div className="col-sm-6">
-                <p className="mb8"><span className="fw500">Task:</span> Landing Page Redesign</p>
-                <p className="mb8"><span className="fw500">Worker:</span> Daniel Carter</p>
-                <p className="mb8"><span className="fw500">Budget Model:</span> Milestone</p>
+                <p><strong>Task:</strong> Landing Page Redesign</p>
+                <p><strong>Worker:</strong> Daniel Carter</p>
+                <p><strong>Budget Model:</strong> Milestone</p>
               </div>
+
               <div className="col-sm-6">
-                <p className="mb8"><span className="fw500">Task Budget:</span> ${taskBudget}</p>
-                <p className="mb8"><span className="fw500">Platform Fee:</span> ${platformFee}</p>
-                <p className="mb8"><span className="fw500">Total Payable:</span> ${totalPayable}</p>
+                <p><strong>Task Budget:</strong> ${taskBudget}</p>
+                <p><strong>Platform Fee:</strong> ${platformFee}</p>
+                <p><strong>Total Payable:</strong> ${totalPayable}</p>
               </div>
             </div>
           </div>
 
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+          <div className="ps-widget bgc-white bdrs4 p30 mb30">
             <div className="bdrb1 pb15 mb20">
-              <h5 className="title mb-0">Milestone Breakdown (if applicable)</h5>
+              <h5 className="title mb-0">Milestone Breakdown</h5>
             </div>
+
             <div className="table-style1 table-responsive">
-              <table className="table table-borderless align-middle mb-0">
+              <table className="table table-borderless">
                 <thead>
                   <tr>
                     <th>Milestone</th>
@@ -49,9 +86,10 @@ export default function EscrowFundingInfo() {
                     <th>Status</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {milestones.map((item) => (
-                    <tr key={item.title} className="bdrb1">
+                    <tr key={item.title}>
                       <td>{item.title}</td>
                       <td>${item.amount}</td>
                       <td>{item.due}</td>
@@ -59,28 +97,52 @@ export default function EscrowFundingInfo() {
                     </tr>
                   ))}
                 </tbody>
+
               </table>
             </div>
           </div>
+
         </div>
 
         <div className="col-xl-4">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+
+          <div className="ps-widget bgc-white bdrs4 p30 mb30">
             <div className="bdrb1 pb15 mb20">
-              <h5 className="title mb-0">Platform Fee Display</h5>
+              <h5 className="title mb-0">Platform Fee</h5>
             </div>
-            <p className="mb10 text">A fixed platform fee is applied for escrow and payment protection.</p>
-            <h4 className="mb0">${platformFee}</h4>
+
+            <p className="text">
+              A fixed platform fee is applied for escrow and payment protection.
+            </p>
+
+            <h4>${platformFee}</h4>
           </div>
 
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+          <div className="ps-widget bgc-white bdrs4 p30 mb30">
             <div className="bdrb1 pb15 mb20">
               <h5 className="title mb-0">Confirm Payment</h5>
             </div>
 
+            {successMessage && (
+              <div className="alert alert-success mb15">
+                {successMessage}
+              </div>
+            )}
+
+            {errorMessage && (
+              <div className="alert alert-danger mb15">
+                {errorMessage}
+              </div>
+            )}
+
             <div className="mb15">
               <label className="form-label fw500">Payment Method</label>
-              <select className="form-select">
+
+              <select
+                className="form-select"
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              >
                 <option>Bank Transfer</option>
                 <option>Payoneer</option>
                 <option>Credit/Debit Card</option>
@@ -89,21 +151,39 @@ export default function EscrowFundingInfo() {
 
             <div className="mb15">
               <label className="form-label fw500">Amount</label>
-              <input type="number" className="form-control" defaultValue={totalPayable} />
+
+              <input
+                type="number"
+                className="form-control"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
             </div>
 
             <div className="form-check mb20">
-              <input className="form-check-input" type="checkbox" id="escrowConfirm" />
-              <label className="form-check-label" htmlFor="escrowConfirm">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={confirmed}
+                onChange={(e) => setConfirmed(e.target.checked)}
+              />
+
+              <label className="form-check-label">
                 Confirmation: I confirm this escrow funding amount and payment method.
               </label>
             </div>
 
-            <button type="button" className="ud-btn btn-thm w-100">
+            <button
+              type="button"
+              className="ud-btn btn-thm w-100"
+              onClick={handleConfirmPayment}
+            >
               Confirm Payment
               <i className="fal fa-arrow-right-long" />
             </button>
+
           </div>
+
         </div>
       </div>
     </ClientSectionLayout>
