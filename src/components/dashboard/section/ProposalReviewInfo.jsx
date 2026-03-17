@@ -3,6 +3,7 @@
 import ClientSectionLayout from "./ClientSectionLayout";
 import { acceptMockProposal, getAuthSession, getProposalsForClient, getTaskById } from "@/utils/auth/mockAuth";
 import Link from "next/link";
+
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback, useState, useEffect, useMemo } from "react";
 
@@ -14,9 +15,11 @@ export default function ProposalReviewInfo() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const taskId = searchParams.get("taskId");
+
 
   const refreshProposals = useCallback(() => {
     const session = getAuthSession();
@@ -41,7 +44,9 @@ export default function ProposalReviewInfo() {
       }
     }
     setLoading(false);
+
   }, [selectedProposalId, taskId]);
+
 
 
   useEffect(() => {
