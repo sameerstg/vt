@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import Pagination1 from "@/components/section/Pagination1";
 import DashboardNavigation from "../header/DashboardNavigation";
 import {
   adminEscrowBalances,
@@ -22,6 +23,15 @@ import {
   Filler,
 } from "chart.js";
 import { Line, Doughnut } from "react-chartjs-2";
+
+const financialOverviewTabs = [
+  "Overview",
+  "Transaction History",
+  "Escrow Balances",
+  "Released Payments",
+  "Platform Fee Ledger",
+];
+const TABLE_PAGE_SIZE = 4;
 
 ChartJS.register(
   CategoryScale,
@@ -58,7 +68,29 @@ const getTypeBadgeClass = (type = "") => {
   return "fo-chip";
 };
 
+const getPaginatedData = (items = [], page = 1, pageSize = TABLE_PAGE_SIZE) => {
+  const totalItems = items.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+  const startIndex = (currentPage - 1) * pageSize;
+
+  return {
+    items: items.slice(startIndex, startIndex + pageSize),
+    totalItems,
+    totalPages,
+    currentPage,
+    pageSize,
+  };
+};
+
 export default function FinancialOverviewInfo() {
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [tablePages, setTablePages] = useState({
+    transactions: 1,
+    balances: 1,
+    released: 1,
+    ledger: 1,
+  });
   const totals = useMemo(() => {
     const escrowFunded = adminEscrowBalances.reduce((sum, row) => sum + row.totalFunded, 0);
     const escrowOnHold = adminEscrowBalances.reduce((sum, row) => sum + row.onHold, 0);
@@ -167,6 +199,33 @@ export default function FinancialOverviewInfo() {
     },
   };
 
+  const paginatedTransactions = useMemo(
+    () => getPaginatedData(adminTransactionHistory, tablePages.transactions),
+    [tablePages.transactions]
+  );
+
+  const paginatedBalances = useMemo(
+    () => getPaginatedData(adminEscrowBalances, tablePages.balances),
+    [tablePages.balances]
+  );
+
+  const paginatedReleasedPayments = useMemo(
+    () => getPaginatedData(adminReleasedPayments, tablePages.released),
+    [tablePages.released]
+  );
+
+  const paginatedLedger = useMemo(
+    () => getPaginatedData(adminPlatformFeeLedger, tablePages.ledger),
+    [tablePages.ledger]
+  );
+
+  const handleTablePageChange = (tableKey, page) => {
+    setTablePages((prev) => ({
+      ...prev,
+      [tableKey]: page,
+    }));
+  };
+
   return (
     <div className="dashboard__content hover-bgc-color financial-overview-page">
       <div className="row pb40">
@@ -211,204 +270,279 @@ export default function FinancialOverviewInfo() {
       </div>
 
       <div className="row">
-        <div className="col-xxl-8">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative">
-            <div className="bdrb1 pb15 mb20">
-              <h5 className="list-title mb-0">Escrow vs Released vs Fee Trend</h5>
-            </div>
-            <div className="fo-line-chart-wrap">
-              <Line data={trendData} options={trendOptions} />
-            </div>
-          </div>
-        </div>
-        <div className="col-xxl-4">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative">
-            <div className="bdrb1 pb15 mb20">
-              <h5 className="list-title mb-0">Platform Fee Split</h5>
-            </div>
-            <div className="fo-doughnut-wrap">
-              <Doughnut data={feeSplitData} options={feeSplitOptions} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="row">
         <div className="col-xl-12">
           <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-            <div className="bdrb1 pb15 mb20">
-              <h5 className="list-title mb-0">Transaction History</h5>
-            </div>
-            <div className="packages_table table-responsive">
-              <table className="table-style3 table at-savesearch">
-                <thead className="t-head">
-                  <tr>
-                    <th scope="col">Transaction</th>
-                    <th scope="col">Task / Party</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="t-body">
-                  {adminTransactionHistory.map((row) => (
-                    <tr key={row.id}>
-                      <td className="vam">
-                        <span className="fz14 fw500 d-block">{row.id}</span>
-                        <span className="text">{row.date}</span>
-                      </td>
-                      <td className="vam">
-                        <span className="fz14 fw500 d-block">{row.taskId}</span>
-                        <p className="text mb-0">{row.party}</p>
-                        <p className="text mb-0">{row.description}</p>
-                      </td>
-                      <td className="vam">
-                        <span className={getTypeBadgeClass(row.type)}>{row.type}</span>
-                      </td>
-                      <td className="vam">
-                        <span className="fz14 fw500">{formatCurrency(row.amount)}</span>
-                      </td>
-                      <td className="vam">
-                        <span className={`pending-style ${getStatusClass(row.status)}`}>
-                          {row.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+            <div className="navtab-style1">
+              <nav>
+                <div className="fo-tabs-shell mb30">
+                  <div className="nav nav-tabs fo-tabs">
+                    {financialOverviewTabs.map((item, index) => (
+                      <button
+                        key={item}
+                        type="button"
+                        className={`nav-link fw500 ps-0 ${selectedTab === index ? "active" : ""}`}
+                        onClick={() => setSelectedTab(index)}
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </nav>
 
-        <div className="col-xl-12">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-            <div className="bdrb1 pb15 mb20">
-              <h5 className="list-title mb-0">Escrow Balances</h5>
-            </div>
-            <div className="packages_table table-responsive">
-              <table className="table-style3 table at-savesearch">
-                <thead className="t-head">
-                  <tr>
-                    <th scope="col">Escrow ID</th>
-                    <th scope="col">Task / Owner</th>
-                    <th scope="col">Funded</th>
-                    <th scope="col">Released</th>
-                    <th scope="col">On Hold</th>
-                    <th scope="col">Available</th>
-                  </tr>
-                </thead>
-                <tbody className="t-body">
-                  {adminEscrowBalances.map((row) => (
-                    <tr key={row.id}>
-                      <td className="vam">
-                        <span className="fz14 fw500">{row.id}</span>
-                      </td>
-                      <td className="vam">
-                        <span className="fz14 fw500 d-block">{row.taskId}</span>
-                        <p className="text mb-0">{row.owner}</p>
-                      </td>
-                      <td className="vam">{formatCurrency(row.totalFunded)}</td>
-                      <td className="vam">{formatCurrency(row.released)}</td>
-                      <td className="vam">{formatCurrency(row.onHold)}</td>
-                      <td className="vam">
-                        <span className="fz14 fw500">{formatCurrency(row.available)}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+              {selectedTab === 0 && (
+                <div>
+                  <div className="fo-section-heading bdrb1 pb15 mb20">
+                    <span className="fo-section-label">Overview</span>
+                    <h5 className="list-title mb-0">Escrow vs Released vs Fee Trend</h5>
+                  </div>
+                  <div className="row">
+                    <div className="col-xxl-8">
+                      <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative fo-inner-widget">
+                        <div className="bdrb1 pb15 mb20">
+                          <h5 className="list-title mb-0">Escrow vs Released vs Fee Trend</h5>
+                        </div>
+                        <div className="fo-line-chart-wrap">
+                          <Line data={trendData} options={trendOptions} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-xxl-4">
+                      <div className="ps-widget bgc-white bdrs4 p30 mb0 position-relative fo-inner-widget">
+                        <div className="bdrb1 pb15 mb20">
+                          <h5 className="list-title mb-0">Platform Fee Split</h5>
+                        </div>
+                        <div className="fo-doughnut-wrap">
+                          <Doughnut data={feeSplitData} options={feeSplitOptions} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-        <div className="col-xl-12">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-            <div className="bdrb1 pb15 mb20">
-              <h5 className="list-title mb-0">Released Payments</h5>
-            </div>
-            <div className="packages_table table-responsive">
-              <table className="table-style3 table at-savesearch">
-                <thead className="t-head">
-                  <tr>
-                    <th scope="col">Payment</th>
-                    <th scope="col">Receiver</th>
-                    <th scope="col">Method</th>
-                    <th scope="col">Gross</th>
-                    <th scope="col">Fee</th>
-                    <th scope="col">Net Released</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="t-body">
-                  {adminReleasedPayments.map((row) => (
-                    <tr key={row.id}>
-                      <td className="vam">
-                        <span className="fz14 fw500 d-block">{row.id}</span>
-                        <p className="text mb-0">{row.date}</p>
-                        <p className="text mb-0">{row.taskId}</p>
-                      </td>
-                      <td className="vam">{row.receiver}</td>
-                      <td className="vam">{row.method}</td>
-                      <td className="vam">{formatCurrency(row.grossAmount)}</td>
-                      <td className="vam">{formatCurrency(row.fee)}</td>
-                      <td className="vam">
-                        <span className="fz14 fw500">{formatCurrency(row.netAmount)}</span>
-                      </td>
-                      <td className="vam">
-                        <span className={`pending-style ${getStatusClass(row.status)}`}>
-                          {row.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+              {selectedTab === 1 && (
+                <div>
+                  <div className="fo-section-heading bdrb1 pb15 mb20">
+                    <span className="fo-section-label">Ledger</span>
+                    <h5 className="list-title mb-0">Transaction History</h5>
+                  </div>
+                  <div className="packages_table table-responsive">
+                    <table className="table-style3 table at-savesearch">
+                      <thead className="t-head">
+                        <tr>
+                          <th scope="col">Transaction</th>
+                          <th scope="col">Task / Party</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Amount</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="t-body">
+                        {paginatedTransactions.items.map((row) => (
+                          <tr key={row.id}>
+                            <td className="vam">
+                              <span className="fz14 fw500 d-block">{row.id}</span>
+                              <span className="text">{row.date}</span>
+                            </td>
+                            <td className="vam">
+                              <span className="fz14 fw500 d-block">{row.taskId}</span>
+                              <p className="text mb-0">{row.party}</p>
+                              <p className="text mb-0">{row.description}</p>
+                            </td>
+                            <td className="vam">
+                              <span className={getTypeBadgeClass(row.type)}>{row.type}</span>
+                            </td>
+                            <td className="vam">
+                              <span className="fz14 fw500">{formatCurrency(row.amount)}</span>
+                            </td>
+                            <td className="vam">
+                              <span className={`pending-style ${getStatusClass(row.status)}`}>
+                                {row.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt30">
+                    <Pagination1
+                      currentPage={paginatedTransactions.currentPage}
+                      totalPages={paginatedTransactions.totalPages}
+                      totalItems={paginatedTransactions.totalItems}
+                      pageSize={paginatedTransactions.pageSize}
+                      onPageChange={(page) => handleTablePageChange("transactions", page)}
+                      countLabel="transactions"
+                    />
+                  </div>
+                </div>
+              )}
 
-        <div className="col-xl-12">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-            <div className="bdrb1 pb15 mb20">
-              <h5 className="list-title mb-0">Platform Fee Ledger</h5>
-            </div>
-            <div className="packages_table table-responsive">
-              <table className="table-style3 table at-savesearch">
-                <thead className="t-head">
-                  <tr>
-                    <th scope="col">Ledger Entry</th>
-                    <th scope="col">Reference</th>
-                    <th scope="col">Fee Type</th>
-                    <th scope="col">Rate</th>
-                    <th scope="col">Base Amount</th>
-                    <th scope="col">Fee Amount</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="t-body">
-                  {adminPlatformFeeLedger.map((row) => (
-                    <tr key={row.id}>
-                      <td className="vam">
-                        <span className="fz14 fw500 d-block">{row.id}</span>
-                        <p className="text mb-0">{row.date}</p>
-                      </td>
-                      <td className="vam">{row.reference}</td>
-                      <td className="vam">{row.feeType}</td>
-                      <td className="vam">{row.rate}</td>
-                      <td className="vam">{formatCurrency(row.baseAmount)}</td>
-                      <td className="vam">
-                        <span className="fz14 fw500">{formatCurrency(row.feeAmount)}</span>
-                      </td>
-                      <td className="vam">
-                        <span className={`pending-style ${getStatusClass(row.status)}`}>
-                          {row.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {selectedTab === 2 && (
+                <div>
+                  <div className="fo-section-heading bdrb1 pb15 mb20">
+                    <span className="fo-section-label">Escrow</span>
+                    <h5 className="list-title mb-0">Escrow Balances</h5>
+                  </div>
+                  <div className="packages_table table-responsive">
+                    <table className="table-style3 table at-savesearch">
+                      <thead className="t-head">
+                        <tr>
+                          <th scope="col">Escrow ID</th>
+                          <th scope="col">Task / Owner</th>
+                          <th scope="col">Funded</th>
+                          <th scope="col">Released</th>
+                          <th scope="col">On Hold</th>
+                          <th scope="col">Available</th>
+                        </tr>
+                      </thead>
+                      <tbody className="t-body">
+                        {paginatedBalances.items.map((row) => (
+                          <tr key={row.id}>
+                            <td className="vam">
+                              <span className="fz14 fw500">{row.id}</span>
+                            </td>
+                            <td className="vam">
+                              <span className="fz14 fw500 d-block">{row.taskId}</span>
+                              <p className="text mb-0">{row.owner}</p>
+                            </td>
+                            <td className="vam">{formatCurrency(row.totalFunded)}</td>
+                            <td className="vam">{formatCurrency(row.released)}</td>
+                            <td className="vam">{formatCurrency(row.onHold)}</td>
+                            <td className="vam">
+                              <span className="fz14 fw500">{formatCurrency(row.available)}</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt30">
+                    <Pagination1
+                      currentPage={paginatedBalances.currentPage}
+                      totalPages={paginatedBalances.totalPages}
+                      totalItems={paginatedBalances.totalItems}
+                      pageSize={paginatedBalances.pageSize}
+                      onPageChange={(page) => handleTablePageChange("balances", page)}
+                      countLabel="escrow balances"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {selectedTab === 3 && (
+                <div>
+                  <div className="fo-section-heading bdrb1 pb15 mb20">
+                    <span className="fo-section-label">Disbursement</span>
+                    <h5 className="list-title mb-0">Released Payments</h5>
+                  </div>
+                  <div className="packages_table table-responsive">
+                    <table className="table-style3 table at-savesearch">
+                      <thead className="t-head">
+                        <tr>
+                          <th scope="col">Payment</th>
+                          <th scope="col">Receiver</th>
+                          <th scope="col">Method</th>
+                          <th scope="col">Gross</th>
+                          <th scope="col">Fee</th>
+                          <th scope="col">Net Released</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="t-body">
+                        {paginatedReleasedPayments.items.map((row) => (
+                          <tr key={row.id}>
+                            <td className="vam">
+                              <span className="fz14 fw500 d-block">{row.id}</span>
+                              <p className="text mb-0">{row.date}</p>
+                              <p className="text mb-0">{row.taskId}</p>
+                            </td>
+                            <td className="vam">{row.receiver}</td>
+                            <td className="vam">{row.method}</td>
+                            <td className="vam">{formatCurrency(row.grossAmount)}</td>
+                            <td className="vam">{formatCurrency(row.fee)}</td>
+                            <td className="vam">
+                              <span className="fz14 fw500">{formatCurrency(row.netAmount)}</span>
+                            </td>
+                            <td className="vam">
+                              <span className={`pending-style ${getStatusClass(row.status)}`}>
+                                {row.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt30">
+                    <Pagination1
+                      currentPage={paginatedReleasedPayments.currentPage}
+                      totalPages={paginatedReleasedPayments.totalPages}
+                      totalItems={paginatedReleasedPayments.totalItems}
+                      pageSize={paginatedReleasedPayments.pageSize}
+                      onPageChange={(page) => handleTablePageChange("released", page)}
+                      countLabel="released payments"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {selectedTab === 4 && (
+                <div>
+                  <div className="fo-section-heading bdrb1 pb15 mb20">
+                    <span className="fo-section-label">Revenue</span>
+                    <h5 className="list-title mb-0">Platform Fee Ledger</h5>
+                  </div>
+                  <div className="packages_table table-responsive">
+                    <table className="table-style3 table at-savesearch">
+                      <thead className="t-head">
+                        <tr>
+                          <th scope="col">Ledger Entry</th>
+                          <th scope="col">Reference</th>
+                          <th scope="col">Fee Type</th>
+                          <th scope="col">Rate</th>
+                          <th scope="col">Base Amount</th>
+                          <th scope="col">Fee Amount</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="t-body">
+                        {paginatedLedger.items.map((row) => (
+                          <tr key={row.id}>
+                            <td className="vam">
+                              <span className="fz14 fw500 d-block">{row.id}</span>
+                              <p className="text mb-0">{row.date}</p>
+                            </td>
+                            <td className="vam">{row.reference}</td>
+                            <td className="vam">{row.feeType}</td>
+                            <td className="vam">{row.rate}</td>
+                            <td className="vam">{formatCurrency(row.baseAmount)}</td>
+                            <td className="vam">
+                              <span className="fz14 fw500">{formatCurrency(row.feeAmount)}</span>
+                            </td>
+                            <td className="vam">
+                              <span className={`pending-style ${getStatusClass(row.status)}`}>
+                                {row.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt30">
+                    <Pagination1
+                      currentPage={paginatedLedger.currentPage}
+                      totalPages={paginatedLedger.totalPages}
+                      totalItems={paginatedLedger.totalItems}
+                      pageSize={paginatedLedger.pageSize}
+                      onPageChange={(page) => handleTablePageChange("ledger", page)}
+                      countLabel="ledger entries"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -485,7 +619,84 @@ export default function FinancialOverviewInfo() {
           color: #6d28d9;
         }
 
+        .fo-tabs-shell {
+          padding: 8px 0 0;
+          border-top: 1px solid #e6ebf2;
+          background: transparent;
+        }
+
+        .fo-tabs {
+          gap: 10px;
+          border-bottom: 0;
+          margin-bottom: 0;
+          padding: 10px 0 0;
+        }
+
+        .fo-tabs .nav-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 42px;
+          padding: 10px 20px;
+          border: 1px solid #d6dfef;
+          border-radius: 4px;
+          color: #243b64;
+          background: #ffffff;
+          margin-bottom: 0;
+          font-size: 15px;
+          font-weight: 500;
+          line-height: 1.2;
+          text-align: center;
+          white-space: nowrap;
+          vertical-align: middle;
+          transition: all 0.2s ease;
+          box-shadow: none;
+        }
+
+        .fo-tabs .nav-link:hover {
+          border-color: #becce4;
+          color: #163c7a;
+          background: #fbfcff;
+        }
+
+        .fo-tabs .nav-link.active {
+          color: #5b41ff;
+          border-color: #5b41ff;
+          background: #ffffff;
+          box-shadow: none;
+        }
+
+        .fo-section-heading {
+          display: block;
+        }
+
+        .fo-section-label {
+          display: inline-block;
+          margin-bottom: 10px;
+          color: #3256a8;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+        }
+
+        .fo-inner-widget {
+          border: 1px solid #edf1f7 !important;
+          box-shadow: none !important;
+        }
+
         @media (max-width: 575px) {
+          .fo-tabs {
+            gap: 8px;
+          }
+
+          .fo-tabs .nav-link {
+            min-height: 40px;
+            padding: 10px 14px;
+            font-size: 14px;
+            white-space: normal;
+          }
+
           .fo-line-chart-wrap {
             height: 260px;
           }

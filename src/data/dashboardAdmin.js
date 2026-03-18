@@ -10,12 +10,46 @@ export const dasboardNavigation = [
     name: "User Management",
     icon: "flaticon-photo",
     path: "/admin-dashboard/user-management",
+    children: [
+      {
+        id: "2-0",
+        name: "All Users",
+        path: "/admin-dashboard/user-management",
+      },
+      {
+        id: "2-1",
+        name: "Clients",
+        path: "/admin-dashboard/user-management/clients",
+      },
+      {
+        id: "2-2",
+        name: "Contractors",
+        path: "/admin-dashboard/user-management/contractors",
+      },
+      {
+        id: "2-3",
+        name: "Workers",
+        path: "/admin-dashboard/user-management/workers",
+      },
+    ],
   },
   {
     id: 3,
-    name: "Task Monitoring",
+    name: "Project Monitoring",
     icon: "flaticon-success",
-    path: "/admin-dashboard/task-monitoring",
+    path: "/admin-dashboard/project-monitoring",
+    children: [
+      {
+        id: "3-0",
+        name: "All Projects",
+        path: "/admin-dashboard/project-monitoring/all-projects",
+      },
+      {
+        id: "3-1",
+        name: "Disputed Projects",
+        path: "/admin-dashboard/project-monitoring/disputed-projects",
+      },
+    ],
   },
   {
     id: 4,
