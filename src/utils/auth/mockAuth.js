@@ -1190,6 +1190,36 @@ export function distributePayment(contractorId, taskId, distributions) {
   return { ok: true };
 }
 
+// ============================================================
+// WORKER APPEALS (vt_worker_appeals)
+// ============================================================
+
+const WORKER_APPEALS_KEY = "vt_worker_appeals";
+
+function getAppealsStore() {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(window.localStorage.getItem(WORKER_APPEALS_KEY) || "[]"); } catch { return []; }
+}
+
+function setAppealsStore(data) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(WORKER_APPEALS_KEY, JSON.stringify(data));
+}
+
+export function submitWorkerAppeal(payload) {
+  if (typeof window === "undefined") return { ok: false };
+  const appeals = getAppealsStore();
+  const id = `APL-${Date.now()}`;
+  appeals.push({ ...payload, id, status: "Open", submittedAt: new Date().toISOString() });
+  setAppealsStore(appeals);
+  return { ok: true, id };
+}
+
+export function getWorkerAppeals(workerId) {
+  if (typeof window === "undefined") return [];
+  return getAppealsStore().filter(a => String(a.workerId) === String(workerId));
+}
+
 export function getPaymentDistributions(workerId) {
   if (typeof window === "undefined") return [];
   try {

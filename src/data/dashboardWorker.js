@@ -42,6 +42,12 @@ export const dasboardNavigation = [
     path: "/worker-dashboard/completed-tasks",
   },
   {
+    id: 8,
+    name: "Appeals",
+    icon: "flaticon-warning",
+    path: "/worker-dashboard/appeal",
+  },
+  {
     id: 11,
     name: "Payment History",
     icon: "flaticon-dollar",

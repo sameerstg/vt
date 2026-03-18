@@ -255,22 +255,33 @@ export default function TasksInfo({
                         <td>{task.deadline}</td>
                         <td>{(task.skills || []).join(", ")}</td>
                         <td>
-                          <Link
-                            href={
-                              activeFilter === "in_progress"
-                                ? `/worker-dashboard/work-submission?taskId=${task.id}&source=${task.source || "client"}`
-                                : activeFilter === "applied"
-                                  ? `/worker-dashboard/applied-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
-                                  : activeFilter === "completed"
-                                    ? `/worker-dashboard/completed-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
-                                    : `/worker-dashboard/assigned-projects/details?taskId=${task.id}&source=${task.source || "client"}`
-                            }
-                            className="ud-btn btn-thm"
-                            style={{ padding: "5px 15px", fontSize: "12px" }}
-                          >
-                            {activeFilter === "in_progress" ? "Submit Work" : "Details"}
-                            <i className="fal fa-arrow-right-long ms-1" />
-                          </Link>
+                          <div className="d-flex gap-2 align-items-center">
+                            <Link
+                              href={
+                                activeFilter === "in_progress"
+                                  ? `/worker-dashboard/work-submission?taskId=${task.id}&source=${task.source || "client"}`
+                                  : activeFilter === "applied"
+                                    ? `/worker-dashboard/applied-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
+                                    : activeFilter === "completed"
+                                      ? `/worker-dashboard/completed-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
+                                      : `/worker-dashboard/assigned-projects/details?taskId=${task.id}&source=${task.source || "client"}`
+                              }
+                              className="ud-btn btn-thm"
+                              style={{ padding: "5px 15px", fontSize: "12px" }}
+                            >
+                              {activeFilter === "in_progress" ? "Submit Work" : "Details"}
+                              <i className="fal fa-arrow-right-long ms-1" />
+                            </Link>
+                            {(activeFilter === "assigned" || activeFilter === "in_progress" || activeFilter === "in_review" || activeFilter === "in_dispute") && (
+                              <Link
+                                href={`/worker-dashboard/appeal?taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}&source=${task.source || "client"}`}
+                                className="ud-btn btn-light-default"
+                                style={{ padding: "5px 15px", fontSize: "12px" }}
+                              >
+                                Appeal
+                              </Link>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))}

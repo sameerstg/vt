@@ -50,8 +50,12 @@ export default function WorkSubmissionInfo() {
       const t = getTaskById(taskId);
       if (t) {
         setTask({ ...t, source: "client" });
-        setMilestones(t.milestones || []);
-        setSelectedIds((t.milestones || []).map(m => m.id || m.title));
+        const ms = t.milestones || [];
+        setMilestones(ms);
+        setSelectedIds(ms.map(m => m.id || m.title));
+      } else {
+        // Task not found in mockUsers — create a minimal placeholder so the form is usable
+        setTask({ id: taskId, title: `Task #${taskId}`, source: "client" });
       }
     }
   }, [taskId, source]);
@@ -66,7 +70,7 @@ export default function WorkSubmissionInfo() {
     e.preventDefault();
     setSubmitAttempted(true);
     if (!note.trim()) return;
-    if (selectedIds.length === 0) return;
+    if (milestones.length > 0 && selectedIds.length === 0) return;
 
     const result = submitWorkerWork(session?.id, taskId, selectedIds, { note });
     if (result?.ok !== false) {
@@ -124,7 +128,7 @@ export default function WorkSubmissionInfo() {
               <h5 className="list-title bdrb1 pb15 mb20">Select Milestones to Submit</h5>
 
               {milestones.length === 0 && (
-                <p className="text text-muted">No pending milestones available for submission.</p>
+                <p className="text text-muted fz13">No milestones defined — fill in the note below and submit your work directly.</p>
               )}
 
               {milestones.map(m => {
@@ -161,7 +165,7 @@ export default function WorkSubmissionInfo() {
                   {submitAttempted && !note.trim() && (
                     <small className="text-danger d-block mt5">Submission note is required.</small>
                   )}
-                  {submitAttempted && selectedIds.length === 0 && (
+                  {submitAttempted && milestones.length > 0 && selectedIds.length === 0 && (
                     <small className="text-danger d-block mt5">Select at least one milestone to submit.</small>
                   )}
                 </div>
@@ -191,7 +195,7 @@ export default function WorkSubmissionInfo() {
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="ud-btn btn-thm" disabled={milestones.length === 0}>
+                  <button type="submit" className="ud-btn btn-thm">
                     Submit Work <i className="fal fa-arrow-right-long ms-1" />
                   </button>
                 </div>
