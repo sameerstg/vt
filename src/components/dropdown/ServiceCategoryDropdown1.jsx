@@ -4,7 +4,7 @@ import { product1 } from "@/data/product";
 import listingStore from "@/store/listingStore";
 import { useEffect, useMemo, useState } from "react";
 
-export default function ServiceCategoryDropdown1() {
+export default function ServiceCategoryDropdown1({ items }) {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   const setCategoryState = listingStore((state) => state.setCategory);
@@ -13,14 +13,14 @@ export default function ServiceCategoryDropdown1() {
   const serviceCategories = useMemo(() => {
     const categoryMap = new Map();
 
-    product1.forEach((item) => {
+    (items?.length ? items : product1).forEach((item) => {
       const tag = item?.tag?.trim();
       if (!tag) return;
       categoryMap.set(tag, (categoryMap.get(tag) || 0) + 1);
     });
 
     return Array.from(categoryMap, ([title, total]) => ({ title, total }));
-  }, []);
+  }, [items]);
 
   const categoryHandler = (categoryValue) => {
     if (!selectedCategories.includes(categoryValue)) {

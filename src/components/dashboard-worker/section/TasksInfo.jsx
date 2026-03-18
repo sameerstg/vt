@@ -25,6 +25,13 @@ const sectionLabelMap = {
   completed: "Completed Projects",
 };
 
+const FOREIGN_LOCATIONS = [
+  "United States",
+  "United Kingdom",
+  "United Arab Emirates",
+  "Canada",
+];
+
 export default function TasksInfo({
   initialFilter = "applied",
   pageTitle = "Projects",
@@ -55,13 +62,6 @@ export default function TasksInfo({
     "Video & Animation",
     "Engineering & Architecture",
     "Finance & Accounting",
-  ];
-
-  const FOREIGN_LOCATIONS = [
-    "United States",
-    "United Kingdom",
-    "United Arab Emirates",
-    "Canada",
   ];
 
   useEffect(() => {

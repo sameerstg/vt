@@ -23,13 +23,13 @@ export default function ProposalReviewInfo() {
     if (session?.id) {
       const clientProposals = getProposalsForClient(session.id);
       setProposals(clientProposals);
-      
+
       // If navigating from a specific task via taskId param
       if (taskId) {
         const task = getTaskById(taskId);
         if (task && task.title) {
           setFilterTitle(task.title);
-          
+
           // Auto-select the first proposal for this specific task
           const taskProposals = clientProposals.filter(p => String(p.taskId) === String(taskId) || p.taskTitle === task.title);
           if (taskProposals.length > 0) {
@@ -42,6 +42,7 @@ export default function ProposalReviewInfo() {
     }
     setLoading(false);
   }, [selectedProposalId, taskId]);
+
 
   useEffect(() => {
     refreshProposals();
@@ -203,8 +204,8 @@ export default function ProposalReviewInfo() {
                   </p>
                 </div>
                 <div className="d-flex justify-content-end gap-2 flex-wrap mt15">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="ud-btn btn-thm"
                     onClick={(e) => {
                       e.stopPropagation();

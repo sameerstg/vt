@@ -14,6 +14,7 @@ import {
   adminUsers,
   adminVerificationRequests,
 } from "@/data/dashboardAdmin";
+import { getAdminUserSummary } from "@/data/adminUserSummary";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -84,6 +85,7 @@ export default function DashboardInfo() {
   const [selectedWindow, setSelectedWindow] = useState("6m");
 
   const overviewStats = useMemo(() => {
+    const userSummary = getAdminUserSummary();
     const pendingKyc = adminVerificationRequests.filter(
       (request) => request.reviewStatus === "Pending"
     ).length;
@@ -108,7 +110,11 @@ export default function DashboardInfo() {
     );
 
     return {
-      totalUsers: adminUsers.length,
+      totalUsers: userSummary.totalUsers,
+      clients: userSummary.clients,
+      workers: userSummary.workers,
+      contractors: userSummary.contractors,
+      admins: userSummary.admins,
       pendingKyc,
       verifiedUsers,
       flaggedTasks,
@@ -266,7 +272,7 @@ export default function DashboardInfo() {
             </div>
             <h4>{overviewStats.totalUsers}</h4>
             <span className="admin-kpi-meta">
-              {overviewStats.verifiedUsers} verified profiles
+              {overviewStats.admins} admin account{overviewStats.admins === 1 ? "" : "s"}
             </span>
           </div>
         </div>
@@ -277,11 +283,11 @@ export default function DashboardInfo() {
               <span className="admin-kpi-icon">
                 <i className="flaticon-review-1" />
               </span>
-              <p>Pending KYC Queue</p>
+              <p>Clients</p>
             </div>
-            <h4>{overviewStats.pendingKyc}</h4>
+            <h4>{overviewStats.clients}</h4>
             <span className="admin-kpi-meta">
-              Requires verification review
+              {overviewStats.pendingKyc} pending KYC request{overviewStats.pendingKyc === 1 ? "" : "s"}
             </span>
           </div>
         </div>
@@ -292,11 +298,11 @@ export default function DashboardInfo() {
               <span className="admin-kpi-icon">
                 <i className="flaticon-delete" />
               </span>
-              <p>Flagged Task Risk</p>
+              <p>Workers</p>
             </div>
-            <h4>{overviewStats.flaggedTasks}</h4>
+            <h4>{overviewStats.workers}</h4>
             <span className="admin-kpi-meta">
-              {overviewStats.suspendedUsers} suspended or banned users
+              {overviewStats.verifiedUsers} verified profile{overviewStats.verifiedUsers === 1 ? "" : "s"}
             </span>
           </div>
         </div>
@@ -307,11 +313,11 @@ export default function DashboardInfo() {
               <span className="admin-kpi-icon">
                 <i className="flaticon-dollar" />
               </span>
-              <p>Total Escrow</p>
+              <p>Contractors</p>
             </div>
-            <h4>{formatCurrency(overviewStats.escrowFunded)}</h4>
+            <h4>{overviewStats.contractors}</h4>
             <span className="admin-kpi-meta">
-              {formatCurrency(overviewStats.platformFees)} platform fee revenue
+              {overviewStats.suspendedUsers} suspended or banned user{overviewStats.suspendedUsers === 1 ? "" : "s"}
             </span>
           </div>
         </div>

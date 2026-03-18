@@ -162,7 +162,7 @@ export default function Footer7() {
                         <div className="col-sm-6">
                             <div className="text-center text-lg-start">
                                 <p className="copyright-text mb-0 at-home8 ff-heading">
-                                    Â© Freeio. 2023{" "}
+(c) Freeio. 2023{" "}
                                     <Link
                                         href="https://themeforest.net/user/ib-themes/portfolio"
                                         target="_blank"
@@ -185,3 +185,4 @@ export default function Footer7() {
         </>
     );
 }
+

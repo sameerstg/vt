@@ -1,14 +1,14 @@
 import ServiceBrowsePage from "@/components/service/ServiceBrowsePage";
 import {
-  getFeaturedServices,
+  getAllServices,
   serviceOverview,
 } from "@/data/serviceCatalog";
 
 export const metadata = {
-  title: "Freeio | Service 1",
+  title: "Freeio | Services",
 };
 
-export default function page() {
+export default function ServicesPage() {
   return (
     <ServiceBrowsePage
       breadcrumb={["Home", "Services", serviceOverview.title]}
@@ -17,8 +17,8 @@ export default function page() {
         description: serviceOverview.description,
         imageSrc: serviceOverview.heroImage,
       }}
-      services={getFeaturedServices()}
-      resetStateKey="service-1-overview"
+      services={getAllServices()}
+      resetStateKey="services-overview"
     />
   );
 }
