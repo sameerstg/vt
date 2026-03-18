@@ -13,7 +13,7 @@ import Testimonial1 from "@/components/section/Testimonial1";
 import TrendingService4 from "@/components/section/TrendingService4";
 
 export const metadata = {
-    title: "Freeio - Freelance Marketplace React/Next Js Template | Home 6",
+    title: "VeriTask | Home 6",
 };
 
 export default function page() {

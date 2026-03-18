@@ -7,12 +7,12 @@ import DashboardNavigation from "../header/DashboardNavigation";
 import { getWorkerTasksBySection } from "@/data/workerTasks";
 import TaskDiscoveryPanel from "@/components/dashboard-shared/TaskDiscoveryPanel";
 import WorkSubmissionPanel from "@/components/dashboard-shared/WorkSubmissionPanel";
-import { getAuthSession, getWorkerAppliedTasks } from "@/utils/auth/mockAuth";
+import { getAuthSession, getWorkerAppliedTasks, getWorkerAssignedTasks } from "@/utils/auth/mockAuth";
 import WorkerTaskFilters from "@/components/dashboard-shared/WorkerTaskFilters";
 
 const TASK_SECTIONS = [
   { key: "applied", label: "Applied Projects", path: "/worker-dashboard/applied-tasks" },
-  { key: "assigned", label: "Assigned Projects", path: "/worker-dashboard/assigned-tasks" },
+  { key: "assigned", label: "Projects", path: "/worker-dashboard/assigned-projects" },
   { key: "in_progress", label: "In Progress Projects", path: "/worker-dashboard/in-progress" },
   { key: "completed", label: "Completed Projects", path: "/worker-dashboard/completed-tasks" },
   { key: "work_submission", label: "Work Submission", path: "/worker-dashboard/manage-projects" },
@@ -20,7 +20,7 @@ const TASK_SECTIONS = [
 
 const sectionLabelMap = {
   applied: "Applied Projects",
-  assigned: "Assigned Projects",
+  assigned: "Projects",
   in_progress: "In Progress Projects",
   completed: "Completed Projects",
 };
@@ -36,6 +36,7 @@ export default function TasksInfo({
   initialFilter = "applied",
   pageTitle = "Projects",
   pageDescription = "",
+  sections = TASK_SECTIONS,
 }) {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
@@ -85,15 +86,27 @@ export default function TasksInfo({
 
   const baseTasks = useMemo(() => {
     if (activeFilter === "work_submission" || activeFilter === "available") return [];
+    const session = getAuthSession();
     const staticTasks = getWorkerTasksBySection(activeFilter);
     let all = staticTasks;
-    if (activeFilter === "applied") {
-      const session = getAuthSession();
-      if (session?.id) {
-        const dynamicApplied = getWorkerAppliedTasks(session.id);
-        all = [...staticTasks, ...dynamicApplied];
-      }
+
+    if (activeFilter === "applied" && session?.id) {
+      all = [...staticTasks, ...getWorkerAppliedTasks(session.id)];
     }
+
+    if (session?.id && ["assigned", "in_progress", "in_review", "in_dispute", "completed"].includes(activeFilter)) {
+      const allAssigned = getWorkerAssignedTasks(session.id);
+      const STATUS_MAP = {
+        assigned: t => ["assigned", "In Progress", "in_progress"].includes(t.status),
+        in_progress: t => ["In Progress", "in_progress"].includes(t.status),
+        in_review: t => ["Work Submitted", "in_review"].includes(t.status),
+        in_dispute: t => ["Disputed", "in_dispute"].includes(t.status),
+        completed: t => ["Completed", "completed"].includes(t.status),
+      };
+      const filtered = allAssigned.filter(STATUS_MAP[activeFilter] || (() => false));
+      all = [...staticTasks, ...filtered];
+    }
+
     return Array.from(new Map(all.map(task => [String(task.id), task])).values());
   }, [activeFilter]);
 
@@ -147,42 +160,63 @@ export default function TasksInfo({
         <div className="col-xl-12">
           <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative tm-toolbar-card">
             <div className="bdrb1 pb15 mb20 tm-toolbar-head">
-              <h5 className="list-title mb-1">Status Filter</h5>
+              <h5 className="list-title mb-1">Find & Filter Projects</h5>
             </div>
-            <div className="tm-filter-wrap">
-              {TASK_SECTIONS.filter(f => f.key !== "work_submission").map(filter => (
-                <button
-                  key={filter.key}
-                  type="button"
-                  className={`tm-filter-btn ${activeFilter === filter.key ? "active" : ""}`}
-                  onClick={() => setActiveFilter(filter.key)}
-                >
-                  {filter.label}
-                </button>
-              ))}
+            <div className="row mb10">
+              <div className="col-12">
+                <label className="fw500 text-muted fz14 mb-2">Quick Search</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Type to search by project title or client..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  style={{ borderRadius: "8px", border: "1px solid #e8edf6", height: "45px", marginBottom: "10px" }}
+                />
+                <small className="text-muted">Use keywords to quickly find relevant projects.</small>
+              </div>
+            </div>
+            <div className="row mb10">
+              <div className="col-12">
+                <label className="fw500 text-muted fz14 mb-2">Status Tabs</label>
+                <div className="tm-filter-wrap mb10">
+                  {sections.filter(f => f.key !== "work_submission").map(filter => (
+                    <button
+                      key={filter.key}
+                      type="button"
+                      className={`tm-filter-btn ${activeFilter === filter.key ? "active" : ""}`}
+                      onClick={() => setActiveFilter(filter.key)}
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
+                <small className="text-muted">Switch between applied, assigned, in-progress, and completed projects.</small>
+              </div>
+            </div>
+            <div className="row mb10">
+              <div className="col-12">
+                <label className="fw500 text-muted fz14 mb-2">Advanced Filters</label>
+                <WorkerTaskFilters
+                  category={category}
+                  setCategory={setCategory}
+                  location={location}
+                  setLocation={setLocation}
+                  taskType={taskType}
+                  setTaskType={setTaskType}
+                  budgetModel={budgetModel}
+                  setBudgetModel={setBudgetModel}
+                  workMode={workMode}
+                  setWorkMode={setWorkMode}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  locationOptions={locationOptions}
+                />
+                {/* <small className="text-muted">Filter by category, location, task type, budget, and mode.</small> */}
+              </div>
             </div>
           </div>
         </div>
-
-        {["applied", "assigned", "in_progress", "completed"].includes(activeFilter) && (
-          <div className="col-xl-12">
-            <WorkerTaskFilters
-              category={category}
-              setCategory={setCategory}
-              location={location}
-              setLocation={setLocation}
-              taskType={taskType}
-              setTaskType={setTaskType}
-              budgetModel={budgetModel}
-              setBudgetModel={setBudgetModel}
-              workMode={workMode}
-              setWorkMode={setWorkMode}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              locationOptions={locationOptions}
-            />
-          </div>
-        )}
 
         <div className="col-xl-12">
           {activeFilter === "available" ? (
@@ -199,7 +233,7 @@ export default function TasksInfo({
                   <thead className="t-head">
                     <tr>
                       <th scope="col">Task</th>
-                      <th scope="col">Client</th>
+                      <th scope="col">{activeFilter === "assigned" ? "Source" : "Client"}</th>
                       <th scope="col">Budget</th>
                       <th scope="col">Deadline</th>
                       <th scope="col">Skills</th>
@@ -210,15 +244,27 @@ export default function TasksInfo({
                     {paginatedTasks.map(task => (
                       <tr key={task.id} className="task-row-hover">
                         <td>{task.title}</td>
-                        <td>{task.client}</td>
+                        <td>
+                          {activeFilter === "assigned" && task.source === "contractor"
+                            ? <span className="source-tag source-tag--contractor">Via {task.contractorName || "Contractor"}</span>
+                            : activeFilter === "assigned"
+                              ? <span className="source-tag source-tag--client">Client Direct</span>
+                              : task.client}
+                        </td>
                         <td>{task.budget}</td>
                         <td>{task.deadline}</td>
                         <td>{(task.skills || []).join(", ")}</td>
                         <td>
                           <Link
-                            href={activeFilter === "in_progress" 
-                              ? `/worker-dashboard/manage-projects?taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}`
-                              : `/worker-dashboard/${activeFilter === "applied" ? "applied-tasks" : activeFilter === "assigned" ? "assigned-tasks" : "completed-tasks"}/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`}
+                            href={
+                              activeFilter === "in_progress"
+                                ? `/worker-dashboard/work-submission?taskId=${task.id}&source=${task.source || "client"}`
+                                : activeFilter === "applied"
+                                  ? `/worker-dashboard/applied-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
+                                  : activeFilter === "completed"
+                                    ? `/worker-dashboard/completed-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
+                                    : `/worker-dashboard/assigned-projects/details?taskId=${task.id}&source=${task.source || "client"}`
+                            }
                             className="ud-btn btn-thm"
                             style={{ padding: "5px 15px", fontSize: "12px" }}
                           >
@@ -263,6 +309,9 @@ export default function TasksInfo({
         .worker-pagination__page, .worker-pagination__nav { min-width: 42px; height: 42px; border-radius: 4px; border: 1px solid #dbe1ee; background: #ffffff; font-weight: 600; }
         .worker-pagination__page.is-active { border-color: #5b2dff; background: #f7f7f7; color: #5b2dff; }
         .worker-pagination__nav:disabled { opacity: 0.45; cursor: not-allowed; }
+        .source-tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .source-tag--client { background: #d4f7e4; color: #1a7a4a; }
+        .source-tag--contractor { background: #f0ebff; color: #5b2dff; }
       `}</style>
     </div>
   );

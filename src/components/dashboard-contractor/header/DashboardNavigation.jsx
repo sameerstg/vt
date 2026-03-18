@@ -24,11 +24,11 @@ export default function DashboardNavigation() {
 
   const handleNavClick = (event, item) => {
     setActive(false);
-    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";
+    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/client/login";
     if (!isLogout) return;
     event.preventDefault();
     clearAuthSession();
-    router.push("/seller/login");
+    router.push("/client/login");
   };
 
   return (

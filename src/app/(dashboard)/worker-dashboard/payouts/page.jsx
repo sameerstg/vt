@@ -3,7 +3,7 @@ import PayoutInfo from "@/components/dashboard-worker/section/PayoutInfo";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Payout",
+  title: "VeriTask | Payout",
 };
 
 export default function page() {

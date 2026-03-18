@@ -31,7 +31,7 @@ export default function Breadcumb1({ title, brief, isBtnActive }) {
                   <h2 className="text-white">{title}</h2>
                   <p className="text mb30 text-white">{brief}</p>
                   {isBtnActive && (
-                    <Link className="ud-btn btn-thm" href="/seller/register">
+                    <Link className="ud-btn btn-thm" href="/client/register">
                       Create Account
                       <i className="fal fa-arrow-right-long" />
                     </Link>

@@ -4,7 +4,7 @@ import ReviewsInfo from "@/components/dashboard-worker/section/ReviewsInfo";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Review",
+  title: "VeriTask | Review",
 };
 
 export default function page() {

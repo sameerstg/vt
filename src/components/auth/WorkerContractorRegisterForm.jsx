@@ -81,7 +81,7 @@ export default function WorkerContractorRegisterForm() {
 
     const flow = getRoleFlow(result.user.role);
     setTimeout(() => {
-      router.push(flow?.dashboardPath || "/seller/login");
+      router.push(flow?.dashboardPath || "/client/login");
     }, 600);
   };
 
@@ -147,7 +147,7 @@ export default function WorkerContractorRegisterForm() {
           <h4>Worker / Contractor Onboarding</h4>
           <p className="text mt20">
             Already have an account?{" "}
-            <Link href="/seller/login" className="text-thm">
+            <Link href="/client/login" className="text-thm">
               Log In
             </Link>
           </p>

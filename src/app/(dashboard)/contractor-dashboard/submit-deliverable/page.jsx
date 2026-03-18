@@ -1,0 +1,16 @@
+import DashboardLayout from "@/components/dashboard-contractor/DashboardLayout";
+import DeliverableSubmissionInfo from "@/components/dashboard-contractor/section/DeliverableSubmissionInfo";
+import MobileNavigation2 from "@/components/header/MobileNavigation2";
+
+export const metadata = { title: "Submit Deliverable | VeriTask" };
+
+export default function page() {
+  return (
+    <>
+      <MobileNavigation2 />
+      <DashboardLayout>
+        <DeliverableSubmissionInfo />
+      </DashboardLayout>
+    </>
+  );
+}

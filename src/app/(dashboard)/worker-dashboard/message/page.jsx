@@ -4,7 +4,7 @@ import MessageInfo from "@/components/dashboard-worker/section/MessageInfo";
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Message",
+  title: "VeriTask | Message",
 };
 
 export default function page() {

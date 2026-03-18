@@ -20,8 +20,8 @@ export default function Header1() {
     const [session, setSession] = useState(null);
     const [isSessionReady, setIsSessionReady] = useState(false);
     const dashboardHref = useMemo(() => {
-        if (!session?.role) return "/seller/login";
-        return getRoleFlow(session.role)?.dashboardPath || "/seller/login";
+        if (!session?.role) return "/client/login";
+        return getRoleFlow(session.role)?.dashboardPath || "/client/login";
     }, [session]);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export default function Header1() {
 
     const handleLogout = () => {
         clearAuthSession();
-        router.push("/seller/login");
+        router.push("/client/login");
     };
 
     return (

@@ -26,6 +26,7 @@ function getLocationPriorityRank(location, preferredLocation) {
 export default function TaskDiscoveryPanel({
   preferredLocation = "Karachi",
   proposalPath = "/worker-dashboard/proposal",
+  detailsPath = "/worker-dashboard/available-tasks/details",
 }) {
   const router = useRouter();
 
@@ -191,7 +192,7 @@ export default function TaskDiscoveryPanel({
                               taskId: task.id,
                               title: task.title,
                             });
-                            router.push(`/worker-dashboard/available-tasks/details?${query.toString()}`);
+                            router.push(`${detailsPath}?${query.toString()}`);
                           }}
                           className="ud-btn btn-light-default"
                           style={{ padding: "5px 15px", fontSize: "12px" }}

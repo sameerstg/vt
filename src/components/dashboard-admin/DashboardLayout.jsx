@@ -17,13 +17,13 @@ export default function DashboardLayout({ children }) {
   useEffect(() => {
     const session = getAuthSession();
     if (!session?.role) {
-      router.replace("/seller/login");
+      router.replace("/client/login");
       return;
     }
 
     if (session.role !== "admin") {
       const roleFlow = getRoleFlow(session.role);
-      router.replace(roleFlow?.dashboardPath || "/seller/login");
+      router.replace(roleFlow?.dashboardPath || "/client/login");
       return;
     }
 

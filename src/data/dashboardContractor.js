@@ -7,24 +7,18 @@ export const dasboardNavigation = [
   },
   {
     id: 2,
-    name: "Manage Services",
-    icon: "flaticon-presentation",
-    path: "/contractor-dashboard/manage-services",
-  },
-  {
-    id: 3,
-    name: "Task Discovery",
+    name: "Browse Projects",
     icon: "flaticon-briefcase",
     path: "/contractor-dashboard/manage-jobs",
   },
   {
-    id: 4,
-    name: "Proposal Submission",
-    icon: "flaticon-content",
+    id: 3,
+    name: "Applied Projects",
+    icon: "flaticon-document",
     path: "/contractor-dashboard/manage-projects",
   },
   {
-    id: 5,
+    id: 4,
     name: "Teams",
     icon: "fal fa-users",
     path: "/contractor-dashboard/team",
@@ -36,28 +30,28 @@ export const dasboardNavigation = [
     ]
   },
   {
-    id: 6,
+    id: 5,
     name: "Payment Distribution",
     icon: "flaticon-money",
     path: "/contractor-dashboard/payment-distribution",
   },
   {
-    id: 7,
+    id: 6,
     name: "Dispute Submission",
     icon: "flaticon-document",
     path: "/contractor-dashboard/dispute-submission",
   },
   {
-    id: 8,
+    id: 7,
     name: "My Profile",
     icon: "flaticon-photo",
     path: "/contractor-dashboard/my-profile",
   },
   {
-    id: 9,
+    id: 8,
     name: "Logout",
     icon: "flaticon-logout",
-    path: "/login",
+    path: "/client/login",
   },
 ];
 

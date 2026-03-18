@@ -9,6 +9,14 @@ export const metadata = {
   title: `Worker Dashboard | ${workerSectionConfig[sectionKey].title}`,
 };
 
+const ASSIGNED_SECTIONS = [
+  { key: "assigned", label: "All" },
+  { key: "in_progress", label: "In Progress" },
+  { key: "in_review", label: "In Review" },
+  { key: "in_dispute", label: "In Dispute" },
+  { key: "completed", label: "Completed" },
+];
+
 export default function page() {
   return (
     <>
@@ -16,8 +24,9 @@ export default function page() {
       <DashboardLayout>
         <TasksInfo
           initialFilter="assigned"
-          pageTitle="Assigned Tasks"
-          pageDescription="Same task flow view with assigned filter applied."
+          pageTitle="Projects"
+          pageDescription=""
+          sections={ASSIGNED_SECTIONS}
         />
       </DashboardLayout>
     </>

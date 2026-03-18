@@ -7,12 +7,12 @@ import { clearAuthSession } from "@/utils/auth/mockAuth";
 export default function DashboardSidebar() {
   const path = usePathname();
   const router = useRouter();
-  const tasksRootPath = "/worker-dashboard/tasks";
+  const tasksRootPath = "/worker-dashboard/assigned-projects";
   const visibleTaskChildPaths = new Set([]);
   const hiddenTaskNavPaths = new Set([
     "/worker-dashboard/available-tasks",
     "/worker-dashboard/applied-tasks",
-    "/worker-dashboard/assigned-tasks",
+    "/worker-dashboard/assigned-projects",
     "/worker-dashboard/in-progress",
     "/worker-dashboard/completed-tasks",
   ]);
@@ -49,11 +49,11 @@ export default function DashboardSidebar() {
   );
 
   const handleNavClick = (event, item) => {
-    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";
+    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/client/login";
     if (!isLogout) return;
     event.preventDefault();
     clearAuthSession();
-    router.push("/seller/login");
+    router.push("/client/login");
   };
 
   return (

@@ -863,3 +863,350 @@ export function getAllPublishedTasks() {
   });
   return allTasks;
 }
+
+// ============================================================
+// CONTRACTOR TEAM STORAGE  (vt_contractor_teams)
+// ============================================================
+
+const CONTRACTOR_TEAMS_KEY = "vt_contractor_teams";
+const CONTRACTOR_PROPOSALS_KEY = "vt_contractor_proposals";
+const PAYMENT_DISTRIBUTIONS_KEY = "vt_payment_distributions";
+
+function getContractorTeamsStore() {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.localStorage.getItem(CONTRACTOR_TEAMS_KEY) || "{}");
+  } catch { return {}; }
+}
+
+function setContractorTeamsStore(data) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(CONTRACTOR_TEAMS_KEY, JSON.stringify(data));
+}
+
+export function getContractorTeam(contractorId) {
+  const store = getContractorTeamsStore();
+  return store[contractorId] || { workers: [], assignments: [] };
+}
+
+export function addWorkerToTeam(contractorId, worker) {
+  const store = getContractorTeamsStore();
+  const team = store[contractorId] || { workers: [], assignments: [] };
+  if (team.workers.some(w => w.workerId === worker.workerId)) {
+    return { ok: false, message: "Worker already in team." };
+  }
+  team.workers.push(worker);
+  store[contractorId] = team;
+  setContractorTeamsStore(store);
+  return { ok: true, team };
+}
+
+export function removeWorkerFromTeam(contractorId, workerId) {
+  const store = getContractorTeamsStore();
+  const team = store[contractorId] || { workers: [], assignments: [] };
+  team.workers = team.workers.filter(w => w.workerId !== workerId);
+  store[contractorId] = team;
+  setContractorTeamsStore(store);
+  return { ok: true };
+}
+
+export function assignProjectToWorker(contractorId, taskId, taskTitle, workerId, workerName) {
+  const store = getContractorTeamsStore();
+  const team = store[contractorId] || { workers: [], assignments: [] };
+  if (team.assignments.find(a => a.taskId === taskId && a.workerId === workerId)) {
+    return { ok: false, message: "Already assigned." };
+  }
+  team.assignments.push({
+    taskId,
+    taskTitle,
+    contractorId,
+    workerId,
+    workerName,
+    assignedAt: new Date().toISOString(),
+    milestones: [],
+  });
+  store[contractorId] = team;
+  setContractorTeamsStore(store);
+  return { ok: true };
+}
+
+export function assignMilestonesToWorker(contractorId, taskId, workerId, milestones) {
+  const store = getContractorTeamsStore();
+  const team = store[contractorId] || { workers: [], assignments: [] };
+  const idx = team.assignments.findIndex(a => a.taskId === taskId && a.workerId === workerId);
+  if (idx === -1) return { ok: false, message: "Assignment not found." };
+  team.assignments[idx].milestones = milestones.map(m => ({
+    id: m.id || `m-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+    title: m.title,
+    price: m.price || 0,
+    deadline: m.deadline || "",
+    status: m.status || "working",
+    progress: m.progress || 0,
+    workerNote: "",
+    contractorNote: "",
+  }));
+  store[contractorId] = team;
+  setContractorTeamsStore(store);
+  return { ok: true };
+}
+
+export function getAssignmentsForContractor(contractorId) {
+  return getContractorTeam(contractorId).assignments || [];
+}
+
+export function updateMilestoneStatus(contractorId, taskId, workerId, milestoneId, updates) {
+  const store = getContractorTeamsStore();
+  const team = store[contractorId] || { workers: [], assignments: [] };
+  const aIdx = team.assignments.findIndex(a => a.taskId === taskId && a.workerId === workerId);
+  if (aIdx === -1) return { ok: false, message: "Assignment not found." };
+  const mIdx = team.assignments[aIdx].milestones.findIndex(m => m.id === milestoneId);
+  if (mIdx === -1) return { ok: false, message: "Milestone not found." };
+  team.assignments[aIdx].milestones[mIdx] = { ...team.assignments[aIdx].milestones[mIdx], ...updates };
+  store[contractorId] = team;
+  setContractorTeamsStore(store);
+  return { ok: true };
+}
+
+export function updateMilestoneProgress(contractorId, taskId, workerId, milestoneId, progress) {
+  return updateMilestoneStatus(contractorId, taskId, workerId, milestoneId, { progress });
+}
+
+export function getContractorAssignmentForWorker(workerId, taskId) {
+  if (typeof window === "undefined") return null;
+  const store = getContractorTeamsStore();
+  for (const contractorId of Object.keys(store)) {
+    const team = store[contractorId];
+    const assignment = (team.assignments || []).find(
+      a => a.workerId === workerId && a.taskId === taskId
+    );
+    if (assignment) return { ...assignment, contractorId };
+  }
+  return null;
+}
+
+export function getWorkerAssignedTasks(workerId) {
+  if (typeof window === "undefined") return [];
+  const results = [];
+
+  // 1. Client-direct: accepted proposals
+  let globalProposals = [];
+  try {
+    globalProposals = JSON.parse(window.localStorage.getItem("vt_submitted_proposals") || "[]");
+  } catch {}
+
+  globalProposals
+    .filter(p => String(p.workerId) === String(workerId) && p.status === "accepted")
+    .forEach(p => {
+      const task = getTaskById(p.taskId);
+      if (!task) return;
+      results.push({
+        id: task.id,
+        title: task.title,
+        client: task.clientName || task.client || "Client",
+        contractorName: null,
+        source: "client",
+        status: task.status || "In Progress",
+        milestones: task.milestones || [],
+        budget: task.budget || `$${p.offerAmount}`,
+        deadline: task.deadline || p.timeline,
+      });
+    });
+
+  // 2. Contractor-assigned tasks
+  const store = getContractorTeamsStore();
+  const allUsers = getAllUsers();
+  for (const contractorId of Object.keys(store)) {
+    const team = store[contractorId];
+    const contractorUser = allUsers.find(u => String(u.id) === String(contractorId));
+    const contractorName = contractorUser?.name || a?.contractorName || "Contractor";
+    (team.assignments || [])
+      .filter(a => String(a.workerId) === String(workerId))
+      .forEach(a => {
+        const totalBudget = (a.milestones || []).reduce((sum, m) => sum + (m.price || 0), 0);
+        const lastDeadline = (a.milestones || []).slice(-1)[0]?.deadline || "—";
+        results.push({
+          id: a.taskId,
+          title: a.taskTitle,
+          client: "",
+          contractorName: a.contractorName || contractorName,
+          contractorId,
+          source: "contractor",
+          status: "In Progress",
+          milestones: a.milestones || [],
+          budget: totalBudget ? `$${totalBudget}` : "—",
+          deadline: lastDeadline,
+          assignmentData: a,
+        });
+      });
+  }
+
+  return results;
+}
+
+export function submitWorkerWork(workerId, taskId, milestoneIds, { note = "" } = {}) {
+  if (typeof window === "undefined") return { ok: false };
+  const store = getContractorTeamsStore();
+  let handled = false;
+
+  for (const contractorId of Object.keys(store)) {
+    const team = store[contractorId];
+    const aIdx = (team.assignments || []).findIndex(
+      a => String(a.workerId) === String(workerId) && a.taskId === taskId
+    );
+    if (aIdx !== -1) {
+      team.assignments[aIdx].milestones = team.assignments[aIdx].milestones.map(m => {
+        if (milestoneIds.includes(m.id)) {
+          return { ...m, status: "submitted", workerNote: note };
+        }
+        return m;
+      });
+      store[contractorId] = team;
+      handled = true;
+    }
+  }
+
+  if (handled) {
+    setContractorTeamsStore(store);
+    return { ok: true };
+  }
+
+  return updateMockTaskStatus(taskId, "Work Submitted");
+}
+
+// ============================================================
+// WORKER CLIENT-DIRECT MILESTONE PROGRESS (vt_worker_client_milestones)
+// ============================================================
+
+const WORKER_CLIENT_MILESTONES_KEY = "vt_worker_client_milestones";
+
+function getWorkerClientMilestonesStore() {
+  if (typeof window === "undefined") return {};
+  try { return JSON.parse(window.localStorage.getItem(WORKER_CLIENT_MILESTONES_KEY) || "{}"); } catch { return {}; }
+}
+
+function setWorkerClientMilestonesStore(data) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(WORKER_CLIENT_MILESTONES_KEY, JSON.stringify(data));
+}
+
+// Returns merged milestone array for a client-direct task, overlaying stored progress
+export function getWorkerClientMilestones(workerId, taskId, baseMilestones = []) {
+  const store = getWorkerClientMilestonesStore();
+  const key = `${workerId}__${taskId}`;
+  const saved = store[key] || {};
+  return baseMilestones.map(m => ({
+    ...m,
+    ...(saved[String(m.id)] || {}),
+  }));
+}
+
+// Patch a single milestone field (progress, status, note)
+export function updateWorkerClientMilestone(workerId, taskId, milestoneId, updates) {
+  if (typeof window === "undefined") return { ok: false };
+  const store = getWorkerClientMilestonesStore();
+  const key = `${workerId}__${taskId}`;
+  if (!store[key]) store[key] = {};
+  store[key][String(milestoneId)] = { ...(store[key][String(milestoneId)] || {}), ...updates };
+  setWorkerClientMilestonesStore(store);
+  return { ok: true };
+}
+
+// ============================================================
+// CONTRACTOR PROPOSALS (vt_contractor_proposals)
+// ============================================================
+
+function getContractorProposalsStore() {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(window.localStorage.getItem(CONTRACTOR_PROPOSALS_KEY) || "[]");
+  } catch { return []; }
+}
+
+function setContractorProposalsStore(data) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(CONTRACTOR_PROPOSALS_KEY, JSON.stringify(data));
+}
+
+export function submitContractorProposal(payload) {
+  const proposals = getContractorProposalsStore();
+  const existing = proposals.find(
+    p => p.taskId === payload.taskId && p.contractorId === payload.contractorId
+  );
+  if (existing) return { ok: false, message: "You have already applied for this project." };
+
+  const newProposal = {
+    id: `cp-${Date.now()}`,
+    ...payload,
+    status: "pending",
+    submittedAt: new Date().toISOString(),
+  };
+  setContractorProposalsStore([newProposal, ...proposals]);
+  return { ok: true, proposal: newProposal };
+}
+
+export function getContractorProposals(contractorId) {
+  return getContractorProposalsStore().filter(p => p.contractorId === contractorId);
+}
+
+export function acceptContractorProposal(proposalId) {
+  const proposals = getContractorProposalsStore();
+  const proposal = proposals.find(p => p.id === proposalId);
+  if (!proposal) return { ok: false, message: "Proposal not found." };
+
+  updateMockTask(proposal.taskId, {
+    status: "In Progress",
+    assignedContractorId: proposal.contractorId,
+    assignedContractorName: proposal.contractorName,
+    contractorProposalId: proposal.id,
+    contractorBid: proposal.totalBid,
+  });
+
+  const updated = proposals.map(p => {
+    if (p.taskId !== proposal.taskId) return p;
+    return { ...p, status: p.id === proposalId ? "accepted" : "rejected" };
+  });
+  setContractorProposalsStore(updated);
+  return { ok: true };
+}
+
+// ============================================================
+// PAYMENT DISTRIBUTION (vt_payment_distributions)
+// ============================================================
+
+export function distributePayment(contractorId, taskId, distributions) {
+  if (typeof window === "undefined") return { ok: false };
+  let existing = [];
+  try {
+    existing = JSON.parse(window.localStorage.getItem(PAYMENT_DISTRIBUTIONS_KEY) || "[]");
+  } catch {}
+  existing.push({
+    id: `pd-${Date.now()}`,
+    contractorId,
+    taskId,
+    distributions,
+    distributedAt: new Date().toISOString(),
+  });
+  window.localStorage.setItem(PAYMENT_DISTRIBUTIONS_KEY, JSON.stringify(existing));
+  return { ok: true };
+}
+
+export function getPaymentDistributions(workerId) {
+  if (typeof window === "undefined") return [];
+  try {
+    const all = JSON.parse(window.localStorage.getItem(PAYMENT_DISTRIBUTIONS_KEY) || "[]");
+    const results = [];
+    all.forEach(record => {
+      (record.distributions || [])
+        .filter(d => String(d.workerId) === String(workerId))
+        .forEach(d => {
+          results.push({
+            ...d,
+            contractorId: record.contractorId,
+            taskId: record.taskId,
+            distributedAt: record.distributedAt,
+          });
+        });
+    });
+    return results;
+  } catch { return []; }
+}

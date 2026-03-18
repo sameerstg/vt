@@ -30,7 +30,7 @@ export default function OurCta1() {
                   Advertise your jobs to millions of monthly users and search
                   15.8 million CVs
                 </p>
-                <Link href="/seller/register" className="ud-btn btn-thm2">
+                <Link href="/client/register" className="ud-btn btn-thm2">
                   Get Started <i className="fal fa-arrow-right-long" />
                 </Link>
               </div>

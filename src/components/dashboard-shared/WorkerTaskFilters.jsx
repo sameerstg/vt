@@ -29,9 +29,7 @@ export default function WorkerTaskFilters({
 }) {
   return (
     <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-      <h5 className="title mb20">
-        Required Filters
-      </h5>
+      <h5 className="title mb20">Advanced Filters</h5>
       <div className="row g-3">
         {/* Category */}
         <div className="col-md-6 col-xl-3">

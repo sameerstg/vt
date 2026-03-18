@@ -7,6 +7,11 @@ import BottomToTop from "@/components/button/BottomToTop";
 import SearchModal1 from "@/components/modal/SearchModal1";
 import GlobalPageLoader from "@/components/ui/GlobalPageLoader";
 
+const Agentation = dynamic(
+  () => import("agentation").then((m) => m.Agentation),
+  { ssr: false }
+);
+
 const NavSidebar = dynamic(() => import("@/components/sidebar/NavSidebar"), {
   ssr: false,
 });
@@ -77,6 +82,7 @@ export default function AppClientShell({ children }) {
       {children}
       <BottomToTop />
       <NavSidebar />
+      {process.env.NODE_ENV === "development" && <Agentation />}
     </>
   );
 }

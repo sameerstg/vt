@@ -18,6 +18,7 @@ export default function TaskDiscoveryInfo() {
       <TaskDiscoveryPanel
         preferredLocation="United States"
         proposalPath="/contractor-dashboard/manage-projects"
+        detailsPath="/contractor-dashboard/task-details"
       />
     </div>
   );

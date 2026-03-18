@@ -52,7 +52,7 @@ export default function SellerLoginForm() {
         <h4>Welcome back!</h4>
         <p className="text">
           New here?{" "}
-          <Link href="/seller/register" className="text-thm">
+          <Link href="/client/register" className="text-thm">
             Sign up
           </Link>
         </p>

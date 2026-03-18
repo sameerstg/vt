@@ -3,7 +3,7 @@ import FinancialOverviewInfo from "@/components/dashboard-admin/section/Financia
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Financial Overview",
+  title: "VeriTask | Financial Overview",
 };
 
 export default function page() {

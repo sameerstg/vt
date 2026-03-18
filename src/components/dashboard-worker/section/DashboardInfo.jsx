@@ -2,17 +2,17 @@
 
 import DashboardNavigation from "../header/DashboardNavigation";
 import Link from "next/link";
-import LineChart from "../chart/LineChart";
 import { useState, useEffect, useMemo } from "react";
 import {
   getWorkerTasksBySection,
   workerSectionConfig,
 } from "@/data/workerTasks";
-import { getAuthSession, getWorkerAppliedTasks } from "@/utils/auth/mockAuth";
+import { getAuthSession, getWorkerAppliedTasks, getWorkerAssignedTasks, getAllClientTasks } from "@/utils/auth/mockAuth";
 
 export default function DashboardInfo() {
   const [session, setSession] = useState(null);
   const [dynamicAppliedTasks, setDynamicAppliedTasks] = useState([]);
+  const [stats, setStats] = useState({ available: 0, applied: 0, assigned: 0, completed: 0 });
 
   useEffect(() => {
     const currentSession = getAuthSession();
@@ -20,6 +20,13 @@ export default function DashboardInfo() {
     if (currentSession?.id) {
       const applied = getWorkerAppliedTasks(currentSession.id);
       setDynamicAppliedTasks(applied);
+      const assigned = getWorkerAssignedTasks(currentSession.id);
+      setStats({
+        available: getAllClientTasks().length,
+        applied: applied.length,
+        assigned: assigned.filter(t => t.status !== "Completed").length,
+        completed: assigned.filter(t => t.status === "Completed").length,
+      });
     }
   }, []);
 
@@ -66,8 +73,8 @@ export default function DashboardInfo() {
           <div className="col-sm-6 col-xxl-4">
             <div className="d-flex align-items-center justify-content-between statistics_funfact">
               <div className="details">
-                <div className="fz15">Open Project Buckets</div>
-                <div className="title">4</div>
+                <div className="fz15">Available Tasks</div>
+                <div className="title">{stats.available}</div>
                 <div className="text fz14">
                   Tracked states for project execution
                 </div>
@@ -105,15 +112,6 @@ export default function DashboardInfo() {
               <div className="icon text-center">
                 <i className="flaticon-success" />
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Line Chart */}
-        <div className="row mb30">
-          <div className="col-xl-12">
-            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative border-none" style={{ border: '1px solid #e8edf6' }}>
-              <LineChart />
             </div>
           </div>
         </div>

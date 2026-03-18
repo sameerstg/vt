@@ -33,11 +33,11 @@ export default function DashboardSidebar() {
     .filter((item) => !hiddenSidebarPaths.has(item.path) && item.name !== "Feedback" && item.name !== "Escrow Funding" && item.name !== "Work Review & Approval");
 
   const handleNavClick = (event, item) => {
-    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";
+    const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/client/login";
     if (!isLogout) return;
     event.preventDefault();
     clearAuthSession();
-    router.push("/seller/login");
+    router.push("/client/login");
   };
 
   return (

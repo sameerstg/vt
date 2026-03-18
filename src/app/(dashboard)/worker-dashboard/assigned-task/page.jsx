@@ -3,7 +3,7 @@ import AssignedTaskInfo from "@/components/dashboard-worker/section/AssignedTask
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Assigned Task",
+  title: "VeriTask | Assigned Task",
 };
 
 export default function page() {

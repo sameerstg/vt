@@ -7,7 +7,7 @@ import Listing13 from "@/components/section/Listing13";
 import TabSection1 from "@/components/section/TabSection1";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Worker 1",
+  title: "VeriTask | Worker 1",
 };
 
 export default function page() {

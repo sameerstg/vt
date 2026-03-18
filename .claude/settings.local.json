@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"D:\\\\Danish\\\\Projects\\\\VeriTask\\\\Project\\\\frontend\\\\vt-frontend/src/app/\\(dashboard\\)\" -name \"page.js\" -o -name \"page.jsx\")",
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(xargs sed:*)",
+      "Bash(node -e \"const fs=require\\(''fs''\\); const f=fs.readFileSync\\(''src/utils/auth/mockAuth.js'',''utf8''\\); const lines=f.split\\(''\\\\n''\\); console.log\\(''Total lines:'', lines.length\\); console.log\\(''Last 5 exports:'', lines.filter\\(l=>l.startsWith\\(''export function''\\)\\).slice\\(-5\\).join\\(''\\\\n''\\)\\);\")",
+      "Bash(ls src/app/\\\\\\(dashboard\\\\\\)/contractor-dashboard/task-details/)",
+      "Bash(ls src/app/\\\\\\(dashboard\\\\\\)/contractor-dashboard/submit-deliverable/)",
+      "Bash(cd:*)",
+      "WebFetch(domain:www.agentation.com)",
+      "Bash(ls \"d:\\\\Danish\\\\Projects\\\\VeriTask\\\\Project\\\\frontend\\\\vt-frontend\\\\src\\\\app\\\\\\(dashboard\\)\\\\worker-dashboard\"\")"
+    ]
+  }
+}

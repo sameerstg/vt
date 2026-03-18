@@ -3,7 +3,7 @@ import DisputeSubmissionInfo from "@/components/dashboard-contractor/section/Dis
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Dispute Submission",
+  title: "VeriTask | Dispute Submission",
 };
 
 export default function page() {

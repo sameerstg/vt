@@ -4,7 +4,7 @@ import AddServiceInfo from "@/components/dashboard-contractor/section/AddService
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Add Service",
+  title: "VeriTask | Add Service",
 };
 
 export default function page() {

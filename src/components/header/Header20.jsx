@@ -20,11 +20,11 @@ export default function Header20() {
     const [session, setSession] = useState(null);
     const [isSessionReady, setIsSessionReady] = useState(false);
     const isSellerFlow =
-        path === "/become-seller" || path.startsWith("/seller/");
-    const signInHref = isSellerFlow ? "/seller/login" : "/login";
+        path === "/become-seller" || path.startsWith("/client/");
+    const signInHref = isSellerFlow ? "/client/login" : "/login";
     const dashboardHref = useMemo(() => {
-        if (!session?.role) return "/seller/login";
-        return getRoleFlow(session.role)?.dashboardPath || "/seller/login";
+        if (!session?.role) return "/client/login";
+        return getRoleFlow(session.role)?.dashboardPath || "/client/login";
     }, [session]);
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export default function Header20() {
 
     const handleLogout = () => {
         clearAuthSession();
-        router.push("/seller/login");
+        router.push("/client/login");
     };
 
     return (
@@ -86,7 +86,7 @@ export default function Header20() {
                                         <Link
                                             className={`login-info mx15-lg mx30 ${
                                                 path === "/become-seller" ||
-                                                path.startsWith("/seller/")
+                                                path.startsWith("/client/")
                                                     ? "ui-active"
                                                     : ""
                                             }`}
@@ -125,7 +125,7 @@ export default function Header20() {
                                             <Link
                                                 className={`login-info mr15-lg mr30 ${
                                                     path === "/login" ||
-                                                    path === "/seller/login"
+                                                    path === "/client/login"
                                                         ? "ui-active"
                                                         : ""
                                                 }`}

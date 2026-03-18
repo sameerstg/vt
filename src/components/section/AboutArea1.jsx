@@ -56,11 +56,11 @@ export default function AboutArea1() {
                       (injected humour and the like).
                     </p>
                     <div className="d-flex align-items-center flex-wrap gap-3 mb25">
-                      <Link className="ud-btn btn-thm-border" href="/seller/register">
+                      <Link className="ud-btn btn-thm-border" href="/client/register">
                         Get Started
                         <i className="fal fa-arrow-right-long" />
                       </Link>
-                      <Link className="ud-btn btn-white2" href="/seller/login">
+                      <Link className="ud-btn btn-white2" href="/client/login">
                         Login
                         <i className="fal fa-arrow-right-long" />
                       </Link>
@@ -91,11 +91,11 @@ export default function AboutArea1() {
                       (injected humour and the like).
                     </p>
                     <div className="d-flex align-items-center flex-wrap gap-3 mb25">
-                      <Link className="ud-btn btn-thm-border" href="/seller/register">
+                      <Link className="ud-btn btn-thm-border" href="/client/register">
                         Get Started
                         <i className="fal fa-arrow-right-long" />
                       </Link>
-                      <Link className="ud-btn btn-white2" href="/seller/login">
+                      <Link className="ud-btn btn-white2" href="/client/login">
                         Login
                         <i className="fal fa-arrow-right-long" />
                       </Link>

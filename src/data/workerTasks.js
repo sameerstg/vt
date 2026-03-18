@@ -10,7 +10,7 @@ export const workerSectionConfig = {
     description: "Track the status of proposals you've submitted to clients."
   },
   assigned: {
-    title: "Assigned Projects",
+    title: "Projects",
     path: "/worker-dashboard/tasks?tab=assigned",
     description: "Review projects currently assigned to you and waiting for execution."
   },
@@ -185,6 +185,62 @@ export const workerTasks = [
     taskType: "Fixed",
     budgetModel: "Milestone",
   },
+  {
+    id: 1012,
+    title: "Brand Identity Refresh",
+    client: "Folio Creative",
+    budget: "$720",
+    deadline: "Mar 20, 2026",
+    skills: ["Branding", "Illustrator"],
+    status: "in_review",
+    isEligible: true,
+    category: "Design & Creative",
+    location: "United States",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
+  },
+  {
+    id: 1013,
+    title: "Backend API Optimisation",
+    client: "Streamline Tech",
+    budget: "$980",
+    deadline: "Mar 25, 2026",
+    skills: ["Node.js", "PostgreSQL"],
+    status: "in_review",
+    isEligible: true,
+    category: "Development & IT",
+    location: "Remote",
+    taskType: "Hourly",
+    budgetModel: "Hourly",
+  },
+  {
+    id: 1014,
+    title: "E-commerce Checkout Revamp",
+    client: "ShopNest",
+    budget: "$1,100",
+    deadline: "Mar 12, 2026",
+    skills: ["React", "Stripe"],
+    status: "in_dispute",
+    isEligible: true,
+    category: "Development & IT",
+    location: "United Kingdom",
+    taskType: "Fixed",
+    budgetModel: "Fixed Price",
+  },
+  {
+    id: 1015,
+    title: "Social Media Content Pack",
+    client: "BuzzReach",
+    budget: "$340",
+    deadline: "Mar 05, 2026",
+    skills: ["Copywriting", "Canva"],
+    status: "in_dispute",
+    isEligible: true,
+    category: "Digital Marketing",
+    location: "Canada",
+    taskType: "Fixed",
+    budgetModel: "Milestone",
+  },
 ];
 
 export const paymentHistory = [
@@ -222,6 +278,9 @@ export const getWorkerTasksBySection = (sectionKey) => {
   const normalizeTaskStatus = (status) => {
     if (status === "In Progress") return "in_progress";
     if (status === "Ongoing") return "available";
+    if (status === "Work Submitted") return "in_review";
+    if (status === "Disputed") return "in_dispute";
+    if (status === "Completed") return "completed";
     return status;
   };
 
@@ -300,6 +359,10 @@ export const getWorkerTasksBySection = (sectionKey) => {
     );
   }
 
-  return allTasks.filter((task) => task.status === sectionKey);
+  return allTasks.filter(
+    (task) =>
+      task.status === sectionKey &&
+      (!task.assignedWorkerId || String(task.assignedWorkerId) === String(currentSession?.id))
+  );
 };
 

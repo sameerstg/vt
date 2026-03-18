@@ -19,8 +19,8 @@ export default function MobileNavigation1() {
     return session.name.split(" ")[0];
   }, [session]);
   const dashboardHref = useMemo(() => {
-    if (!session?.role) return "/seller/login";
-    return getRoleFlow(session.role)?.dashboardPath || "/seller/login";
+    if (!session?.role) return "/client/login";
+    return getRoleFlow(session.role)?.dashboardPath || "/client/login";
   }, [session]);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function MobileNavigation1() {
 
   const handleLogout = () => {
     clearAuthSession();
-    router.push("/seller/login");
+    router.push("/client/login");
   };
 
   return (

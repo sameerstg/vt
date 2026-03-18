@@ -4,7 +4,7 @@ import Header20 from "@/components/header/Header20";
 import SubmitProposal1 from "@/components/section/SubmitProposal1";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Submit Proposal",
+  title: "VeriTask | Submit Proposal",
 };
 
 export default function page() {

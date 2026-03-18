@@ -2,19 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import DashboardNavigation from "../header/DashboardNavigation";
+import {
+  getAuthSession,
+  getContractorTeam,
+  getContractorProposals,
+  getAssignmentsForContractor,
+  distributePayment,
+} from "@/utils/auth/mockAuth";
 
-const contractorMilestones = [
-  { id: 1, title: "UI Fix Batch", amount: "$280" },
-  { id: 2, title: "QA Regression Pass", amount: "$220" },
-  { id: 3, title: "Client Delivery Notes", amount: "$300" },
-];
-
-const workers = [
-  { id: "w-1001", name: "Ahsan Raza" },
-  { id: "w-1002", name: "Sara Khan" },
-  { id: "w-1003", name: "Bilal Ahmed" },
-  { id: "w-1004", name: "Maham Ali" },
-];
 
 const parseAmount = (value = "") => {
   const parsed = Number(String(value).replace(/[$,\s]/g, ""));
@@ -24,9 +19,11 @@ const parseAmount = (value = "") => {
 const formatAmount = (value = 0) => `$${Number(value).toLocaleString()}`;
 
 export default function PaymentDistributionInfo() {
-  const defaultMilestoneId = String(contractorMilestones[0]?.id || "");
+  const [session, setSession] = useState(null);
+  const [contractorMilestones, setContractorMilestones] = useState([]);
+  const [workers, setWorkers] = useState([]);
   const [totalEscrowReceived, setTotalEscrowReceived] = useState("1200");
-  const [selectedMilestoneId, setSelectedMilestoneId] = useState(defaultMilestoneId);
+  const [selectedMilestoneId, setSelectedMilestoneId] = useState("");
   const [milestoneAmount, setMilestoneAmount] = useState("");
   const [allocations, setAllocations] = useState([{ workerId: "", amount: "" }]);
   const [distributionConfirmation, setDistributionConfirmation] = useState(false);
@@ -42,6 +39,32 @@ export default function PaymentDistributionInfo() {
     },
   ]);
   const [isDistributed, setIsDistributed] = useState(false);
+
+  useEffect(() => {
+    const s = getAuthSession();
+    setSession(s);
+    if (!s?.id) return;
+    const team = getContractorTeam(s.id);
+    setWorkers(team.workers.map(w => ({ id: w.workerId, name: w.name })));
+    const proposals = getContractorProposals(s.id);
+    const accepted = proposals.filter(p => p.status === "accepted");
+    const assignments = getAssignmentsForContractor(s.id);
+    const milestoneList = [];
+    accepted.forEach(p => {
+      const taskAssignments = assignments.filter(a => a.taskId === p.taskId);
+      const allMilestones = taskAssignments.flatMap(a => a.milestones || []);
+      allMilestones.filter(m => m.status === "completed").forEach(m => {
+        milestoneList.push({
+          id: `${p.taskId}-${m.id}`,
+          taskId: p.taskId,
+          title: `${p.taskTitle} — ${m.title}`,
+          amount: `$${m.price || 0}`,
+        });
+      });
+    });
+    setContractorMilestones(milestoneList);
+    if (milestoneList.length > 0) setSelectedMilestoneId(String(milestoneList[0].id));
+  }, []);
 
   const selectedMilestone = useMemo(
     () =>
@@ -124,6 +147,14 @@ export default function PaymentDistributionInfo() {
     setAllocations([{ workerId: "", amount: "" }]);
     setDistributionConfirmation(false);
     setIsDistributed(true);
+
+    // Persist to localStorage
+    if (session?.id && selectedMilestone?.taskId) {
+      const distributions = allocations
+        .filter(a => a.workerId && parseAmount(a.amount) > 0)
+        .map(a => ({ workerId: a.workerId, amount: parseAmount(a.amount) }));
+      distributePayment(session.id, selectedMilestone.taskId, distributions);
+    }
   };
 
   return (

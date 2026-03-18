@@ -3,7 +3,7 @@ import ProposalSubmissionInfo from "@/components/dashboard-worker/section/Propos
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Proposal Submission",
+  title: "VeriTask | Proposal Submission",
 };
 
 export default function page() {

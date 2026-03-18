@@ -6,28 +6,22 @@ import Link from "next/link";
 import DashboardNavigation from "../header/DashboardNavigation";
 import { workerTasks } from "@/data/workerTasks";
 import { taskDiscoveryItems } from "@/data/taskDiscovery";
+import { getAllClientTasks } from "@/utils/auth/mockAuth";
 
 export default function AvailableTaskDetails() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // URL se taskId aur title lein
   const taskId = searchParams.get('taskId');
-  const taskTitle = searchParams.get('title') || 'Task Details';
 
-  // Task find karein (Check both data sources)
   const task = useMemo(() => {
     if (!taskId) return null;
-
-    // Search in discovery items first (since this is often where available tasks come from)
-    let foundTask = taskDiscoveryItems.find(t => String(t.id) === taskId);
-
-    // If not found, search in worker tasks
-    if (!foundTask) {
-      foundTask = workerTasks.find(t => String(t.id) === taskId);
-    }
-
-    return foundTask;
+    return (
+      taskDiscoveryItems.find(t => String(t.id) === String(taskId)) ||
+      workerTasks.find(t => String(t.id) === String(taskId)) ||
+      getAllClientTasks().find(t => String(t.id) === String(taskId)) ||
+      null
+    );
   }, [taskId]);
 
   // Agar task nahi mila ya taskId nahi hai
@@ -44,7 +38,7 @@ export default function AvailableTaskDetails() {
             <div className="ps-widget bgc-white bdrs4 p30 mb30 text-center">
               <h4>Task not found</h4>
               <p className="text mb20">No task selected or task not found.</p>
-              <Link href="/worker-dashboard/tasks?tab=available" className="ud-btn btn-thm">
+              <Link href="/worker-dashboard/available-tasks" className="ud-btn btn-thm">
                 Back to Tasks
               </Link>
             </div>
@@ -54,13 +48,8 @@ export default function AvailableTaskDetails() {
     );
   }
 
-  // Agar task available nahi hai (optional check, better for consistency)
-  if (task.status !== "available") {
-     // We could redirect or show a message. For now, let's just show details anyway but with correct status.
-  }
-
   const handleApplyNow = () => {
-    router.push(`/worker-dashboard/proposal?taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}`);
+    router.push(`/worker-dashboard/proposal-submission?taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}&clientId=${task.clientId || ""}`);
   };
 
   const handleContactClient = () => {
@@ -93,7 +82,7 @@ export default function AvailableTaskDetails() {
                 <h4 className="mb0">{task.title}</h4>
                 <p className="text-muted mb0 mt5">Task ID: #{task.id}</p>
               </div>
-              <Link href="/worker-dashboard/tasks?tab=available" className="ud-btn btn-light-default">
+              <Link href="/worker-dashboard/available-tasks" className="ud-btn btn-light-default">
                 ← Back to List
               </Link>
             </div>
