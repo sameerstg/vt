@@ -30,7 +30,6 @@ export default function DashboardInfo() {
 
   const sectionCards = useMemo(() => {
     const rawCards = [
-      { key: "available", tasks: availableTasks },
       { 
         key: "applied", 
         tasks: [...getWorkerTasksBySection("applied"), ...dynamicAppliedTasks] 
@@ -67,10 +66,10 @@ export default function DashboardInfo() {
           <div className="col-sm-6 col-xxl-4">
             <div className="d-flex align-items-center justify-content-between statistics_funfact">
               <div className="details">
-                <div className="fz15">Open Task Buckets</div>
-                <div className="title">5</div>
+                <div className="fz15">Open Project Buckets</div>
+                <div className="title">4</div>
                 <div className="text fz14">
-                  Tracked states for worker execution
+                  Tracked states for project execution
                 </div>
               </div>
               <div className="icon text-center">
@@ -82,7 +81,7 @@ export default function DashboardInfo() {
           <div className="col-sm-6 col-xxl-4">
             <div className="d-flex align-items-center justify-content-between statistics_funfact">
               <div className="details">
-                <div className="fz15">Tasks In Progress</div>
+                <div className="fz15">Projects In Progress</div>
                 <div className="title">{inProgressTasks.length}</div>
                 <div className="text fz14">
                   Active delivery workload right now
@@ -97,10 +96,10 @@ export default function DashboardInfo() {
           <div className="col-sm-6 col-xxl-4">
             <div className="d-flex align-items-center justify-content-between statistics_funfact">
               <div className="details">
-                <div className="fz15">Completed Tasks</div>
+                <div className="fz15">Completed Projects</div>
                 <div className="title">{completedTasks.length}</div>
                 <div className="text fz14">
-                  Successfully delivered tasks
+                  Successfully delivered projects
                 </div>
               </div>
               <div className="icon text-center">

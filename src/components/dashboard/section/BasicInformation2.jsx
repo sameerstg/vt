@@ -1,7 +1,8 @@
-"use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SelectInput from "../option/SelectInput";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
+import { getTaskById, updateMockTask, getAuthSession } from "@/utils/auth/mockAuth";
 
 export default function BasicInformation2() {
   const [getCategory, setCategory] = useState({
@@ -44,6 +45,27 @@ export default function BasicInformation2() {
     option: "Nothing selected",
     value: null,
   });
+  const [title, setTitle] = useState("");
+  const [cost, setCost] = useState("");
+  const [detail, setDetail] = useState("");
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const taskId = searchParams.get("taskId");
+
+  useEffect(() => {
+    if (taskId) {
+      const task = getTaskById(taskId);
+      if (task) {
+        setTitle(task.title || "");
+        setCost(task.budget ? task.budget.replace(/[^0-9.]/g, "") : "");
+        setDetail(task.detail || "");
+        
+        if (task.category) setCategory({ option: task.category, value: task.category.toLowerCase().replace(/ /g, "-") });
+        // Add more mapping if necessary for other fields
+      }
+    }
+  }, [taskId]);
 
   // handlers
   const categoryHandler = (option, value) => {
@@ -113,6 +135,8 @@ export default function BasicInformation2() {
                     type="text"
                     className="form-control"
                     placeholder="i will"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
               </div>
@@ -231,9 +255,11 @@ export default function BasicInformation2() {
                     Cost
                   </label>
                   <input
-                    type="email"
+                    type="number"
                     className="form-control"
                     placeholder="$"
+                    value={cost}
+                    onChange={(e) => setCost(e.target.value)}
                   />
                 </div>
               </div>
@@ -459,15 +485,44 @@ export default function BasicInformation2() {
                   <label className="heading-color ff-heading fw500 mb10">
                     Project Detail
                   </label>
-                  <textarea cols={30} rows={6} placeholder="Description" />
+                  <textarea 
+                    cols={30} 
+                    rows={6} 
+                    placeholder="Description" 
+                    value={detail}
+                    onChange={(e) => setDetail(e.target.value)}
+                  />
                 </div>
               </div>
               <div className="col-md-12">
                 <div className="text-start">
-                  <Link className="ud-btn btn-thm" href="/contact">
-                    Save
+                  <button 
+                    type="button"
+                    className="ud-btn btn-thm" 
+                    onClick={() => {
+                      const updatedData = {
+                        title,
+                        budget: `$${cost}`,
+                        detail,
+                        category: getCategory.option,
+                        // Add other fields as needed
+                      };
+                      if (taskId) {
+                        const res = updateMockTask(taskId, updatedData);
+                        if (res.ok) {
+                          router.push("/dashboard/manage-projects");
+                        } else {
+                          alert(res.message);
+                        }
+                      } else {
+                        // Handle new task creation logic if needed
+                        alert("Create logic not implemented in this mock, use existing tasks to edit.");
+                      }
+                    }}
+                  >
+                    Save Changes
                     <i className="fal fa-arrow-right-long" />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,26 +1,59 @@
 "use client";
 
 import ClientSectionLayout from "./ClientSectionLayout";
-import { getAuthSession, getProposalsForClient } from "@/utils/auth/mockAuth";
+import { acceptMockProposal, getAuthSession, getProposalsForClient, getTaskById } from "@/utils/auth/mockAuth";
 import Link from "next/link";
+<<<<<<< HEAD
 import { useState, useEffect, useMemo, useCallback } from "react";
+=======
+import { useSearchParams, useRouter } from "next/navigation";
+import { useCallback, useState, useEffect, useMemo } from "react";
+>>>>>>> master
 
 export default function ProposalReviewInfo() {
   const [proposals, setProposals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProposalId, setSelectedProposalId] = useState(null);
+  const [filterTitle, setFilterTitle] = useState("All Projects");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
+<<<<<<< HEAD
+=======
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
+
+>>>>>>> master
   const refreshProposals = useCallback(() => {
     const session = getAuthSession();
     if (session?.id) {
       const clientProposals = getProposalsForClient(session.id);
       setProposals(clientProposals);
-      if (clientProposals.length > 0 && !selectedProposalId) {
+
+      // If navigating from a specific task via taskId param
+      if (taskId) {
+        const task = getTaskById(taskId);
+        if (task && task.title) {
+          setFilterTitle(task.title);
+
+          // Auto-select the first proposal for this specific task
+          const taskProposals = clientProposals.filter(p => String(p.taskId) === String(taskId) || p.taskTitle === task.title);
+          if (taskProposals.length > 0) {
+            setSelectedProposalId(taskProposals[0].id);
+          }
+        }
+      } else if (clientProposals.length > 0 && !selectedProposalId) {
         setSelectedProposalId(clientProposals[0].id);
       }
     }
     setLoading(false);
+<<<<<<< HEAD
   }, [selectedProposalId]);
+=======
+  }, [selectedProposalId, taskId]);
+
+>>>>>>> master
 
   useEffect(() => {
     refreshProposals();
@@ -39,6 +72,29 @@ export default function ProposalReviewInfo() {
     return proposals.find((item) => item.id === selectedProposalId) || proposals[0];
   }, [proposals, selectedProposalId]);
 
+  const projectTitles = useMemo(() => {
+    return ["All Projects", ...new Set(proposals.map((p) => p.taskTitle))];
+  }, [proposals]);
+
+  const filteredProposals = useMemo(() => {
+    let list = proposals;
+    if (filterTitle !== "All Projects") {
+      list = list.filter((p) => p.taskTitle === filterTitle);
+    }
+    return list;
+  }, [proposals, filterTitle]);
+
+  const totalPages = Math.ceil(filteredProposals.length / itemsPerPage);
+
+  const paginatedProposals = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredProposals.slice(start, start + itemsPerPage);
+  }, [filteredProposals, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filterTitle]);
+
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating || 5);
     return (
@@ -53,6 +109,20 @@ export default function ProposalReviewInfo() {
       </span>
     );
   };
+
+  const handleAcceptProposal = (proposal) => {
+    if (!proposal || !proposal.taskId) return;
+
+    const result = acceptMockProposal(proposal);
+
+    if (result && result.ok) {
+      refreshProposals();
+      router.push("/dashboard/active-tasks?tab=progress");
+    } else {
+      alert(result?.message || "Failed to accept proposal.");
+    }
+  };
+
 
   if (loading) {
     return (
@@ -83,24 +153,32 @@ export default function ProposalReviewInfo() {
 
   return (
     <ClientSectionLayout
-      title="Proposal Review Page"
+      title="Proposal Review"
     >
+      <div className="mb20">
+        <Link href="/dashboard/active-tasks" className="text-thm fz14 fw500 d-flex align-items-center">
+          <i className="fal fa-arrow-left me-2" />
+          Back to Projects
+        </Link>
+      </div>
       <div className="row">
         <div className="col-xl-8">
           <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-            <div className="bdrb1 pb15 mb20 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div className="bdrb1 pb15 mb20">
               <h5 className="title mb-0">Proposal List</h5>
-              <p className="mb-0 text">
-                {proposals.length} proposals received | Reviewing: {selected?.workerName}
+            </div>
+            <div className="mb20">
+              <p className="mb-0 text fz14">
+                {filteredProposals.length} proposals found | Reviewing: {selected?.workerName}
               </p>
             </div>
-            {proposals.map((item, index) => (
+            {paginatedProposals.map((item, index) => (
               <div
                 key={item.id}
-                className="p20 bdr1 bdrs4 mb15"
+                className="p20 bdr1 bdrs12 mb15 proposal-card-premium transition"
                 style={{
-                  borderColor: selected?.id === item.id ? "#5b5f97" : undefined,
-                  boxShadow: selected?.id === item.id ? "0 0 0 1px #5b5f97 inset" : "none",
+                  border: selected?.id === item.id ? "2px solid #5b2dff" : "1px solid #e9ecef",
+                  backgroundColor: selected?.id === item.id ? "#f5f3ff" : "#fff",
                   cursor: "pointer",
                 }}
                 onClick={() => setSelectedProposalId(item.id)}
@@ -137,7 +215,14 @@ export default function ProposalReviewInfo() {
                   </p>
                 </div>
                 <div className="d-flex justify-content-end gap-2 flex-wrap mt15">
-                  <button type="button" className="ud-btn btn-thm">
+                  <button
+                    type="button"
+                    className="ud-btn btn-thm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAcceptProposal(item);
+                    }}
+                  >
                     Accept Proposal
                     <i className="fal fa-check" />
                   </button>
@@ -146,26 +231,48 @@ export default function ProposalReviewInfo() {
                     <i className="fal fa-xmark" />
                   </button>
                 </div>
-                {index !== proposals.length - 1 && <hr className="opacity-100 mt15 mb0" />}
+                {index !== paginatedProposals.length - 1 && <hr className="opacity-100 mt15 mb0" />}
               </div>
             ))}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="worker-pagination mt30">
+                <button
+                  className="worker-pagination__nav"
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    className={`worker-pagination__page ${currentPage === page ? "is-active" : ""
+                      }`}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  className="worker-pagination__nav"
+                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+
+              </div>
+            )}
           </div>
 
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
-            <div className="bdrb1 pb15 mb20">
-              <h5 className="title mb-0">Cover Letter</h5>
-            </div>
-            <p className="mb10 text">
-              <span className="fw500">Job Title:</span> {selected?.taskTitle}
-            </p>
-            <p className="text mb10">{selected?.coverLetter || "No cover letter provided."}</p>
-          </div>
         </div>
 
         <div className="col-xl-4">
           <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
             <div className="bdrb1 pb15 mb20">
-              <h5 className="title mb-0">Worker Informaiton</h5>
+              <h5 className="title mb-0">Worker Information</h5>
             </div>
             <div className="d-flex align-items-center">
               <div
@@ -198,6 +305,15 @@ export default function ProposalReviewInfo() {
               </button>
             </div>
           </div>
+          <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+            <div className="bdrb1 pb15 mb20">
+              <h5 className="title mb-0">Cover Letter</h5>
+            </div>
+            <p className="mb10 text">
+              <span className="fw500">Job Title:</span> {selected?.taskTitle}
+            </p>
+            <p className="text mb10">{selected?.coverLetter || "No cover letter provided."}</p>
+          </div>
 
           <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
             <div className="bdrb1 pb15 mb20">
@@ -212,8 +328,64 @@ export default function ProposalReviewInfo() {
             </p>
             <p className="text mb0">Includes full scope from task brief and revision support.</p>
           </div>
+
+          {selected?.attachments && selected.attachments.length > 0 && (
+            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+              <div className="bdrb1 pb15 mb20">
+                <h5 className="title mb-0">Worker Attachments</h5>
+              </div>
+              <div className="row g-2">
+                {selected.attachments.map((file, i) => (
+                  <div key={i} className="col-12">
+                    <div className="project-attach p-2 border bdrs8 d-flex align-items-center">
+                      <span className="icon flaticon-page me-2" style={{ fontSize: '20px', color: '#5b2dff' }} />
+                      <div className="overflow-hidden flex-grow-1">
+                        <h6 className="title fz13 mb-0 text-truncate" title={file}>{file}</h6>
+                        <p className="fz12 text-uppercase mb-0">{file.split('.').pop()}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
+      <style jsx>{`
+        .proposal-card-premium:hover {
+          border-color: #5b2dff !important;
+          box-shadow: 0 4px 12px rgba(91, 45, 255, 0.08);
+          transform: translateY(-2px);
+        }
+        .transition {
+          transition: all 0.3s ease;
+        }
+        .worker-pagination {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        .worker-pagination__page,
+        .worker-pagination__nav {
+          min-width: 42px;
+          height: 42px;
+          border-radius: 4px;
+          border: 1px solid #dbe1ee;
+          background: #ffffff;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .worker-pagination__page.is-active {
+          border-color: #5b2dff;
+          background: #f7f7f7;
+          color: #5b2dff;
+        }
+        .worker-pagination__nav:disabled {
+          opacity: 0.45;
+          cursor: not-allowed;
+        }
+      `}</style>
     </ClientSectionLayout>
   );
 }

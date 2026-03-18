@@ -236,12 +236,12 @@ export default function DashboardInfo() {
     () =>
       adminTaskMonitoringTasks.filter(
         (task) => task.status === "Flagged" || task.status === "Suspended"
-      ).slice(0, 4),
+      ).slice(0, 3),
     []
   );
 
   const latestTransactions = useMemo(
-    () => adminTransactionHistory.slice(0, 4),
+    () => adminTransactionHistory.slice(0, 3),
     []
   );
 
@@ -325,7 +325,7 @@ export default function DashboardInfo() {
 
       <div className="row">
         <div className="col-xxl-8">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative">
+          <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative admin-chart-card">
             <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 bdrb1 pb15 mb20">
               <div>
                 <h5 className="list-title mb-1">Financial Trend Overview</h5>
@@ -352,7 +352,7 @@ export default function DashboardInfo() {
         </div>
 
         <div className="col-xxl-4">
-          <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative">
+          <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative admin-chart-card admin-doughnut-card">
             <div className="bdrb1 pb15 mb20">
               <h5 className="list-title mb-1">Task State Mix</h5>
               <p className="text mb-0">Distribution of current monitored task states.</p>
@@ -366,7 +366,7 @@ export default function DashboardInfo() {
 
       <div className="row">
         <div className="col-md-6 col-xxl-4">
-          <div className="ps-widget bgc-white bdrs4 p25 mb30 overflow-hidden position-relative">
+          <div className="ps-widget bgc-white bdrs4 p25 mb30 overflow-hidden position-relative admin-summary-card">
             <div className="d-flex justify-content-between align-items-center bdrb1 pb15 mb20">
               <h5 className="list-title mb-0">ID Verification Queue</h5>
               <Link href="/admin-dashboard/user-management" className="admin-inline-link">
@@ -396,7 +396,7 @@ export default function DashboardInfo() {
         </div>
 
         <div className="col-md-6 col-xxl-4">
-          <div className="ps-widget bgc-white bdrs4 p25 mb30 overflow-hidden position-relative">
+          <div className="ps-widget bgc-white bdrs4 p25 mb30 overflow-hidden position-relative admin-summary-card">
             <div className="d-flex justify-content-between align-items-center bdrb1 pb15 mb20">
               <h5 className="list-title mb-0">Flagged and Suspended Tasks</h5>
               <Link href="/admin-dashboard/task-monitoring" className="admin-inline-link">
@@ -424,7 +424,7 @@ export default function DashboardInfo() {
         </div>
 
         <div className="col-md-6 col-xxl-4">
-          <div className="ps-widget bgc-white bdrs4 p25 mb30 overflow-hidden position-relative">
+          <div className="ps-widget bgc-white bdrs4 p25 mb30 overflow-hidden position-relative admin-summary-card">
             <div className="d-flex justify-content-between align-items-center bdrb1 pb15 mb20">
               <h5 className="list-title mb-0">Recent Financial Activity</h5>
               <Link href="/admin-dashboard/financial-overview" className="admin-inline-link">
@@ -458,6 +458,14 @@ export default function DashboardInfo() {
         .admin-dashboard-page :global(.ps-widget) {
           border: 1px solid #e8edf6;
           box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+        }
+
+        .admin-chart-card {
+          height: calc(100% - 30px);
+        }
+
+        .admin-doughnut-card {
+          min-height: 422px;
         }
 
         .admin-kpi-card {
@@ -533,21 +541,29 @@ export default function DashboardInfo() {
           font-weight: 500;
         }
 
+        .admin-summary-card {
+          min-height: 428px;
+          display: flex;
+          flex-direction: column;
+        }
+
         .admin-list {
           display: flex;
           flex-direction: column;
           gap: 12px;
+          flex: 1;
         }
 
         .admin-list-item {
           display: flex;
           justify-content: space-between;
           gap: 10px;
-          align-items: flex-start;
+          align-items: center;
           border: 1px solid #edf1f8;
           border-radius: 10px;
           background: #fbfcff;
-          padding: 12px;
+          padding: 14px 12px;
+          min-height: 100px;
         }
 
         .admin-list-title {
@@ -563,6 +579,13 @@ export default function DashboardInfo() {
         }
 
         @media (max-width: 575px) {
+          .admin-chart-card,
+          .admin-doughnut-card,
+          .admin-summary-card {
+            min-height: auto;
+            height: auto;
+          }
+
           .admin-line-chart-wrap {
             height: 260px;
           }

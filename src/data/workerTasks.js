@@ -5,22 +5,22 @@ export const workerSectionConfig = {
     description: "Browse and apply for new opportunities matching your profile."
   },
   applied: {
-    title: "Applied Tasks",
+    title: "Applied Projects",
     path: "/worker-dashboard/tasks?tab=applied",
     description: "Track the status of proposals you've submitted to clients."
   },
   assigned: {
-    title: "Assigned Tasks",
+    title: "Assigned Projects",
     path: "/worker-dashboard/tasks?tab=assigned",
-    description: "Review tasks currently assigned to you and waiting for execution."
+    description: "Review projects currently assigned to you and waiting for execution."
   },
   in_progress: {
-    title: "In Progress",
+    title: "In Progress Projects",
     path: "/worker-dashboard/tasks?tab=in_progress",
     description: "Manage milestones and work updates for your active projects."
   },
   completed: {
-    title: "Completed",
+    title: "Completed Projects",
     path: "/worker-dashboard/tasks?tab=completed",
     description: "Review and access deliverables for your finished contracts."
   },
@@ -219,21 +219,30 @@ import { getMockUsers } from "@/utils/auth/mockAuth";
 export const getWorkerTasksBySection = (sectionKey) => {
   const users = getMockUsers();
   const currentSession = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem("vt_auth_session") || "null") : null;
+  const normalizeTaskStatus = (status) => {
+    if (status === "In Progress") return "in_progress";
+    if (status === "Ongoing") return "available";
+    return status;
+  };
 
   // Resolve client info for all tasks in mockUsers.json
   const extraTasks = [];
   users.forEach(user => {
     if (user.createdTasks) {
       user.createdTasks.forEach(task => {
+        const normalizedStatus = normalizeTaskStatus(task.status || "available");
         extraTasks.push({
           ...task,
           client: task.client || user.name,
           clientId: task.clientId || user.id,
           clientEmail: task.clientEmail || user.email,
-          status: task.status || "available",
+          status: normalizedStatus,
           skills: Array.isArray(task.skills) ? task.skills : (task.skills ? [task.skills] : []),
           deadline: task.deadline ? (isNaN(task.deadline) ? task.deadline : `${task.deadline} Days`) : "TBD",
-          budget: task.budget || `$${task.budgetAmount || 0}`
+          budget: task.budget || `$${task.budgetAmount || 0}`,
+          isEligible: task.assignedWorkerId
+            ? String(task.assignedWorkerId) === String(currentSession?.id)
+            : true,
         });
       });
     }
@@ -261,7 +270,9 @@ export const getWorkerTasksBySection = (sectionKey) => {
     }
 
     const workerProposals = allProposals.filter(p => String(p.workerId) === String(currentSession.id));
-    const proposalTasks = workerProposals.map(p => ({
+    const proposalTasks = workerProposals
+      .filter((p) => p.status !== "accepted")
+      .map(p => ({
       id: p.taskId || p.id,
       title: p.taskTitle,
       client: p.clientEmail || "Client",
@@ -271,6 +282,22 @@ export const getWorkerTasksBySection = (sectionKey) => {
     }));
 
     return [...allTasks.filter((task) => task.status === "applied"), ...proposalTasks];
+  }
+
+  if (sectionKey === "in_progress") {
+    return allTasks.filter(
+      (task) =>
+        task.status === "in_progress" &&
+        (!task.assignedWorkerId || String(task.assignedWorkerId) === String(currentSession?.id))
+    );
+  }
+
+  if (sectionKey === "assigned") {
+    return allTasks.filter(
+      (task) =>
+        task.status === "assigned" &&
+        (!task.assignedWorkerId || String(task.assignedWorkerId) === String(currentSession?.id))
+    );
   }
 
   return allTasks.filter((task) => task.status === sectionKey);

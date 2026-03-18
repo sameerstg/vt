@@ -70,7 +70,7 @@ export default function UploadAttachment() {
         </div>
         <p className="text">Maximum file size: 10 MB</p>
         <div className="text-start">
-          <Link className="ud-btn btn-thm" href="/contact">
+          <Link className="ud-btn btn-thm" href="/dashboard/manage-projects">
             Save &amp; Publish
             <i className="fal fa-arrow-right-long" />
           </Link>

@@ -19,17 +19,18 @@ export default function DashboardSidebar() {
     "/create-projects",
     "/dashboard/task-details",
     "/dashboard/create-task",
+    "/dashboard/proposal-review",
   ]);
 
   const primaryItems = dasboardNavigation
     .slice(0, 13)
-    .filter((item) => !hiddenSidebarPaths.has(item.path));
+    .filter((item) => !hiddenSidebarPaths.has(item.path) && item.name !== "Feedback" && item.name !== "Escrow Funding" && item.name !== "Work Review & Approval");
   const secondaryItems = dasboardNavigation
     .slice(13, 24)
-    .filter((item) => !hiddenSidebarPaths.has(item.path));
+    .filter((item) => !hiddenSidebarPaths.has(item.path) && item.name !== "Feedback" && item.name !== "Escrow Funding" && item.name !== "Work Review & Approval");
   const accountItems = dasboardNavigation
     .slice(24, 26)
-    .filter((item) => !hiddenSidebarPaths.has(item.path));
+    .filter((item) => !hiddenSidebarPaths.has(item.path) && item.name !== "Feedback" && item.name !== "Escrow Funding" && item.name !== "Work Review & Approval");
 
   const handleNavClick = (event, item) => {
     const isLogout = item?.name?.toLowerCase() === "logout" || item?.path === "/login" || item?.path === "/seller/login";

@@ -1,7 +1,7 @@
 [
   {
     "id": "client-demo-1",
-    "name": "ok",
+    "name": "Sarah Johnson",
     "email": "client@veritask.demook",
     "password": "Client@123",
     "role": "client",
@@ -48,7 +48,7 @@
         "client": "Sarah Johnson",
         "clientId": "client-demo-1",
         "createdAt": "2026-03-16T04:31:38.027Z",
-        "status": "available",
+        "status": "Ongoing",
         "proposals": 1
       },
       {
@@ -67,8 +67,8 @@
         "client": "Sarah Johnson",
         "clientId": "client-demo-1",
         "createdAt": "2026-03-16T04:34:57.256Z",
-        "status": "available",
-        "proposals": 1
+        "status": "Ongoing",
+        "proposals": 2
       },
       {
         "title": "This is Testing Project",
@@ -86,7 +86,7 @@
         "client": "Sarah Johnson",
         "clientId": "client-demo-1",
         "createdAt": "2026-03-16T11:51:58.201Z",
-        "status": "available",
+        "status": "Ongoing",
         "proposals": 1
       },
       {
@@ -105,11 +105,138 @@
           "V2-Spring-2026-UG-R2-Result-Provisional-Program-Offering-for-Website.pdf"
         ],
         "id": "task-1773718894827",
-        "client": "ok",
+        "client": "Sarah Johnson",
         "clientId": "client-demo-1",
         "createdAt": "2026-03-17T03:41:34.827Z",
+        "status": "Ongoing",
+        "proposals": 1
+      },
+      {
+        "title": "New Project ",
+        "description": "New Project ",
+        "category": "Design & Creative",
+        "taskType": "individual",
+        "workMode": "virtual",
+        "location": "Remote",
+        "budget": "$1200",
+        "budgetModel": "milestone",
+        "deadline": "Mar 27, 2026",
+        "milestones": [
+          {
+            "title": "Milestone 1",
+            "amount": "1200",
+            "description": "New Project "
+          }
+        ],
+        "attachments": [
+          "Ellipse 1.png"
+        ],
+        "id": "task-1773723473066",
+        "client": "Sarah Johnson",
+        "clientId": "client-demo-1",
+        "createdAt": "2026-03-17T04:57:53.066Z",
+        "status": "Ongoing",
+        "proposals": 1
+      },
+      {
+        "title": "flat design illustration",
+        "description": "I will create modern flat design illustration",
+        "category": "Music & Audio",
+        "taskType": "individual",
+        "workMode": "virtual",
+        "location": "Remote",
+        "budget": "$100",
+        "budgetModel": "fixed",
+        "deadline": "Mar 27, 2026",
+        "milestones": [],
+        "attachments": [],
+        "id": "task-1773724249724",
+        "client": "Sarah Johnson",
+        "clientId": "client-demo-1",
+        "createdAt": "2026-03-17T05:10:49.724Z",
+        "status": "Ongoing",
+        "proposals": 0
+      },
+      {
+        "title": "John Smith Startup",
+        "description": "John Smith Startup",
+        "category": "Development & IT",
+        "taskType": "individual",
+        "workMode": "virtual",
+        "location": "Remote",
+        "latitude": "",
+        "longitude": "",
+        "budgetModel": "fixed",
+        "budget": "$1200",
+        "deadline": "Mar 26, 2026",
+        "milestones": [],
+        "attachments": [],
+        "projectLevel": "Intermediate",
+        "englishLevel": "Basic",
+        "sellerType": "Company",
+        "skills": [
+          "Python"
+        ],
+        "id": "task-1773734606160",
+        "client": "Sarah Johnson",
+        "clientId": "client-demo-1",
+        "createdAt": "2026-03-17T08:03:26.160Z",
         "status": "available",
         "proposals": 1
+      },
+      {
+        "title": "Poster create",
+        "description": "Poster create",
+        "category": "Design & Creative",
+        "taskType": "individual",
+        "workMode": "virtual",
+        "location": "Remote",
+        "latitude": "",
+        "longitude": "",
+        "budgetModel": "fixed",
+        "budget": "$1200",
+        "deadline": "Mar 20, 2026",
+        "milestones": [],
+        "attachments": [],
+        "projectLevel": "Intermediate",
+        "englishLevel": "Professional",
+        "sellerType": "Individual / Company",
+        "skills": [
+          "UI/UX Design"
+        ],
+        "status": "Draft",
+        "id": "task-1773743396764",
+        "client": "Sarah Johnson",
+        "clientId": "client-demo-1",
+        "createdAt": "2026-03-17T10:29:56.764Z",
+        "proposals": 0
+      },
+      {
+        "title": "Webiste Create and Seo",
+        "description": "Webiste Create and Seo",
+        "category": "Development & IT",
+        "taskType": "individual",
+        "workMode": "virtual",
+        "location": "Remote",
+        "latitude": "",
+        "longitude": "",
+        "budgetModel": "fixed",
+        "budget": "$1000",
+        "deadline": "Mar 26, 2026",
+        "milestones": [],
+        "attachments": [],
+        "projectLevel": "Intermediate",
+        "englishLevel": "Professional",
+        "sellerType": "Individual / Company",
+        "skills": [
+          "WordPress",
+          "SEO"
+        ],
+        "status": "Draft",
+        "id": "task-1773746642959",
+        "client": "Sarah Johnson",
+        "clientId": "client-demo-1",
+        "createdAt": "2026-03-17T11:24:02.959Z"
       }
     ],
     "receivedProposals": [
@@ -176,6 +303,53 @@
         "coverLetter": "ok ok",
         "submittedAt": "2026-03-17T04:16:00.472Z",
         "status": "pending"
+      },
+      {
+        "id": "proposal-1773732130339",
+        "taskId": "task-1773635697256",
+        "taskTitle": "E-Commerce Store Development",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demook",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerAmount": "300",
+        "timeline": "2-4-weeks",
+        "coverLetter": "I hope i do this perfectly\n",
+        "status": "pending",
+        "submittedAt": "2026-03-17T07:22:10.339Z"
+      },
+      {
+        "id": "proposal-1773723473999",
+        "taskId": "task-1773723473066",
+        "taskTitle": "New Project ",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demook",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "accept",
+        "offerAmount": 950,
+        "timeline": "5",
+        "coverLetter": "I can deliver the first milestone within 5 days with clean revisions and daily updates.",
+        "status": "pending",
+        "submittedAt": "2026-03-17T05:00:10.000Z"
+      },
+      {
+        "id": "proposal-1773734607999",
+        "taskId": "task-1773734606160",
+        "taskTitle": "John Smith Startup",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demook",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "custom",
+        "offerAmount": 1100,
+        "timeline": "7",
+        "coverLetter": "I have startup MVP experience and can handle the Python scope end to end.",
+        "status": "pending",
+        "submittedAt": "2026-03-17T08:08:15.000Z"
       }
     ]
   },
@@ -275,6 +449,53 @@
         "coverLetter": "ok ok",
         "submittedAt": "2026-03-17T04:16:00.472Z",
         "status": "pending"
+      },
+      {
+        "id": "proposal-1773732130339",
+        "taskId": "task-1773635697256",
+        "taskTitle": "E-Commerce Store Development",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demook",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerAmount": "300",
+        "timeline": "2-4-weeks",
+        "coverLetter": "I hope i do this perfectly\n",
+        "status": "pending",
+        "submittedAt": "2026-03-17T07:22:10.339Z"
+      },
+      {
+        "id": "proposal-1773723473999",
+        "taskId": "task-1773723473066",
+        "taskTitle": "New Project ",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demook",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "accept",
+        "offerAmount": 950,
+        "timeline": "5",
+        "coverLetter": "I can deliver the first milestone within 5 days with clean revisions and daily updates.",
+        "status": "pending",
+        "submittedAt": "2026-03-17T05:00:10.000Z"
+      },
+      {
+        "id": "proposal-1773734607999",
+        "taskId": "task-1773734606160",
+        "taskTitle": "John Smith Startup",
+        "clientId": "client-demo-1",
+        "clientEmail": "client@veritask.demook",
+        "workerId": "worker-demo-1",
+        "workerName": "John Deo",
+        "workerEmail": "abc@gmail.com",
+        "offerType": "custom",
+        "offerAmount": 1100,
+        "timeline": "7",
+        "coverLetter": "I have startup MVP experience and can handle the Python scope end to end.",
+        "status": "pending",
+        "submittedAt": "2026-03-17T08:08:15.000Z"
       }
     ],
     "education": [],

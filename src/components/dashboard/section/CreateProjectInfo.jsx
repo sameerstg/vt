@@ -19,10 +19,16 @@ export default function CreateProjectInfo() {
           </div>
           <div className="col-lg-3">
             <div className="text-lg-end">
-              <a className="ud-btn btn-dark">
+              <button 
+                className="ud-btn btn-dark"
+                onClick={() => {
+                   // Logic to save/publish can be added here
+                   alert("Publish from here not implemented yet, please use the dashboard Publish button.");
+                }}
+              >
                 Save &amp; Publish
                 <i className="fal fa-arrow-right-long" />
-              </a>
+              </button>
             </div>
           </div>
         </div>

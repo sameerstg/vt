@@ -2,7 +2,6 @@
 import DashboardNavigation from "../header/DashboardNavigation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import DoughnutChart from "../chart/DoughnutChart";
 import LineChart from "../chart/LineChart";
 import {
   activeTasks,
@@ -106,14 +105,12 @@ export default function DashboardInfo() {
         </div>
 
         <div className="row mb30">
-          <div className="col-xl-8">
-            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative" style={{ border: '1px solid #e8edf6' }}>
+          <div className="col-xl-12">
+            <div
+              className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative"
+              style={{ border: "1px solid #e8edf6" }}
+            >
               <LineChart />
-            </div>
-          </div>
-          <div className="col-xl-4">
-            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative" style={{ border: '1px solid #e8edf6' }}>
-              <DoughnutChart />
             </div>
           </div>
         </div>

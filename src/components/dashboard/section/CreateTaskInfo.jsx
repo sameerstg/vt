@@ -1,9 +1,9 @@
-"use client";
-
-import { useMemo, useState } from "react";
+'use client'
+import { useMemo, useState, useEffect } from "react";
 import DashboardNavigation from "../header/DashboardNavigation";
-import { createMockTask } from "@/utils/auth/mockAuth";
-import { useRouter } from "next/navigation";
+import { createMockTask, getTaskById, updateMockTask } from "@/utils/auth/mockAuth";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const defaultMilestones = [
   { title: "Milestone 1", amount: "", description: "" },
@@ -21,6 +21,14 @@ const taskCategoryCatalog = [
   { title: "Finance & Accounting", skills: "1,853 skills", subtitle: "Bookkeeping, Tax, Financial Analysis & More" },
 ];
 
+const popularSkills = [
+  "React", "Node.js", "Python", "JavaScript", "UI/UX Design", "Figma", "WordPress", 
+  "SEO", "Copywriting", "PHP", "Social Media Marketing", "Data Analysis", 
+  "Graphic Design", "Illustration", "Mobile App Development", "TypeScript", 
+  "Next.js", "Vue.js", "Angular", "Laravel", "Shopify", "E-commerce", 
+  "Video Editing", "Content Writing", "Translation", "QA Testing", "Project Management"
+];
+
 export default function CreateTaskInfo() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,12 +41,58 @@ export default function CreateTaskInfo() {
   const [category, setCategory] = useState("");
   const [city, setCity] = useState("");
   const [stateRegion, setStateRegion] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [budgetModel, setBudgetModel] = useState("fixed");
   const [totalBudget, setTotalBudget] = useState("");
   const [scheduleStart, setScheduleStart] = useState("");
   const [scheduleEnd, setScheduleEnd] = useState("");
   const [milestones, setMilestones] = useState(defaultMilestones);
   const [mediaFiles, setMediaFiles] = useState([]);
+  
+  // Extra fields for professional detail
+  const [projectLevel, setProjectLevel] = useState("Intermediate");
+  const [englishLevel, setEnglishLevel] = useState("Professional");
+  const [languages, setLanguages] = useState("English");
+  const [sellerType, setSellerType] = useState("Individual / Company");
+  const [skills, setSkills] = useState([]);
+  const [skillInput, setSkillInput] = useState("");
+  const [showSkillSuggestions, setShowSkillSuggestions] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
+
+  useEffect(() => {
+    if (taskId) {
+      const task = getTaskById(taskId);
+      if (task) {
+        setTitle(task.title || "");
+        setDescription(task.description || "");
+        setCategory(task.category || "");
+        setTaskType(task.taskType || "individual");
+        setWorkMode(task.workMode || "virtual");
+        if (task.location && task.location !== "Remote") {
+          const parts = task.location.split(", ");
+          setCity(parts[0] || "");
+          setStateRegion(parts[1] || "");
+        }
+        setLatitude(task.latitude || "");
+        setLongitude(task.longitude || "");
+        setBudgetModel(task.budgetModel || "fixed");
+        if (task.budgetModel === "fixed") {
+          setTotalBudget(task.budget ? task.budget.replace(/[^0-9.]/g, "") : "");
+        } else if (task.milestones) {
+          setMilestones(task.milestones);
+        }
+        setProjectLevel(task.projectLevel || "Intermediate");
+        setEnglishLevel(task.englishLevel || "Professional");
+        setLanguages(task.languages || "English");
+        setSellerType(task.sellerType || "Individual / Company");
+        setSkills(Array.isArray(task.skills) ? task.skills : []);
+      }
+    }
+  }, [taskId]);
 
   const addToast = (type, message) => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -76,6 +130,26 @@ export default function CreateTaskInfo() {
     }, 0), [milestones]
   );
 
+  const addSkill = (skill) => {
+    const cleaned = skill.trim();
+    if (cleaned && !skills.includes(cleaned)) {
+      setSkills([...skills, cleaned]);
+    }
+    setSkillInput("");
+    setShowSkillSuggestions(false);
+  };
+
+  const removeSkill = (skillToRemove) => {
+    setSkills(skills.filter(s => s !== skillToRemove));
+  };
+
+  const filteredSkillSuggestions = useMemo(() => {
+    if (!skillInput) return [];
+    return popularSkills.filter(s => 
+      s.toLowerCase().includes(skillInput.toLowerCase()) && !skills.includes(s)
+    ).slice(0, 5);
+  }, [skillInput, skills]);
+
   const formatDateLabel = (value) => {
     if (!value) return "";
     const date = new Date(value);
@@ -100,20 +174,35 @@ export default function CreateTaskInfo() {
     setSubmitError("");
     const taskData = {
       title, description, category, taskType, workMode,
-      location: workMode === "physical" ? `${city}, ${stateRegion}` : "Remote",
+      location: workMode === "virtual" ? "Remote" : `${city}, ${stateRegion}`,
+      latitude,
+      longitude,
+      budgetModel,
       budget: budgetModel === "fixed" ? `$${totalBudget}` : `$${totalMilestoneAmount}`,
       budgetModel,
       deadline: scheduleEnd ? formatDateLabel(scheduleEnd) : "Not set",
       milestones: budgetModel === "milestone" ? milestones : [],
       attachments: mediaFiles.map(f => f.name),
+      projectLevel,
+      englishLevel,
+      sellerType,
+      skills,
+      status: taskId ? undefined : "Draft", // Start as Draft for new projects
     };
-    const result = await createMockTask(taskData);
+
+    let result;
+    if (taskId) {
+      result = updateMockTask(taskId, taskData);
+    } else {
+      result = await createMockTask(taskData);
+    }
+
     if (result.ok) {
-      addToast("success", "Project created successfully! Redirecting...");
+      addToast("success", taskId ? "Project updated successfully! Redirecting..." : "Project created successfully! Redirecting...");
       setTimeout(() => router.push("/dashboard/active-tasks"), 2000);
     } else {
-      setSubmitError(result.message || "Failed to create project.");
-      addToast("error", result.message || "Failed to create project.");
+      setSubmitError(result.message || "Failed to save project.");
+      addToast("error", result.message || "Failed to save project.");
     }
     setIsSubmitting(false);
   };
@@ -134,7 +223,12 @@ export default function CreateTaskInfo() {
         <div className="col-lg-12"><DashboardNavigation /></div>
         <div className="col-lg-12">
           <div className="dashboard_title_area">
-            <h2 className="fw500">Create Project</h2>
+            <h2 className="fw500">{taskId ? "Edit Project" : "Create Project"}</h2>
+            <div className="mt15">
+              <Link href="/dashboard/active-tasks" className="ud-btn btn-light-default">
+                ← Back to List
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -167,6 +261,42 @@ export default function CreateTaskInfo() {
                 </select>
               </div>
             </div>
+            
+            <div className="row g-4 mt-2">
+              <div className="col-md-6">
+                <label className="heading-color ff-heading fw500 mb10 d-block">Expertise Level</label>
+                <select className="form-select" value={projectLevel} onChange={(e) => setProjectLevel(e.target.value)}>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Expert">Expert</option>
+                  <option value="Expensive">Expensive / Enterprise</option>
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label className="heading-color ff-heading fw500 mb10 d-block">Seller Preference</label>
+                <select className="form-select" value={sellerType} onChange={(e) => setSellerType(e.target.value)}>
+                  <option value="Individual">Individual</option>
+                  <option value="Company">Company / Agency</option>
+                  <option value="Individual / Company">Both Allowed</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="row g-4 mt-2 bdrb1 pb30">
+              <div className="col-md-6">
+                <label className="heading-color ff-heading fw500 mb10 d-block">English Level Required</label>
+                <select className="form-select" value={englishLevel} onChange={(e) => setEnglishLevel(e.target.value)}>
+                  <option value="Basic">Basic</option>
+                  <option value="Conversational">Conversational</option>
+                  <option value="Professional">Professional</option>
+                  <option value="Fluent / Native">Fluent / Native</option>
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label className="heading-color ff-heading fw500 mb10 d-block">Languages</label>
+                <input className="form-control" value={languages} onChange={(e) => setLanguages(e.target.value)} placeholder="e.g. English, Spanish (Comma separated)" />
+              </div>
+            </div>
           </div>
 
           <div className="ps-widget bgc-white bdrs12 p30 mb30 border-light shadow-sm">
@@ -178,12 +308,112 @@ export default function CreateTaskInfo() {
               </div>
               <div className="col-md-12">
                 <label className="heading-color ff-heading fw500 mb10 d-block">Description</label>
-                <textarea rows={6} className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Provide a detailed brief of your project requirements..." />
+                <textarea rows={20} className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Provide a detailed brief of your project requirements..." />
+              </div>
+              <div className="col-md-12">
+                <label className="heading-color ff-heading fw500 mb10 d-block">Skills Required <span className="text-muted fz12 fw400">(Type and press enter or select from suggestions)</span></label>
+                <div className="skills-tag-container-premium p2 bdrs8 d-flex flex-wrap align-items-center mb10" style={{ border: '1px solid #dbe1ee', minHeight: '45px', gap: '8px', padding: '8px 12px' }}>
+                  {skills.map(skill => (
+                    <span key={skill} className="skill-tag-premium d-flex align-items-center fz13" style={{ background: '#f5f3ff', color: '#5b2dff', padding: '4px 10px', borderRadius: '6px', fontWeight: '500' }}>
+                      {skill}
+                      <i className="fal fa-times ms-2 pointer" style={{ cursor: 'pointer', fontSize: '11px' }} onClick={() => removeSkill(skill)} />
+                    </span>
+                  ))}
+                  <input 
+                    className="skill-tag-input border-0 flex-grow-1 fz14" 
+                    style={{ outline: 'none', border: 'none', minWidth: '120px' }}
+                    value={skillInput}
+                    onChange={(e) => {
+                      setSkillInput(e.target.value);
+                      setShowSkillSuggestions(true);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addSkill(skillInput);
+                      }
+                    }}
+                    onFocus={() => setShowSkillSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSkillSuggestions(false), 200)}
+                    placeholder={skills.length === 0 ? "e.g. React, Node.js..." : ""}
+                  />
+                </div>
+                {showSkillSuggestions && filteredSkillSuggestions.length > 0 && (
+                  <div className="skill-suggestions-dropdown-premium shadow-sm bdrs8 overflow-hidden border mt-1" style={{ position: 'absolute', zIndex: 100, background: '#fff', width: 'auto', minWidth: '250px' }}>
+                    {filteredSkillSuggestions.map(s => (
+                      <div 
+                        key={s} 
+                        className="suggestion-item p2 px-3 pointer fz14" 
+                        style={{ cursor: 'pointer', hover: { background: '#f8f9fa' } }}
+                        onClick={() => addSkill(s)}
+                      >
+                        {s}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               {workMode === "physical" && (
-                <div className="row g-3 mt-1">
-                  <div className="col-md-6"><label className="heading-color ff-heading fw500 mb10 d-block">City</label><input className="form-control" value={city} onChange={(e) => setCity(e.target.value)} /></div>
-                  <div className="col-md-6"><label className="heading-color ff-heading fw500 mb10 d-block">State / Region</label><input className="form-control" value={stateRegion} onChange={(e) => setStateRegion(e.target.value)} /></div>
+                <div className="mt-4">
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <label className="heading-color ff-heading fw500 mb10 d-block">City</label>
+                      <input className="form-control" value={city} onChange={(e) => setCity(e.target.value)} placeholder="e.g. New York" />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="heading-color ff-heading fw500 mb10 d-block">State / Region</label>
+                      <input className="form-control" value={stateRegion} onChange={(e) => setStateRegion(e.target.value)} placeholder="e.g. NY" />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="heading-color ff-heading fw500 mb10 d-block">Latitude</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        value={latitude}
+                        onChange={(e) => setLatitude(e.target.value)}
+                        placeholder="e.g. 30.3753"
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label className="heading-color ff-heading fw500 mb10 d-block">Longitude</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        value={longitude}
+                        onChange={(e) => setLongitude(e.target.value)}
+                        placeholder="e.g. 69.3451"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Map Preview */}
+                  <div className="mt-4">
+                    <label className="heading-color ff-heading fw500 mb10 d-block">Location Preview</label>
+                    <div className="bdrs12 overflow-hidden border" style={{ height: "350px", background: "#f8f9fa", position: 'relative' }}>
+                      {latitude || longitude || city ? (
+                        <iframe
+                          key={`${latitude}-${longitude}-${city}-${stateRegion}`}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          allowFullScreen=""
+                          loading="lazy"
+                          src={`https://maps.google.com/maps?q=${(latitude || longitude)
+                            ? encodeURIComponent(`${latitude}${latitude && longitude ? ',' : ''}${longitude}`)
+                            : encodeURIComponent(city + (stateRegion ? ", " + stateRegion : ""))
+                            }&t=m&z=15&output=embed&iwloc=near`}
+                          title="Location Preview"
+                        ></iframe>
+                      ) : (
+                        <div className="d-flex align-items-center justify-content-center h-100 text-muted p-4 text-center">
+                          <div>
+                            <i className="fal fa-map-marker-alt fz30 mb10 d-block"></i>
+                            Enter City or Latitude/Longitude to see the location preview
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -333,6 +563,14 @@ export default function CreateTaskInfo() {
                   <div className="text-muted fz13 mb-1">Budget Model</div>
                   <div className="fw500 dark-color text-capitalize">{budgetModel} Price</div>
                 </div>
+                <div className="summary-item mb15">
+                  <div className="text-muted fz13 mb-1">Expertise Level</div>
+                  <div className="fw500 dark-color">{projectLevel}</div>
+                </div>
+                <div className="summary-item mb15">
+                  <div className="text-muted fz13 mb-1">Seller Preference</div>
+                  <div className="fw500 dark-color">{sellerType}</div>
+                </div>
                 <div className="summary-item bdrb1 pb15 mb15">
                   <div className="text-muted fz13 mb-1">Budget Total</div>
                   <div className="fz18 fw700 text-thm">
@@ -357,7 +595,7 @@ export default function CreateTaskInfo() {
                 onClick={handleSubmit}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Creating..." : "Create Project"}
+                {isSubmitting ? (taskId ? "Updating..." : "Creating...") : (taskId ? "Save Changes" : "Create Project")}
                 <i className="fal fa-arrow-right-long ms-2" />
               </button>
               <p className="text-center fz12 text-muted mt15 mb-0">
@@ -366,13 +604,72 @@ export default function CreateTaskInfo() {
             </div>
 
             <div className="ps-widget bgc-white bdrs12 p25 border-light shadow-sm">
-              <h6 className="fz14 fw600 mb10">Need Help?</h6>
-              <p className="fz13 text-muted mb0">Our support team is available 24/7 to help you with project creation.</p>
-              <a href="#" className="text-thm fw600 fz13 mt10 d-inline-block">Contact Support</a>
+              {taskId ? (
+                <>
+                  <h6 className="fz14 fw600 mb10 text-danger">Delete Project</h6>
+                  <p className="fz13 text-muted mb0">
+                    If you no longer need this project, you can permanently delete it.
+                  </p>
+                  <button
+                    className="ud-btn btn-thm mt15 w-100"
+                    style={{ backgroundColor: "#dc3545", borderColor: "#dc3545" }}
+                    onClick={() => setShowDeleteModal(true)}
+                  >
+                    Delete Project
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h6 className="fz14 fw600 mb10">Need Help?</h6>
+                  <p className="fz13 text-muted mb0">Our support team is available 24/7 to help you with project creation.</p>
+                  <a href="#" className="text-thm fw600 fz13 mt10 d-inline-block">Contact Support</a>
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {showDeleteModal && (
+        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content bdrs12">
+              <div className="modal-header border-bottom-0 pb-0">
+                <h5 className="modal-title text-danger">Confirm Deletion</h5>
+                <button type="button" className="btn-close" onClick={() => setShowDeleteModal(false)}></button>
+              </div>
+              <div className="modal-body p-4 text-center">
+                <i className="fal fa-exclamation-triangle text-danger mb15" style={{ fontSize: "40px" }}></i>
+                <p className="fz15 fw500 mb-0">Are you sure you want to permanently delete this project?</p>
+                <p className="fz14 text-muted mt-2">This action cannot be undone.</p>
+              </div>
+              <div className="modal-footer border-top-0 d-flex justify-content-center pt-0 pb-4">
+                <button type="button" className="ud-btn btn-light" onClick={() => setShowDeleteModal(false)}>
+                  Cancel
+                </button>
+                <button 
+                  type="button" 
+                  className="ud-btn btn-thm" 
+                  style={{ backgroundColor: "#dc3545", borderColor: "#dc3545", color: "white" }}
+                  onClick={async () => {
+                    setShowDeleteModal(false);
+                    const { deleteMockTask } = await import("@/utils/auth/mockAuth");
+                    const result = await deleteMockTask(taskId);
+                    if (result.ok) {
+                      addToast("success", "Project deleted successfully!");
+                      setTimeout(() => router.push("/dashboard/active-tasks"), 1500);
+                    } else {
+                      addToast("error", result.message || "Failed to delete project.");
+                    }
+                  }}
+                >
+                  Yes, Delete it
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         .toast-premium {
@@ -479,6 +776,16 @@ export default function CreateTaskInfo() {
 
         .media-item-premium .remove-btn:hover {
           color: #ff4d4d;
+        }
+
+        .skill-suggestions-dropdown-premium .suggestion-item {
+          transition: all 0.2s;
+        }
+
+        .skill-suggestions-dropdown-premium .suggestion-item:hover {
+          background-color: #f5f3ff !important;
+          color: #5b2dff !important;
+          padding-left: 20px !important;
         }
 
         .bgc-thm-light {

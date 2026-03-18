@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Pagination1 from "@/components/section/Pagination1";
 import DashboardNavigation from "../header/DashboardNavigation";
 import { adminTaskMonitoringTasks } from "@/data/dashboardAdmin";
 
 const stateOptions = ["Pending", "In Progress", "Under Review", "Completed", "Flagged", "Suspended"];
+const TASKS_PAGE_SIZE = 4;
 
 const statusTabs = [
   { id: "All", label: "All", key: "all" },
@@ -63,10 +65,26 @@ const getTaskSnapshot = (task) => {
   return "Delivery is active and the task is moving through the normal workflow.";
 };
 
+const getPaginatedData = (items = [], page = 1, pageSize = TASKS_PAGE_SIZE) => {
+  const totalItems = items.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+  const startIndex = (currentPage - 1) * pageSize;
+
+  return {
+    items: items.slice(startIndex, startIndex + pageSize),
+    totalItems,
+    totalPages,
+    currentPage,
+    pageSize,
+  };
+};
+
 export default function TaskMonitoringInfo() {
   const [tasks, setTasks] = useState(adminTaskMonitoringTasks);
   const [statusFilter, setStatusFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [transitionDrafts, setTransitionDrafts] = useState(
     Object.fromEntries(adminTaskMonitoringTasks.map((task) => [task.id, task.status])),
   );
@@ -106,6 +124,11 @@ export default function TaskMonitoringInfo() {
     [tasks, selectedTaskId, filteredTasks],
   );
 
+  const paginatedTasks = useMemo(
+    () => getPaginatedData(filteredTasks, currentPage),
+    [filteredTasks, currentPage],
+  );
+
   useEffect(() => {
     if (!filteredTasks.length) return;
     const selectedVisible = filteredTasks.some((task) => task.id === selectedTaskId);
@@ -114,6 +137,10 @@ export default function TaskMonitoringInfo() {
       setGlobalTargetState(filteredTasks[0].status);
     }
   }, [filteredTasks, selectedTaskId]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, searchQuery]);
 
   const applyStateTransition = (taskId, nextStatus, source) => {
     setTasks((prev) =>
@@ -261,7 +288,7 @@ export default function TaskMonitoringInfo() {
             </div>
 
             <div className="tm-task-list">
-              {filteredTasks.map((task) => (
+              {paginatedTasks.items.map((task) => (
                 <article
                   key={task.id}
                   className={`tm-task-row ${selectedTask?.id === task.id ? "active" : ""}`}
@@ -361,6 +388,19 @@ export default function TaskMonitoringInfo() {
                 </div>
               )}
             </div>
+
+            {!!filteredTasks.length && (
+              <div className="mt30">
+                <Pagination1
+                  currentPage={paginatedTasks.currentPage}
+                  totalPages={paginatedTasks.totalPages}
+                  totalItems={paginatedTasks.totalItems}
+                  pageSize={paginatedTasks.pageSize}
+                  onPageChange={setCurrentPage}
+                  countLabel="tasks"
+                />
+              </div>
+            )}
           </div>
         </div>
 

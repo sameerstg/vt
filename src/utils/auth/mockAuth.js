@@ -11,6 +11,12 @@ export const DEFAULT_PROFILE_IMAGE_BY_ROLE = {
   admin: "/images/portrait-white-man-isolated_53876-40306.jpg",
 };
 
+const DEMO_PROPOSAL_WORKERS = [
+  { id: "worker-demo-uk-1", name: "James Walker", email: "james.walker@demo.com", amount: 920, timeline: "5" },
+  { id: "worker-demo-us-1", name: "Olivia Carter", email: "olivia.carter@demo.com", amount: 1040, timeline: "7" },
+  { id: "worker-demo-uk-2", name: "William Scott", email: "william.scott@demo.com", amount: 980, timeline: "6" },
+];
+
 export function getGeneratedAvatarUrl(name = "User") {
   const seed = encodeURIComponent(String(name).trim() || "User");
   return `https://api.dicebear.com/8.x/adventurer-neutral/svg?seed=${seed}&backgroundType=gradientLinear`;
@@ -39,7 +45,7 @@ function setRegisteredUsers(users) {
   window.localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
 }
 
-function getAllUsers() {
+export function getAllUsers() {
   const registeredUsers = getRegisteredUsers();
   const merged = [...mockUsers, ...registeredUsers];
   const uniqueByEmail = new Map();
@@ -76,6 +82,79 @@ function getAllUsers() {
   });
 
   return Array.from(uniqueByEmail.values());
+}
+
+function getDesiredProposalCountForTask(task = {}, index = 0) {
+  if (typeof task.proposals === "number" && task.proposals > 0) {
+    return task.proposals;
+  }
+
+  if (task.status === "available" || task.status === "Ongoing") {
+    return index % 2 === 0 ? 2 : 3;
+  }
+
+  return 0;
+}
+
+function buildDemoProposalsForClient(clientId) {
+  const clientTasks = getClientTasks(clientId);
+  const allUsers = getAllUsers();
+  const pooledProposals = [];
+
+  allUsers.forEach((user) => {
+    if (Array.isArray(user.receivedProposals)) pooledProposals.push(...user.receivedProposals);
+    if (Array.isArray(user.submittedProposals)) pooledProposals.push(...user.submittedProposals);
+  });
+
+  let globalProposals = [];
+  if (typeof window !== "undefined") {
+    try {
+      globalProposals = JSON.parse(window.localStorage.getItem("vt_submitted_proposals") || "[]");
+    } catch {}
+  }
+
+  const existingByTaskId = new Map();
+  [...pooledProposals, ...globalProposals]
+    .filter((proposal) => String(proposal.clientId) === String(clientId))
+    .forEach((proposal) => {
+      const taskKey = String(proposal.taskId);
+      if (!existingByTaskId.has(taskKey)) {
+        existingByTaskId.set(taskKey, []);
+      }
+      existingByTaskId.get(taskKey).push(proposal);
+    });
+
+  const fallbackProposals = [];
+
+  clientTasks.forEach((task, index) => {
+    const taskKey = String(task.id);
+    const existing = existingByTaskId.get(taskKey) || [];
+    const desiredCount = getDesiredProposalCountForTask(task, index);
+
+    if (desiredCount <= existing.length) return;
+
+    for (let i = existing.length; i < desiredCount; i += 1) {
+      const worker = DEMO_PROPOSAL_WORKERS[i % DEMO_PROPOSAL_WORKERS.length];
+      fallbackProposals.push({
+        id: `demo-proposal-${task.id}-${i + 1}`,
+        taskId: task.id,
+        taskTitle: task.title,
+        clientId: task.clientId,
+        clientEmail: task.clientEmail,
+        workerId: worker.id,
+        workerName: worker.name,
+        workerEmail: worker.email,
+        offerType: i % 2 === 0 ? "accept" : "custom",
+        offerAmount: worker.amount + index * 25,
+        timeline: worker.timeline,
+        coverLetter: `I can handle ${task.title} with structured delivery, regular updates, and production-ready output.`,
+        submittedAt: new Date(Date.now() - (i + 1) * 3600000).toISOString(),
+        status: "pending",
+      });
+    }
+  });
+
+  return fallbackProposals;
 }
 
 export function authenticateMockUser(email, password) {
@@ -371,6 +450,239 @@ export function getClientTasks(clientId) {
   }));
 }
 
+export function updateMockTaskStatus(taskId, newStatus) {
+  if (typeof window === "undefined") return { ok: false };
+
+  const allUsers = getAllUsers().filter((user) => Array.isArray(user.createdTasks));
+  const registeredUsers = allUsers;
+  let taskFound = false;
+
+  const nextRegisteredUsers = registeredUsers.map((user) => {
+    if (user.createdTasks) {
+      const nextTasks = user.createdTasks.map((task) => {
+        if (String(task.id) === String(taskId)) {
+          taskFound = true;
+          return { ...task, status: newStatus };
+        }
+        return task;
+      });
+      return { ...user, createdTasks: nextTasks };
+    }
+    return user;
+  });
+
+  const current = getAuthSession();
+  if (current && current.createdTasks) {
+    const nextSessionTasks = current.createdTasks.map((task) => {
+      if (String(task.id) === String(taskId)) {
+        taskFound = true;
+        return { ...task, status: newStatus };
+      }
+      return task;
+    });
+    updateAuthSession({ createdTasks: nextSessionTasks });
+  }
+
+  if (taskFound) {
+    window.localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(nextRegisteredUsers));
+    return { ok: true };
+  }
+
+  return { ok: false, message: "Task not found." };
+}
+
+export function getTaskById(taskId) {
+  if (typeof window === "undefined") return null;
+  const allUsers = getAllUsers();
+
+  for (const user of allUsers) {
+    if (user.createdTasks) {
+      const task = user.createdTasks.find(t => String(t.id) === String(taskId));
+      if (task) {
+        return {
+          ...task,
+          clientName: task.client || user.name || user.email.split('@')[0],
+          clientEmail: user.email,
+          clientLocation: user.location || user.country || "Remote",
+          clientImage: user.profileImage || getGeneratedAvatarUrl(user.name)
+        };
+      }
+    }
+  }
+  return null;
+}
+
+export function updateMockTask(taskId, updatedData) {
+  if (typeof window === "undefined") return { ok: false };
+
+  const allUsers = getAllUsers().filter((user) => Array.isArray(user.createdTasks));
+  const registeredUsers = allUsers;
+  let taskFound = false;
+  const current = getAuthSession();
+
+  const nextRegisteredUsers = registeredUsers.map((user) => {
+    if (user.createdTasks) {
+      const nextTasks = user.createdTasks.map((task) => {
+        if (String(task.id) === String(taskId)) {
+          taskFound = true;
+          return { ...task, ...updatedData };
+        }
+        return task;
+      });
+      return { ...user, createdTasks: nextTasks };
+    }
+    return user;
+  });
+
+  if (current && current.createdTasks) {
+    const nextSessionTasks = current.createdTasks.map(task => {
+      if (String(task.id) === String(taskId)) {
+        taskFound = true;
+        return { ...task, ...updatedData };
+      }
+      return task;
+    });
+    updateAuthSession({ createdTasks: nextSessionTasks });
+  }
+
+  if (taskFound) {
+    window.localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(nextRegisteredUsers));
+    return { ok: true };
+  }
+
+  return { ok: false, message: "Task not found." };
+}
+
+export function acceptMockProposal(proposal) {
+  if (typeof window === "undefined") {
+    return { ok: false, message: "Window is not available." };
+  }
+
+  if (!proposal?.id || !proposal?.taskId || !proposal?.clientId || !proposal?.workerId) {
+    return { ok: false, message: "Incomplete proposal data." };
+  }
+
+  const taskUpdateResult = updateMockTask(proposal.taskId, {
+    status: "In Progress",
+    freelancer: proposal.workerName,
+    timeline: proposal.timeline,
+    assignedWorkerId: proposal.workerId,
+    assignedWorkerEmail: proposal.workerEmail,
+    acceptedProposalId: proposal.id,
+  });
+
+  if (!taskUpdateResult?.ok) {
+    return taskUpdateResult;
+  }
+
+  const updateProposalRecord = (item) => {
+    if (String(item?.taskId) !== String(proposal.taskId)) return item;
+
+    const nextStatus = String(item.id) === String(proposal.id) ? "accepted" : "rejected";
+    return { ...item, status: nextStatus };
+  };
+
+  const globalRaw = window.localStorage.getItem("vt_submitted_proposals");
+  let globalProposals = [];
+  try {
+    globalProposals = JSON.parse(globalRaw) || [];
+  } catch {}
+
+  window.localStorage.setItem(
+    "vt_submitted_proposals",
+    JSON.stringify(globalProposals.map(updateProposalRecord))
+  );
+
+  const registeredUsers = getRegisteredUsers();
+  const nextUsers = registeredUsers.map((user) => ({
+    ...user,
+    receivedProposals: Array.isArray(user.receivedProposals)
+      ? user.receivedProposals.map(updateProposalRecord)
+      : user.receivedProposals,
+    submittedProposals: Array.isArray(user.submittedProposals)
+      ? user.submittedProposals.map(updateProposalRecord)
+      : user.submittedProposals,
+  }));
+
+  setRegisteredUsers(nextUsers);
+
+  window.dispatchEvent(new Event(AUTH_SESSION_EVENT));
+  window.dispatchEvent(new Event("storage"));
+
+  return { ok: true };
+}
+
+export async function deleteMockTask(taskId) {
+  if (typeof window === "undefined") return { ok: false };
+
+  let taskDeleted = false;
+  
+  // 1. Delete from Current Session
+  const currentSession = getAuthSession();
+  let nextSessionTasks = [];
+  if (currentSession && currentSession.createdTasks) {
+    const originalLength = currentSession.createdTasks.length;
+    nextSessionTasks = currentSession.createdTasks.filter(task => String(task.id) !== String(taskId));
+    if (nextSessionTasks.length < originalLength) {
+      updateAuthSession({ createdTasks: nextSessionTasks });
+      taskDeleted = true;
+    }
+  }
+
+  // 2. Delete from server-side mockUsers.json via API
+  if (currentSession && currentSession.id) {
+    try {
+      await fetch("/api/tasks", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientId: currentSession.id,
+          taskId: taskId,
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to delete from JSON api", err);
+    }
+  }
+
+  // 3. Delete from Local Storage (Persistent Storage)
+  const raw = window.localStorage.getItem(REGISTERED_USERS_KEY);
+  let registeredUsers = [];
+  try {
+    registeredUsers = JSON.parse(raw) || [];
+  } catch (e) {}
+
+  let userIndex = registeredUsers.findIndex(u => currentSession && String(u.id) === String(currentSession.id));
+  if (userIndex === -1 && currentSession) {
+    const allUsers = getAllUsers();
+    const activeUser = allUsers.find(u => String(u.id) === String(currentSession.id));
+    if (activeUser) {
+      registeredUsers.push(activeUser);
+      userIndex = registeredUsers.length - 1;
+    }
+  }
+
+  if (userIndex !== -1 && registeredUsers[userIndex].createdTasks) {
+    const activeUserDb = registeredUsers[userIndex];
+    const originalDbLength = activeUserDb.createdTasks.length;
+    activeUserDb.createdTasks = activeUserDb.createdTasks.filter(task => String(task.id) !== String(taskId));
+    
+    if (activeUserDb.createdTasks.length < originalDbLength) {
+      taskDeleted = true;
+    } else if (taskDeleted && nextSessionTasks) {
+      activeUserDb.createdTasks = nextSessionTasks;
+    }
+  }
+
+  window.localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(registeredUsers));
+
+  if (taskDeleted) {
+    return { ok: true, message: "Project deleted successfully!" };
+  } else {
+    return { ok: false, message: "Task not found to delete." }; 
+  }
+}
+
 export function getAllClientTasks() {
   const users = getAllUsers();
   let tasks = [];
@@ -437,6 +749,8 @@ export async function submitProposal(payload) {
   }
 }
 
+export const saveProposal = submitProposal;
+
 export function getProposalsForClient(clientId) {
   if (typeof window === "undefined") return [];
   
@@ -456,7 +770,8 @@ export function getProposalsForClient(clientId) {
   });
 
   // Merge and deduplicate by ID
-  const all = [...globalProposals, ...userProposals];
+  const fallbackProposals = buildDemoProposalsForClient(clientId);
+  const all = [...globalProposals, ...userProposals, ...fallbackProposals];
   const unique = Array.from(new Map(all.map(p => [p.id, p])).values());
 
   return unique.filter(p => String(p.clientId) === String(clientId));
@@ -464,25 +779,11 @@ export function getProposalsForClient(clientId) {
 
 export function getProposalCountForTask(taskId) {
   if (typeof window === "undefined") return 0;
-  
-  // Reuse the logic from getProposalsForClient or similar pooling
-  const raw = window.localStorage.getItem("vt_submitted_proposals");
-  let globalProposals = [];
-  try {
-    globalProposals = JSON.parse(raw) || [];
-  } catch {}
 
-  const allUsers = getAllUsers();
-  const userProposals = [];
-  allUsers.forEach(u => {
-    if (u.receivedProposals) userProposals.push(...u.receivedProposals);
-    if (u.submittedProposals) userProposals.push(...u.submittedProposals);
-  });
+  const session = getAuthSession();
+  if (!session?.id) return 0;
 
-  const all = [...globalProposals, ...userProposals];
-  const unique = Array.from(new Map(all.map(p => [p.id, p])).values());
-
-  return unique.filter(p => String(p.taskId) === String(taskId)).length;
+  return getProposalsForClient(session.id).filter((p) => String(p.taskId) === String(taskId)).length;
 }
 
 export function getWorkerAppliedTasks(workerId) {
@@ -490,25 +791,47 @@ export function getWorkerAppliedTasks(workerId) {
   
   const allUsers = getAllUsers();
   const worker = allUsers.find(u => String(u.id) === String(workerId));
-  if (!worker || !worker.submittedProposals) return [];
+  const email = worker?.email || "";
+
+  // 1. Get global proposals from localStorage
+  const raw = window.localStorage.getItem("vt_submitted_proposals");
+  let globalProposals = [];
+  try {
+    globalProposals = JSON.parse(raw) || [];
+  } catch {}
+
+  // 2. Get proposals associated with user record
+  const userProposals = worker?.submittedProposals || [];
+
+  // Filter global proposals for this worker
+  const workerGlobalProposals = globalProposals.filter(p => 
+    String(p.workerId) === String(workerId) || (email && p.workerEmail === email)
+  );
+
+  // Merge and deduplicate by proposal ID
+  const all = [...workerGlobalProposals, ...userProposals];
+  const uniqueProposals = Array.from(new Map(all.map(p => [p.id, p])).values());
+
+  if (uniqueProposals.length === 0) return [];
 
   // Map proposals back to a task-like structure for the dashboard
-  return worker.submittedProposals.map(p => {
-    // Try to find the actual client name
-    const client = allUsers.find(u => String(u.id) === String(p.clientId) || u.email === p.clientEmail);
-    
-    return {
-      id: p.taskId,
-      title: p.taskTitle,
-      client: client?.name || p.clientEmail || "Client",
-      budget: `$${p.offerAmount}`,
-      deadline: p.timeline ? (isNaN(p.timeline) ? p.timeline : `${p.timeline} Days`) : "N/A",
-      skills: ["Applied"],
-      status: "applied",
-      submittedAt: p.submittedAt,
-      proposalId: p.id
-    };
-  });
+  return uniqueProposals
+    .filter((p) => p.status !== "accepted")
+    .map(p => {
+      const client = allUsers.find(u => String(u.id) === String(p.clientId) || u.email === p.clientEmail);
+
+      return {
+        id: p.taskId,
+        title: p.taskTitle,
+        client: client?.name || p.clientEmail || "Client",
+        budget: `$${p.offerAmount}`,
+        deadline: p.timeline ? (isNaN(p.timeline) ? p.timeline : `${p.timeline} Days`) : "N/A",
+        skills: ["Applied"],
+        status: "applied",
+        submittedAt: p.submittedAt,
+        proposalId: p.id
+      };
+    });
 }
 
 export function getRoleFlow(role) {
@@ -517,4 +840,26 @@ export function getRoleFlow(role) {
 
 export function getMockUsers() {
   return getAllUsers();
+}
+
+export function getAllPublishedTasks() {
+  if (typeof window === "undefined") return [];
+  const allUsers = getAllUsers();
+  const allTasks = [];
+  allUsers.forEach(user => {
+    if (user.createdTasks) {
+      user.createdTasks.forEach(task => {
+        if (task.status === "Ongoing") {
+          allTasks.push({
+            ...task,
+            clientName: task.client || user.name || user.email.split('@')[0],
+            clientLocation: user.location || user.country || "Remote",
+            clientEmail: user.email,
+            clientImage: user.profileImage || getGeneratedAvatarUrl(user.name)
+          });
+        }
+      });
+    }
+  });
+  return allTasks;
 }
