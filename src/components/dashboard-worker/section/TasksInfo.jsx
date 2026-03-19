@@ -7,13 +7,14 @@ import DashboardNavigation from "../header/DashboardNavigation";
 import { getWorkerTasksBySection } from "@/data/workerTasks";
 import TaskDiscoveryPanel from "@/components/dashboard-shared/TaskDiscoveryPanel";
 import WorkSubmissionPanel from "@/components/dashboard-shared/WorkSubmissionPanel";
-import { getAuthSession, getWorkerAppliedTasks, getWorkerAssignedTasks } from "@/utils/auth/mockAuth";
+import { getAuthSession, getWorkerAppliedTasks, getWorkerAssignedTasks, getWorkerTaskStatus, setWorkerTaskStatus } from "@/utils/auth/mockAuth";
 import WorkerTaskFilters from "@/components/dashboard-shared/WorkerTaskFilters";
 
 const TASK_SECTIONS = [
   { key: "applied", label: "Applied Projects", path: "/worker-dashboard/applied-tasks" },
   { key: "assigned", label: "Projects", path: "/worker-dashboard/assigned-projects" },
   { key: "in_progress", label: "In Progress Projects", path: "/worker-dashboard/in-progress" },
+  { key: "in_review", label: "In Review", path: "/worker-dashboard/in-review" },
   { key: "completed", label: "Completed Projects", path: "/worker-dashboard/completed-tasks" },
   { key: "work_submission", label: "Work Submission", path: "/worker-dashboard/manage-projects" },
 ];
@@ -22,6 +23,7 @@ const sectionLabelMap = {
   applied: "Applied Projects",
   assigned: "Projects",
   in_progress: "In Progress Projects",
+  in_review: "In Review",
   completed: "Completed Projects",
 };
 
@@ -51,6 +53,30 @@ export default function TasksInfo({
   const [taskType, setTaskType] = useState("all");
   const [budgetModel, setBudgetModel] = useState("all");
   const [workMode, setWorkMode] = useState("all");
+  const [taskStatusOverrides, setTaskStatusOverrides] = useState({});
+  const [toasts, setToasts] = useState([]);
+
+  const showToast = (type, message) => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, type, message }]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 4000);
+  };
+
+  const handleMarkEscrow = (task) => {
+    const session = getAuthSession();
+    if (!session?.id) return;
+    setWorkerTaskStatus(session.id, String(task.id), "in_escrow");
+    setTaskStatusOverrides(prev => ({ ...prev, [String(task.id)]: "in_escrow" }));
+    showToast("success", `"${task.title}" marked as completed — payment in escrow.`);
+  };
+
+  const handleCloseTask = (task) => {
+    const session = getAuthSession();
+    if (!session?.id) return;
+    setWorkerTaskStatus(session.id, String(task.id), "closed");
+    setTaskStatusOverrides(prev => ({ ...prev, [String(task.id)]: "closed" }));
+    showToast("info", `"${task.title}" closed.`);
+  };
 
   // Standardized catalogs from CreateTaskInfo / TaskDiscoveryPanel
   const categoryOptions = [
@@ -144,6 +170,11 @@ export default function TasksInfo({
 
   return (
     <div className="dashboard__content hover-bgc-color worker-task-monitoring-page">
+      <div className="toast-container">
+        {toasts.map(t => (
+          <div key={t.id} className={`vt-toast vt-toast--${t.type}`}>{t.message}</div>
+        ))}
+      </div>
       <div className="row pb40">
         <div className="col-lg-12">
           <DashboardNavigation />
@@ -241,50 +272,83 @@ export default function TasksInfo({
                     </tr>
                   </thead>
                   <tbody className="t-body">
-                    {paginatedTasks.map(task => (
-                      <tr key={task.id} className="task-row-hover">
-                        <td>{task.title}</td>
-                        <td>
-                          {activeFilter === "assigned" && task.source === "contractor"
-                            ? <span className="source-tag source-tag--contractor">Via {task.contractorName || "Contractor"}</span>
-                            : activeFilter === "assigned"
-                              ? <span className="source-tag source-tag--client">Client Direct</span>
-                              : task.client}
-                        </td>
-                        <td>{task.budget}</td>
-                        <td>{task.deadline}</td>
-                        <td>{(task.skills || []).join(", ")}</td>
-                        <td>
-                          <div className="d-flex gap-2 align-items-center">
-                            <Link
-                              href={
-                                activeFilter === "in_progress"
-                                  ? `/worker-dashboard/work-submission?taskId=${task.id}&source=${task.source || "client"}`
-                                  : activeFilter === "applied"
-                                    ? `/worker-dashboard/applied-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
-                                    : activeFilter === "completed"
-                                      ? `/worker-dashboard/completed-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
-                                      : `/worker-dashboard/assigned-projects/details?taskId=${task.id}&source=${task.source || "client"}`
-                              }
-                              className="ud-btn btn-thm"
-                              style={{ padding: "5px 15px", fontSize: "12px" }}
-                            >
-                              {activeFilter === "in_progress" ? "Submit Work" : "Details"}
-                              <i className="fal fa-arrow-right-long ms-1" />
-                            </Link>
-                            {(activeFilter === "assigned" || activeFilter === "in_progress" || activeFilter === "in_review" || activeFilter === "in_dispute") && (
-                              <Link
-                                href={`/worker-dashboard/appeal?taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}&source=${task.source || "client"}`}
-                                className="ud-btn btn-light-default"
-                                style={{ padding: "5px 15px", fontSize: "12px" }}
-                              >
-                                Appeal
-                              </Link>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                    {paginatedTasks
+                      .filter(task => taskStatusOverrides[String(task.id)] !== "closed")
+                      .map(task => {
+                        const workerStatus = taskStatusOverrides[String(task.id)];
+                        return (
+                          <tr key={task.id} className="task-row-hover">
+                            <td>{task.title}</td>
+                            <td>
+                              {activeFilter === "assigned" && task.source === "contractor"
+                                ? <span className="source-tag source-tag--contractor">Via {task.contractorName || "Contractor"}</span>
+                                : activeFilter === "assigned"
+                                  ? <span className="source-tag source-tag--client">Client Direct</span>
+                                  : task.client}
+                            </td>
+                            <td>{task.budget}</td>
+                            <td>{task.deadline}</td>
+                            <td>{(task.skills || []).join(", ")}</td>
+                            <td>
+                              <div className="d-flex gap-2 align-items-center flex-wrap">
+                                {activeFilter !== "in_review" && (
+                                  <Link
+                                    href={
+                                      activeFilter === "in_progress"
+                                        ? `/worker-dashboard/work-submission?taskId=${task.id}&source=${task.source || "client"}`
+                                        : activeFilter === "applied"
+                                          ? `/worker-dashboard/applied-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
+                                          : activeFilter === "completed"
+                                            ? `/worker-dashboard/completed-tasks/details?taskId=${task.id}&title=${encodeURIComponent(task.title)}`
+                                            : `/worker-dashboard/assigned-projects/details?taskId=${task.id}&source=${task.source || "client"}`
+                                    }
+                                    className="ud-btn btn-thm"
+                                    style={{ padding: "5px 15px", fontSize: "12px" }}
+                                  >
+                                    {activeFilter === "in_progress" ? "Submit Work" : "Details"}
+                                    <i className="fal fa-arrow-right-long ms-1" />
+                                  </Link>
+                                )}
+                                {activeFilter === "in_review" && workerStatus !== "in_escrow" && (
+                                  <button
+                                    type="button"
+                                    className="ud-btn btn-thm"
+                                    style={{ padding: "5px 15px", fontSize: "12px" }}
+                                    onClick={() => handleMarkEscrow(task)}
+                                  >
+                                    <i className="fal fa-lock me-1" />Complete &amp; Escrow
+                                  </button>
+                                )}
+                                {activeFilter === "in_review" && workerStatus === "in_escrow" && (
+                                  <span className="escrow-badge">
+                                    <i className="fal fa-shield-check me-1" />In Escrow
+                                  </span>
+                                )}
+                                {(activeFilter === "assigned" || activeFilter === "in_progress" || activeFilter === "in_review" || activeFilter === "in_dispute") && (
+                                  <Link
+                                    href={`/worker-dashboard/appeal?taskId=${task.id}&taskTitle=${encodeURIComponent(task.title)}&source=${task.source || "client"}`}
+                                    className="ud-btn btn-light-default"
+                                    style={{ padding: "5px 15px", fontSize: "12px" }}
+                                  >
+                                    Appeal
+                                  </Link>
+                                )}
+                                {(activeFilter === "in_review" || activeFilter === "completed") && (
+                                  <button
+                                    type="button"
+                                    className="ud-btn btn-close-task"
+                                    style={{ padding: "5px 15px", fontSize: "12px" }}
+                                    onClick={() => handleCloseTask(task)}
+                                    title="Remove from list"
+                                  >
+                                    <i className="fal fa-times me-1" />Close
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     {!paginatedTasks.length && (
                       <tr>
                         <td className="text-center py-5" colSpan={6}>
@@ -323,6 +387,14 @@ export default function TasksInfo({
         .source-tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
         .source-tag--client { background: #d4f7e4; color: #1a7a4a; }
         .source-tag--contractor { background: #f0ebff; color: #5b2dff; }
+        .escrow-badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; background: #fff3cd; color: #856404; font-size: 12px; font-weight: 600; border: 1px solid #ffc107; }
+        :global(.ud-btn.btn-close-task) { border: 1px solid #dbe1ee; background: #fff; color: #6b7280; }
+        :global(.ud-btn.btn-close-task:hover) { border-color: #ef4444; color: #ef4444; background: #fff5f5; }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .vt-toast { padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; min-width: 260px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+        .vt-toast--success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .vt-toast--info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .vt-toast--error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
       `}</style>
     </div>
   );

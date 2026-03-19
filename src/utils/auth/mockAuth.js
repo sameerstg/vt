@@ -1220,6 +1220,33 @@ export function getWorkerAppeals(workerId) {
   return getAppealsStore().filter(a => String(a.workerId) === String(workerId));
 }
 
+// ============================================================
+// WORKER TASK STATUS OVERRIDES (vt_worker_task_statuses)
+// Allows workers to mark tasks completed/closed without touching client data
+// ============================================================
+
+const WORKER_TASK_STATUSES_KEY = "vt_worker_task_statuses";
+
+function getWorkerTaskStatusesStore() {
+  if (typeof window === "undefined") return {};
+  try { return JSON.parse(window.localStorage.getItem(WORKER_TASK_STATUSES_KEY) || "{}"); } catch { return {}; }
+}
+
+// Returns worker-side status override for a task, or null if none set
+export function getWorkerTaskStatus(workerId, taskId) {
+  const store = getWorkerTaskStatusesStore();
+  return store[`${workerId}__${taskId}`] || null;
+}
+
+// Set worker-side status: "in_escrow" | "closed"
+export function setWorkerTaskStatus(workerId, taskId, status) {
+  if (typeof window === "undefined") return { ok: false };
+  const store = getWorkerTaskStatusesStore();
+  store[`${workerId}__${taskId}`] = status;
+  window.localStorage.setItem(WORKER_TASK_STATUSES_KEY, JSON.stringify(store));
+  return { ok: true };
+}
+
 export function getPaymentDistributions(workerId) {
   if (typeof window === "undefined") return [];
   try {
