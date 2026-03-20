@@ -21,6 +21,14 @@
 | bootstrap | 5.3.6 | CSS framework |
 | sass | 1.89.0 | SCSS compilation |
 
+### Styling
+| Package | Purpose |
+|---------|---------|
+| tailwindcss | Utility-first CSS framework |
+| @tailwindcss/postcss | PostCSS plugin for Tailwind |
+| postcss | CSS transformation |
+| autoprefixer | Vendor prefix automation |
+
 ### UI/UX Libraries
 | Package | Purpose |
 |---------|---------|
@@ -208,9 +216,39 @@ Sections are self-contained page sections (183 total):
 
 ### Global Styles (`src/app/globals.css`)
 ```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import "./../../public/css/bootstrap.min.css";
 @import "./../../public/css/animate.css";
 /* ... additional CSS imports */
+```
+
+### Tailwind Configuration (`tailwind.config.js`)
+```js
+module.exports = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#37047C',      // Brand purple
+        secondary: '#051036',    // Headings dark blue
+      },
+      fontFamily: {
+        dm: ['DM Sans', 'sans-serif'],
+      },
+      maxWidth: {
+        'container': '1430px',
+      },
+    },
+  },
+  plugins: [],
+}
 ```
 
 ### CSS Variables
@@ -287,7 +325,13 @@ export const dasboardNavigation = [
 ### 5. Modular CSS
 - Bootstrap base + custom CSS imports
 - Component-scoped styles via classes
-- Primary color easily customized via CSS variable
+- Primary color easily customizable via CSS variable
+
+### 6. Dual Styling Strategy (Tailwind + Existing CSS)
+- **Coexistence approach**: Tailwind added alongside existing Bootstrap/custom CSS
+- **Migration-ready**: New components can use Tailwind; existing components unchanged
+- **Brand colors**: Available as Tailwind utilities (`bg-primary`, `text-primary`, etc.)
+- **Build verified**: All 121 static pages compile successfully
 
 ---
 
@@ -379,6 +423,7 @@ yarn lint     # ESLint check
 1. Override CSS variables in `globals.css`
 2. Add custom SCSS in `public/css/`
 3. Use Bootstrap utility classes
+4. Use Tailwind utility classes for new components (e.g., `className="flex items-center bg-primary"`)
 
 ---
 
