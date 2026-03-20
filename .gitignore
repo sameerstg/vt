@@ -48,3 +48,9 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Next.js build output
+.next/
+
+# npm lock file (using yarn)
+package-lock.json
+
