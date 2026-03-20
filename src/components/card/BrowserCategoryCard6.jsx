@@ -11,7 +11,7 @@ export default function BrowserCategoryCard6({ data }) {
         <div className="details ml40">
           <p className="mb-0 text">{data.skill} skills</p>
           <h5 className="title">
-            <Link href="/service-2">{data.title}</Link>
+            <Link href="/service-1">{data.title}</Link>
           </h5>
         </div>
       </div>

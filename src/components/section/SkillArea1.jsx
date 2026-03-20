@@ -218,7 +218,7 @@ export default function SkillArea1() {
                                                                     <li
                                                                         key={i2}
                                                                     >
-                                                                        <Link href="/home-4">
+                                                                        <Link href="/home-1">
                                                                             {
                                                                                 item2
                                                                             }
@@ -240,7 +240,7 @@ export default function SkillArea1() {
                                                                     <li
                                                                         key={i2}
                                                                     >
-                                                                        <Link href="/home-4">
+                                                                        <Link href="/home-1">
                                                                             {
                                                                                 item2
                                                                             }
@@ -262,7 +262,7 @@ export default function SkillArea1() {
                                                                     <li
                                                                         key={i2}
                                                                     >
-                                                                        <Link href="/home-4">
+                                                                        <Link href="/home-1">
                                                                             {
                                                                                 item2
                                                                             }
@@ -284,7 +284,7 @@ export default function SkillArea1() {
                                                                     <li
                                                                         key={i2}
                                                                     >
-                                                                        <Link href="/home-4">
+                                                                        <Link href="/home-1">
                                                                             {
                                                                                 item2
                                                                             }

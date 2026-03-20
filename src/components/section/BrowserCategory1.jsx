@@ -31,7 +31,7 @@ export default function BrowserCategory1() {
             </div>
             <div className="col-lg-3">
               <div className="text-start text-lg-end mb-4 mb-lg-2">
-                <Link className="ud-btn2" href="/service-2">
+                <Link className="ud-btn2" href="/service-1">
                   All Categories
                   <i className="fal fa-arrow-right-long" />
                 </Link>

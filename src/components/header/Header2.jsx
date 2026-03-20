@@ -23,7 +23,7 @@ export default function Header2() {
                                     <div className="logos">
                                         <Link
                                             className="header-logo logo1"
-                                            href="/home-2"
+                                            href="/home-1"
                                         >
                                             <Image
                                                 height={40}
@@ -34,7 +34,7 @@ export default function Header2() {
                                         </Link>
                                         <Link
                                             className="header-logo logo2"
-                                            href="/home-2"
+                                            href="/home-1"
                                         >
                                             <Image
                                                 height={40}
