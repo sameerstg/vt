@@ -4,7 +4,7 @@
 
 **Project Name:** freeio-nextjs (v1.6.0)  
 **Type:** Freelancer Marketplace / Job Board Template  
-**Framework:** Next.js 15.3.2 with React 19.1.0  
+**Framework:** Next.js 16.2.0 with React 19.2.4  
 **Package Manager:** Yarn
 
 ---
@@ -14,9 +14,9 @@
 ### Core Dependencies
 | Package | Version | Purpose |
 |---------|---------|---------|
-| next | 15.3.2 | React framework |
-| react | 19.1.0 | UI library |
-| react-dom | 19.1.0 | DOM rendering |
+| next | 16.2.0 | React framework |
+| react | 19.2.4 | UI library |
+| react-dom | 19.2.4 | DOM rendering |
 | zustand | 5.0.5 | State management |
 | bootstrap | 5.3.6 | CSS framework |
 | sass | 1.89.0 | SCSS compilation |
@@ -452,4 +452,4 @@ This is a comprehensive freelancer marketplace template with:
 The codebase prioritizes template flexibility over backend integration, making it ideal for:
 - Quick deployment as a freelancer marketplace
 - Customization for specific niche platforms
-- Learning Next.js 15 patterns and practices
+- Learning Next.js 16 patterns and practices
