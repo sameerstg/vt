@@ -41,7 +41,7 @@ export default function Hero1() {
   const router = useRouter();
   // search handler
   const searchHandler = () => {
-    router.push("/freelancer-1");
+    router.push("/worker-1");
   };
 
   return (
@@ -97,7 +97,7 @@ export default function Hero1() {
               <div className="col-xl-10 col-xxl-7">
                 <div className="position-relative">
                   <h3 className="banner-title animate-up-2">
-                    Hire the best freelancers for{" "}
+                    Hire the best workers for{" "}
                     <br className="d-none d-lg-block" />
                     any job, online.
                   </h3>

@@ -19,7 +19,7 @@ export default function HighestRated18() {
         <div className="row align-items-center wow fadeInUp">
           <div className="col-lg-9">
             <div className="main-title">
-              <h2 className="title">Highest Rated Freelancers</h2>
+              <h2 className="title">Highest Rated Workers</h2>
               <p className="paragraph">
                 Most viewed and all-time top-selling services
               </p>
@@ -27,7 +27,7 @@ export default function HighestRated18() {
           </div>
           <div className="col-lg-3">
             <div className="text-lg-end mb-2">
-              <Link href="/freelancer-1" className="ud-btn2">
+              <Link href="/worker-1" className="ud-btn2">
                 All Services <i className="fal fa-arrow-right-long"></i>
               </Link>
             </div>

@@ -23,8 +23,8 @@ export const header3 = [
     "/employee-single",
     "/worker-1",
     "/worker-single",
-    "/freelancer-1",
-    "/freelancer-single",
+    "/worker-1",
+    "/worker-single",
     "/faq",
     "/help",
     "/pricing",
@@ -46,5 +46,5 @@ export const sidebarEnable = [
     "/project-1",
     "/job-1",
     "/employee-1",
-    "/freelancer-1",
+    "/worker-1",
 ];

@@ -66,7 +66,7 @@ export default function About1() {
                   <ul className="mb30">
                     <li>
                       <i className="far fa-check" />
-                      Connect to freelancers with proven business experience
+                      Connect to workers with proven business experience
                     </li>
                     <li>
                       <i className="far fa-check" />
@@ -79,7 +79,7 @@ export default function About1() {
                     </li>
                   </ul>
                 </div>
-                <Link href="/freelancer-1" className="ud-btn btn-thm">
+                <Link href="/worker-1" className="ud-btn btn-thm">
                   Find Talent
                   <i className="fal fa-arrow-right-long" />
                 </Link>

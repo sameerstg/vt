@@ -93,7 +93,7 @@ export default function OurFunFact3() {
                     </ul>
                     <p className="fz15 dark-color">
                       95% of customers are satisfied through to see their <br />
-                      freelancers
+                      workers
                     </p>
                   </div>
                 </div>

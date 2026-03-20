@@ -12,7 +12,7 @@ export const steps = [
     id: 1,
 
     iconClass: "flaticon-web-design",
-    title: "Choose freelancers",
+    title: "Choose workers",
     description:
       "It’s free and easy to post a job. Simply fill in a title, description.",
   },
@@ -37,7 +37,7 @@ export const steps = [
 export const stepsTwo = [
   {
     id: 1,
-    text: "Connect to freelancers with proven business experience",
+    text: "Connect to workers with proven business experience",
   },
   {
     id: 2,
@@ -60,7 +60,7 @@ export const stepsThree = [
   {
     id: 2,
     imgSrc: "/images/about/home19-vector-2.png",
-    title: "Choose freelancers",
+    title: "Choose workers",
     description:
       "It’s free and easy to post a job. Simply fill in a title, description.",
   },

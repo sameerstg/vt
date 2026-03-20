@@ -1026,7 +1026,7 @@ export const employee = [
   },
 ];
 
-export const freelancer1 = [
+export const worker1 = [
   {
     id: 1,
     img: "/images/team/fl-1.png",
@@ -1232,28 +1232,28 @@ export const inspiringProjects = [
     id: 1,
     title: "Caricatures",
     imageSrc: "/images/listings/pro-1.jpg",
-    freelancerImageSrc: "/images/team/fl-m-1.png",
+    workerImageSrc: "/images/team/wl-m-1.png",
     author: "Ali Tufan",
   },
   {
     id: 2,
     title: "Product Photography",
     imageSrc: "/images/listings/pro-2.jpg",
-    freelancerImageSrc: "/images/team/fl-m-2.png",
+    workerImageSrc: "/images/team/wl-m-2.png",
     author: "Ali Tufan",
   },
   {
     id: 3,
     title: "UI Design",
     imageSrc: "/images/listings/pro-3.jpg",
-    freelancerImageSrc: "/images/team/fl-m-3.png",
+    workerImageSrc: "/images/team/wl-m-3.png",
     author: "Ali Tufan",
   },
   {
     id: 4,
     title: "App Design",
     imageSrc: "/images/listings/pro-4.jpg",
-    freelancerImageSrc: "/images/team/fl-m-4.png",
+    workerImageSrc: "/images/team/wl-m-4.png",
     author: "Ali Tufan",
   },
 ];

@@ -10,7 +10,7 @@ export default function Hero18() {
           <div className="col-xl-7">
             <div className="home18-hero-content">
               <h1 className="banner-title animate-up-1 mb25">
-                Freelance Services For <br className="d-none d-xl-block" />
+                worker Services For <br className="d-none d-xl-block" />
                 Your Business
               </h1>
               <p className="text-white text animate-up-2">
@@ -26,7 +26,7 @@ export default function Hero18() {
                   Find Work
                 </Link>
                 <Link
-                  href="/freelancer-1"
+                  href="/worker-1"
                   className="ud-btn btn-white bdr1 bdrs120 btn-2"
                 >
                   Find Talent

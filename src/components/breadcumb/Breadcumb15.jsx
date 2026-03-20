@@ -9,7 +9,7 @@ export default function Breadcumb15() {
   return (
     <>
       <section className="breadcumb-section pt-0">
-        <div className="cta-employee-single freelancer-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg">
+        <div className="cta-employee-single worker-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg">
           <Image
             height={226}
             width={198}
@@ -29,14 +29,14 @@ export default function Breadcumb15() {
               <div className="col-xl-7">
                 <div className="position-relative">
                   <div className="list-meta d-sm-flex align-items-center">
-                    <a className="position-relative freelancer-single-style">
+                    <a className="position-relative worker-single-style">
                       {data ? (
                         <Image
                           height={120}
                           width={120}
                           className="rounded-circle w-100 wa-sm mb15-sm"
                           src={data.img}
-                          alt="Freelancer Photo"
+                          alt="worker Photo"
                         />
                       ) : (
                         <Image
@@ -44,7 +44,7 @@ export default function Breadcumb15() {
                           width={120}
                           className="rounded-circle w-100 wa-sm mb15-sm"
                           src="/images/team/employee-single.png"
-                          alt="Freelancer Photo"
+                          alt="worker Photo"
                         />
                       )}
                       <span className="online2" />

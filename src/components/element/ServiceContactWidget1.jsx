@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function ServiceContactWidget1() {
   return (
     <>
-      <div className="freelancer-style1 service-single mb-0">
+      <div className="worker-style1 service-single mb-0">
         <div className="wrapper d-flex align-items-center">
           <div className="thumb position-relative mb25">
             <Image

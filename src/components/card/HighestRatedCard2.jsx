@@ -13,7 +13,7 @@ export default function HeighestRetedCard2({ data, itemClass }) {
         className={`${
           itemClass
             ? itemClass
-            : "freelancer-style1 text-center bdr1 hover-box-shadow mb60"
+            : "worker-style1 text-center bdr1 hover-box-shadow mb60"
         } ${path !== "/home-10" ? "at-home7 bdrs4" : ""}`}
       >
         <div className="thumb w90 mb25 mx-auto position-relative rounded-circle">
@@ -61,7 +61,7 @@ export default function HeighestRetedCard2({ data, itemClass }) {
           </div>
           <div className="d-grid mt15">
             <Link
-              href={`/freelancer-single/${data.id}`}
+              href={`/worker-single/${data.id}`}
               className="ud-btn btn-white2 double-border bdrs4"
             >
               View Profile

@@ -24,10 +24,10 @@ export default function About4() {
                   className="position-relative mb35 mb0-sm wow fadeInRight"
                   data-wow-delay="300ms"
                 >
-                  <div className="freelancer-widget d-none d-lg-block">
+                  <div className="worker-widget d-none d-lg-block">
                     <h5 className="title mb20">
                       <span className="text-thm">200+</span>
-                      Verified Freelancer
+                      Verified Worker
                     </h5>
                     <div className="thumb d-flex align-items-center mb20">
                       <div className="flex-shrink-0">
@@ -90,7 +90,7 @@ export default function About4() {
                       </div>
                     </div>
                   </div>
-                  <div className="freelancer-style1 about-page-style text-center d-none d-lg-block">
+                  <div className="worker-style1 about-page-style text-center d-none d-lg-block">
                     <div className="thumb w90 mb25 mx-auto position-relative rounded-circle">
                       <Image
                         height={90}
@@ -140,7 +140,7 @@ export default function About4() {
                     height={561}
                     width={633}
                     className="d-block d-lg-none w-100 h-100 object-fit-contain"
-                    src="/images/about/verified-freelancer.png"
+                    src="/images/about/verified-worker.png"
                     alt="object"
                   />
                   <div className="imgbox-about-page position-relative d-none d-xl-block">
@@ -189,7 +189,7 @@ export default function About4() {
                 >
                   <h2 className="title mb10">
                     Truested By Best <br />
-                    Freelancer
+                    Workers
                   </h2>
                   <p className="text mb25 mb30-md">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed

@@ -49,8 +49,8 @@ export default function InspiringService11() {
                           width={60}
                           height={60}
                           className="rounded-circle"
-                          src={elm.freelancerImageSrc}
-                          alt="Freelancer Photo"
+                          src={elm.workerImageSrc}
+                          alt="worker Photo"
                         />
                       </span>
                       <span>

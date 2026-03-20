@@ -10,7 +10,7 @@ export default function Hero4() {
             <div className="col-lg-6">
               <div className="pr30 pr0-lg mb30-md position-relative">
                 <h1 className="animate-up-1 mb25 text-thm2">
-                  Hire the best freelancers for
+                  Hire the best workers for
                   <br className="d-none d-xl-block" />
                   any job, online.
                 </h1>
@@ -22,7 +22,7 @@ export default function Hero4() {
                   <Link href="/job-1" className="ud-btn btn-thm me-3">
                     Find Work
                   </Link>
-                  <Link href="/freelancer-1" className="ud-btn btn-thm-border">
+                  <Link href="/worker-1" className="ud-btn btn-thm-border">
                     Find Talent
                   </Link>
                 </div>

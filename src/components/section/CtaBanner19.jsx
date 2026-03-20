@@ -19,7 +19,7 @@ export default function CtaBanner19() {
                 turnarounds.
               </p>
               <Link
-                href="/freelancer-1"
+                href="/worker-1"
                 className="ud-btn btn-dark default-box-shadow1 bdrs16 mr20"
               >
                 I want to Hire <i className="fal fa-arrow-right-long"></i>

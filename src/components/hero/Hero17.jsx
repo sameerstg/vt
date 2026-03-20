@@ -23,7 +23,7 @@ export default function Hero17() {
                   Find Work
                 </Link>
                 <Link
-                  href="/freelancer-1"
+                  href="/worker-1"
                   className="ud-btn btn-2 bdr1 bdrs120 btn-2"
                 >
                   Find Talent

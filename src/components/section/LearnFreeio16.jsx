@@ -97,7 +97,7 @@ export default function LearnFreeio16() {
                   </ul>
                   <p className="fz15 dark-color">
                     99% of customers are satisfied through to see their <br />
-                    freelancers
+                    workers
                   </p>
                 </div>
               </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function ProjectContactWidget1() {
   return (
     <>
-      <div className="freelancer-style1 service-single mb-0 bdrs8">
+      <div className="worker-style1 service-single mb-0 bdrs8">
         <h4>About Buyer</h4>
         <div className="wrapper d-flex align-items-center mt20">
           <div className="thumb position-relative mb25">

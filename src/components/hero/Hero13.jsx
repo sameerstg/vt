@@ -44,7 +44,7 @@ export default function Hero13() {
                 Get Started
               </span>
               <h1 className="animate-up-1 mb25">
-                Hire the best freelancers <br className="d-none d-xl-block" />
+                Hire the best workers <br className="d-none d-xl-block" />
                 for any job, online.
               </h1>
               <p className="text animate-up-2">

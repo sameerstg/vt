@@ -26,7 +26,7 @@ export default function Hero16() {
   const router = useRouter();
   // search handler
   const searchHandler = () => {
-    router.push("/freelancer-1");
+    router.push("/worker-1");
   };
   return (
     <section className="hero-home16">
@@ -35,7 +35,7 @@ export default function Hero16() {
           <div className="col-xl-7">
             <div className="home14-hero-content wow fadeInRight">
               <h1 className="title animate-up-1 mb25">
-                Freelance Services For <br className="d-none d-xl-block" />
+                worker Services For <br className="d-none d-xl-block" />
                 Your Business
               </h1>
               <p className="text animate-up-2">

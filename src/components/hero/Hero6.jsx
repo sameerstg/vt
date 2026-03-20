@@ -19,7 +19,7 @@ export default function Hero6() {
 
   // search handler
   const searchHandler = () => {
-    router.push("/freelancer-3");
+    router.push("/worker-3");
   };
 
   return (
@@ -30,7 +30,7 @@ export default function Hero6() {
             <div className="col-lg-6">
               <div className="pr50 pr0-xl mb30-md position-relative">
                 <h1 className="animate-up-1 mb15 text-thm2">
-                  With talented <span className="text-thm">freelancers</span>{" "}
+                  With talented <span className="text-thm">workers</span>{" "}
                   <br className="d-none d-xl-block" />
                   do more work.
                 </h1>

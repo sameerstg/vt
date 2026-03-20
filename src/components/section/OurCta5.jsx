@@ -10,7 +10,7 @@ export default function OurCta5() {
             <div className="col-md-7 col-xl-5 wow fadeInLeft">
               <div className="cta-style3 pl80 pl0-lg">
                 <h2 className="cta-title">
-                  With talented freelancers do more work.
+                  With talented workers do more work.
                 </h2>
                 <div className="d-sm-flex align-items-center mt30">
                   <Link
@@ -21,7 +21,7 @@ export default function OurCta5() {
                     <i className="fal fa-arrow-right-long" />
                   </Link>
                   <Link
-                    href="/freelancer-1"
+                    href="/worker-1"
                     className="ud-btn btn-transparent double-border bdrs60"
                   >
                     Find Talent

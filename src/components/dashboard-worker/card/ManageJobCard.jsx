@@ -7,7 +7,7 @@ export default function ManageJobCard({ data }) {
     <>
       <tr>
         <th scope="row">
-          <div className="freelancer-style1 p-0 mb-0 box-shadow-none">
+              <div className="worker-style1 p-0 mb-0 box-shadow-none">
             <div className="d-lg-flex align-items-lg-center">
               <div className="thumb w60 position-relative rounded-circle mb15-md">
                 <Image

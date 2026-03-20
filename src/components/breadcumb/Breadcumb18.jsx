@@ -56,7 +56,7 @@ export default function Breadcumb18() {
                                className="form-control"
                               type="text"
                               name="search"
-                              placeholder="Keyword or freelancer name"
+                              placeholder="Keyword or worker name"
                             />
                           </div>
                         </form>

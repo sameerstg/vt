@@ -77,7 +77,7 @@ export default function LearnFreeio1() {
                       </ul>
                       <p className="text mb-0">
                         95% of customers are satisfied <br /> through to see
-                        their freelancers
+                        their workers
                       </p>
                     </div>
                   </div>

@@ -25,7 +25,7 @@ export default function Talent15() {
                 Find Work <i className="fal fa-arrow-right-long"></i>
               </Link>
               <Link
-                href="/freelancer-1"
+                href="/worker-1"
                 className="ud-btn btn-transparent bdrs16"
               >
                 Find Talent <i className="fal fa-arrow-right-long"></i>

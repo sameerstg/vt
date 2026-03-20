@@ -33,7 +33,7 @@ export default function ProjectDetail2() {
         <div className="container">
           <div className="row wrap">
             <div className="col-lg-8">
-              <div className="cta-service-v1 mb30 freelancer-single-v1 pt60 pb60 bdrs16 position-relative overflow-hidden d-flex align-items-center">
+              <div className="cta-service-v1 mb30 worker-single-v1 pt60 pb60 bdrs16 position-relative overflow-hidden d-flex align-items-center">
                 <Image
                   width={198}
                   height={226}

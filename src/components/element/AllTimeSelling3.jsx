@@ -22,7 +22,7 @@ export default function AllTimeSelling3() {
               <span className="flaticon-web-design" />
             </div>
             <div className="details">
-              <h4 className="title text-white mt10 mb-3">Choose freelancers</h4>
+              <h4 className="title text-white mt10 mb-3">Choose workers</h4>
               <p className="text text-white">
                 It’s free and easy to post a job. Simply fill{" "}
                 <br className="d-none d-xxl-block" /> in a title, description.

@@ -14,7 +14,7 @@ export default function Hero11() {
                 Get Started
               </span>
               <h2 className="title animate-up-2">
-                Find the perfect freelance services for your business
+                Find the perfect worker services for your business
               </h2>
               <p className="text animate-up-3">
                 Work with talented people at the most affordable price to get
@@ -27,7 +27,7 @@ export default function Hero11() {
                 Find Work
               </Link>
               <Link
-                href="/freelancer-1"
+                href="/worker-1"
                 className="ud-btn btn-white bdr1 bdrs12"
               >
                 Find Talent

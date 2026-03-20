@@ -1,17 +1,17 @@
 "use client";
-import { freelancer1 } from "@/data/product";
+import { worker1 } from "@/data/product";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
 export default function Breadcumb17() {
   const { id } = useParams();
 
-  const data = freelancer1.find((item) => item.id == id);
+  const data = worker1.find((item) => item.id == id);
 
   return (
     <>
       <section className="breadcumb-section pt-0">
-        <div className="cta-service-v1 freelancer-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg">
+        <div className="cta-service-v1 worker-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg">
           <Image
             height={226}
             width={198}
@@ -37,7 +37,7 @@ export default function Breadcumb17() {
                   )}
 
                   <div className="list-meta d-sm-flex align-items-center mt30">
-                    <a className="position-relative freelancer-single-style">
+                    <a className="position-relative worker-single-style">
                       <span className="online" />
                       {data ? (
                         <Image
@@ -45,7 +45,7 @@ export default function Breadcumb17() {
                           width={90}
                           className="rounded-circle w-100 wa-sm mb15-sm"
                           src={data.img}
-                          alt="Freelancer Photo"
+                          alt="worker Photo"
                         />
                       ) : (
                         <Image
@@ -53,7 +53,7 @@ export default function Breadcumb17() {
                           width={90}
                           className="rounded-circle w-100 wa-sm mb15-sm"
                           src="/images/profile.jpg"
-                          alt="Freelancer Photo"
+                          alt="worker Photo"
                         />
                       )}
                     </a>

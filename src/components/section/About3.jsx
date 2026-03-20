@@ -24,7 +24,7 @@ export default function About3() {
                 <ul className="mb25">
                   <li>
                     <i className="far fa-check" />
-                    Connect to freelancers with proven business experience
+                    Connect to workers with proven business experience
                   </li>
                   <li>
                     <i className="far fa-check" />

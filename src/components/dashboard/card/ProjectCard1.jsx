@@ -5,7 +5,7 @@ import { Tooltip } from "react-tooltip";
 export default function ProjectCard1({ data }) {
   return (
     <>
-      <div className="freelancer-style1 bdr1 box-shadow-none row ms-0 pr20 align-items-lg-end">
+      <div className="worker-style1 bdr1 box-shadow-none row ms-0 pr20 align-items-lg-end">
         <a className="tag-del" id={`delete${data.id}`}>
           <Tooltip
             anchorSelect={`#delete${data.id}`}

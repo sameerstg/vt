@@ -45,7 +45,7 @@ export default function CtaBanner4() {
             <div className="col-sm-6 col-lg-4 col-xl-3">
               <div className="iconbox-style9 default-box-shadow1 bgc-white p40 bdrs12 position-relative mb30">
                 <span className="icon fz40 flaticon-web-design" />
-                <h4 className="iconbox-title mt20">Choose freelancers</h4>
+                    <h4 className="iconbox-title mt20">Choose workers</h4>
                 <p className="text mb-0">
                   It’s free and easy to post a job.
                   <br className="d-none d-md-block" /> Simply fill in a title,

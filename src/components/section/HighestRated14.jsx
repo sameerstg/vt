@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
-import { freelancer1, hightedRated1 } from "@/data/product";
+import { worker1, hightedRated1 } from "@/data/product";
 import Link from "next/link";
 
 export default function HighestRated14() {
@@ -16,7 +16,7 @@ export default function HighestRated14() {
           <div className="row align-items-center wow fadeInUp">
             <div className="col-lg-9">
               <div className="main-title">
-                <h2 className="title">Highest Rated Freelancers</h2>
+                <h2 className="title">Highest Rated Workers</h2>
                 <p className="paragraph">
                   Lorem ipsum dolor sit amet, consectetur.
                 </p>
@@ -24,8 +24,8 @@ export default function HighestRated14() {
             </div>
             <div className="col-lg-3">
               <div className="text-lg-end mb-3">
-                <Link className="ud-btn2" href="/freelancer-1">
-                  All Freelancers
+                <Link className="ud-btn2" href="/worker-1">
+                  All Workers
                   <i className="fal fa-arrow-right-long" />
                 </Link>
               </div>
@@ -62,7 +62,7 @@ export default function HighestRated14() {
                     },
                   }}
                 >
-                  {freelancer1.map((item, index) => (
+                  {worker1.map((item, index) => (
                     <SwiperSlide key={index}>
                       <HeighestRetedCard1
                         btnClass={"ud-btn btn-white2 bdrs90"}

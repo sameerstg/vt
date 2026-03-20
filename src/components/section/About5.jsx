@@ -41,7 +41,7 @@ export default function About5() {
                   <ul className="mb20">
                     <li>
                       <i className="far fa-check" />
-                      Connect to freelancers with proven business experience
+                      Connect to workers with proven business experience
                     </li>
                     <li>
                       <i className="far fa-check" />
@@ -55,7 +55,7 @@ export default function About5() {
                   </ul>
                 </div>
                 <Link
-                  href="/freelancer-single"
+                  href="/worker-single"
                   className="ud-btn btn-thm-border"
                 >
                   Find Talent

@@ -25,7 +25,7 @@ export default function Hero7() {
 
   // search handler
   const searchHandler = () => {
-    router.push("/freelancer-1");
+    router.push("/worker-1");
   };
 
   return (
@@ -52,7 +52,7 @@ export default function Hero7() {
               </div>
               <div className="pr50 pr0-md mb30-md position-relative">
                 <h1 className="animate-up-1 mb25">
-                  Hire the best freelancers for{" "}
+                  Hire the best workers for{" "}
                   <br className="d-none d-lg-block" />
                   any job, online.
                 </h1>

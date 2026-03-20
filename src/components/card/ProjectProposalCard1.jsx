@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function ProjectProposalCard1({ data }) {
   return (
     <>
-      <div className="freelancer-style1 bdr1 hover-box-shadow row ms-0 align-items-start">
+      <div className="worker-style1 bdr1 hover-box-shadow row ms-0 align-items-start">
         <div className="col-xl-10 px-0">
           <div className="d-lg-flex">
             <div className="thumb w90 position-relative rounded-circle mb15-md">

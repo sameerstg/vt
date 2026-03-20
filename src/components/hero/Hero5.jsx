@@ -9,7 +9,7 @@ export default function Hero5() {
 
   // search handler
   const searchHandler = () => {
-    router.push("/freelancer-2");
+    router.push("/worker-2");
   };
 
   return (
@@ -22,7 +22,7 @@ export default function Hero5() {
                 <h1 className="animate-up-1 mb25 text-thm2">
                   More than 10K expert
                   <br className="d-none d-xl-block" />
-                  freelancers are waiting for you
+                  workers are waiting for you
                 </h1>
                 <div className="advance-search-tab at-home6 bgc-white bdrs4 p10 position-relative zi2 animate-up-3 mr30 mr0-lg">
                   <div className="row">
@@ -57,7 +57,7 @@ export default function Hero5() {
                           <span>M</span>
                         </li>
                       </ul>
-                      <p className="text mb-0">Total Freelancer</p>
+                      <p className="text mb-0">Total Worker</p>
                     </div>
                   </div>
                   <div className="funfact_one at-home5-hero me-2 me-sm-0">

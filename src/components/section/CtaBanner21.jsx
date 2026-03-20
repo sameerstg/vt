@@ -10,7 +10,7 @@ export default function CtaBanner21() {
           <div className="col-md-6 col-lg-8 wow fadeInRight">
             <div className="cta-style3">
               <h2 className="cta-title text-white">
-                With talented freelancers do{" "}
+                With talented workers do{" "}
                 <br className="d-none d-xl-block" /> more work.
               </h2>
               <p className="cta-text text-white">
@@ -22,7 +22,7 @@ export default function CtaBanner21() {
                 Find Work <i className="fal fa-arrow-right-long"></i>
               </Link>
               <Link
-                href="/freelancer-1"
+                href="/worker-1"
                 className="ud-btn btn-transparent2 bdrs16"
               >
                 Find Talent <i className="fal fa-arrow-right-long"></i>

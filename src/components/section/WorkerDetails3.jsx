@@ -1,6 +1,6 @@
 "use client";
 
-import { freelancer1, product1 } from "@/data/product";
+import { worker1, product1 } from "@/data/product";
 import FreelancerAbout1 from "../element/FreelancerAbout1";
 import FreelancerSkill1 from "../element/FreelancerSkill1";
 import ServiceDetailComment1 from "../element/ServiceDetailComment1";
@@ -15,7 +15,7 @@ export default function FreelancerDetail3() {
   const isMatchedScreen = useScreen(1216);
   const { id } = useParams();
 
-  const data = freelancer1.find((item) => item.id == id);
+  const data = worker1.find((item) => item.id == id);
   return (
     <>
       <section className="pt10 pb90 pb30-md">
@@ -29,7 +29,7 @@ export default function FreelancerDetail3() {
                       <div className="position-relative">
                         <div className="list-meta d-sm-flex align-items-center">
                           <a
-                            className="position-relative freelancer-single-style"
+                            className="position-relative worker-single-style"
                             href="#"
                           >
                             <span className="online"></span>
@@ -40,7 +40,7 @@ export default function FreelancerDetail3() {
                               src={
                                 data?.img ? data.img : "/images/team/fl-1.png"
                               }
-                              alt="Freelancer Photo"
+                              alt="worker Photo"
                             />
                           </a>
                           <div className="ml20 ml0-xs">

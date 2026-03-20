@@ -5,7 +5,7 @@ import React from "react";
 export default function HeighestRetedCard3({ data }) {
   return (
     <>
-      <div className="freelancer-style1 text-center bdr1 hover-box-shadow mb60 bdrs16">
+      <div className="worker-style1 text-center bdr1 hover-box-shadow mb60 bdrs16">
         <div className="thumb w90 mb25 mx-auto position-relative rounded-circle">
           <Image
             height={90}
@@ -51,7 +51,7 @@ export default function HeighestRetedCard3({ data }) {
           </div>
           <div className="d-grid mt15">
             <Link
-              href={`/freelancer-single/${data.id}`}
+              href={`/worker-single/${data.id}`}
               className="ud-btn btn-white2 double-border bdrs60"
             >
               View Profile

@@ -10,7 +10,7 @@ export default function Breadcumb13() {
   return (
     <>
       <section className="breadcumb-section pt-0">
-        <div className="cta-job-v1 freelancer-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg">
+        <div className="cta-job-v1 worker-single-style mx-auto maxw1700 pt120 pt60-sm pb120 pb60-sm bdrs16 position-relative overflow-hidden d-flex align-items-center mx20-lg px30-lg">
           <Image
             height={226}
             width={198}
@@ -31,7 +31,7 @@ export default function Breadcumb13() {
                 <div className="position-relative">
                   <div className="list-meta d-lg-flex align-items-end justify-content-between">
                     <div className="wrapper d-sm-flex align-items-center mb20-md">
-                      <a className="position-relative freelancer-single-style">
+                      <a className="position-relative worker-single-style">
                         {data ? (
                           <Image
                             height={100}

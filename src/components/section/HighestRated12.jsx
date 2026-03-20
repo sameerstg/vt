@@ -4,7 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
-import { freelancer1, hightedRated1 } from "@/data/product";
+import { worker1, hightedRated1 } from "@/data/product";
 import Link from "next/link";
 
 import HeighestRetedCard3 from "../card/HighestRatedCard3";
@@ -17,7 +17,7 @@ export default function HighestRated12() {
           <div className="row align-items-center wow fadeInUp">
             <div className="col-lg-9">
               <div className="main-title">
-                <h2 className="title text-white">Highest Rated Freelancers</h2>
+                <h2 className="title text-white">Highest Rated Workers</h2>
                 <p className="paragraph text-white">
                   Most viewed and all-time top-selling services
                 </p>
@@ -25,8 +25,8 @@ export default function HighestRated12() {
             </div>
             <div className="col-lg-3">
               <div className="text-start text-lg-end mb-4 mb-lg-2">
-                <Link className="ud-btn2 text-white" href="/freelancer-1">
-                  All Freelancers
+                <Link className="ud-btn2 text-white" href="/worker-1">
+                  All Workers
                   <i className="fal fa-arrow-right-long" />
                 </Link>
               </div>
@@ -63,11 +63,11 @@ export default function HighestRated12() {
                     },
                   }}
                 >
-                  {freelancer1.slice(0, 4).map((item, index) => (
+                  {worker1.slice(0, 4).map((item, index) => (
                     <SwiperSlide key={index}>
                       <HeighestRetedCard3
                         itemClass={
-                          "freelancer-style1 text-center bdr1 bdrs16 hover-box-shadow"
+                          "worker-style1 text-center bdr1 bdrs16 hover-box-shadow"
                         }
                         data={item}
                       />

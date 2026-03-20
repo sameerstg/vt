@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function ProjectCard1({ data }) {
   return (
     <>
-      <div className="freelancer-style1 bdr1 hover-box-shadow row ms-0 align-items-lg-center">
+      <div className="worker-style1 bdr1 hover-box-shadow row ms-0 align-items-lg-center">
         <div className="col-lg-8 ps-0">
           <div className="d-lg-flex bdrr1 bdrn-xl pr15 pr0-lg">
             <div className="thumb w60 position-relative rounded-circle mb15-md">

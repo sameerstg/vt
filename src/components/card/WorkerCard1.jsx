@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function FreelancerCard2({ data }) {
+export default function FreelancerCard1({ data }) {
   return (
     <>
-      <div className="freelancer-style1 text-center bdr1 hover-box-shadow">
+      <div className="worker-style1 text-center bdr1 hover-box-shadow">
         <div className="thumb w90 mb25 mx-auto position-relative rounded-circle">
           <Image
             height={90}
@@ -50,7 +50,7 @@ export default function FreelancerCard2({ data }) {
           </div>
           <div className="d-grid mt15">
             <Link
-              href={`/freelancer-single/${data.id}`}
+              href={`/worker-single/${data.id}`}
               className="ud-btn btn-light-thm"
             >
               View Profile

@@ -3,7 +3,7 @@ import listingStore from "@/store/listingStore";
 import FreelancerCard1 from "../card/FreelancerCard1";
 import ListingOption6 from "../element/ListingOption6";
 import Pagination1 from "./Pagination1";
-import { freelancer1 } from "@/data/product";
+import { worker1 } from "@/data/product";
 import priceStore from "@/store/priceStore";
 import ListingSidebarModal5 from "../modal/ListingSidebarModal5";
 
@@ -55,7 +55,7 @@ export default function Listing13() {
         <div className="container">
           <ListingOption6 />
           <div className="row">
-            {freelancer1
+            {worker1
               .slice(0, 12)
               .filter(categoryFilter)
               .filter(priceFilter)

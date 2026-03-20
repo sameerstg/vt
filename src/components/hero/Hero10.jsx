@@ -13,7 +13,7 @@ const herobg = [
     bg: "/images/home/home-3.jpg",
     headline: (
       <>
-        With talented freelancer <br className="d-none d-lg-block" />
+        With talented worker <br className="d-none d-lg-block" />
         and more works.
       </>
     ),
@@ -25,7 +25,7 @@ const herobg = [
     bg: "/images/home/home-2.jpg",
     headline: (
       <>
-        Freelance Services For <br className="d-none d-lg-block" />
+        worker Services For <br className="d-none d-lg-block" />
         Your Business.
       </>
     ),
@@ -37,7 +37,7 @@ const herobg = [
     bg: "/images/home/home-1.jpg",
     headline: (
       <>
-        With talented freelancers <br className="d-none d-lg-block" />
+        With talented workers <br className="d-none d-lg-block" />
         ando more work.
       </>
     ),
@@ -94,7 +94,7 @@ export default function Hero10() {
                                     Find Work
                                   </Link>
                                   <Link
-                                    href="/freelancer-1"
+                                    href="/worker-1"
                                     className="ud-btn btn-dark"
                                   >
                                     Find Talent

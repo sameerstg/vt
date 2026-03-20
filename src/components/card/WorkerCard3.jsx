@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function FreelancerCard3({ data }) {
   return (
     <>
-      <div className="freelancer-style1 bdr1 hover-box-shadow row ms-0">
+      <div className="worker-style1 bdr1 hover-box-shadow row ms-0">
         <div className="col-lg-8 ps-0">
           <div className="d-lg-flex bdrr1 bdrn-lg">
             <div className="thumb w90 position-relative rounded-circle mb15-md">
@@ -56,7 +56,7 @@ export default function FreelancerCard3({ data }) {
             </div>
             <div className="d-grid mt15">
               <Link
-                href={`/freelancer-single/${data.id}`}
+                href={`/worker-single/${data.id}`}
                 className="ud-btn btn-light-thm"
               >
                 View Profile
