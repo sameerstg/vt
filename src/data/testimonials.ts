@@ -1,4 +1,21 @@
-export const testimonials = [
+interface CustomerTestimonial {
+  id: number;
+  img: string;
+  comment: string;
+  name: string;
+  role: string;
+  client?: string;
+}
+
+interface TeamMember {
+  id: number;
+  name: string;
+  role: string;
+  imageSrc: string;
+  rating: number | string;
+}
+
+export const testimonials: CustomerTestimonial[] = [
   {
     id: 1,
     img: `/images/testimonials/testi-1.png`,
@@ -21,7 +38,7 @@ export const testimonials = [
     role: "Product Manager, Apple Inc",
   },
 ];
-export const testimonialsTwo = [
+export const testimonialsTwo: CustomerTestimonial[] = [
   {
     id: 1,
     img: `/images/about/about-16.jpg`,
@@ -48,7 +65,7 @@ export const testimonialsTwo = [
   },
 ];
 
-export const testimonialsThree = [
+export const testimonialsThree: CustomerTestimonial[] = [
   {
     id: 1,
     img: `/images/about/about-12.jpg`,
@@ -66,7 +83,7 @@ export const testimonialsThree = [
     role: "Product Manager | Envato",
   },
 ];
-export const teamData = [
+export const teamData: TeamMember[] = [
   {
     id: 1,
     name: "Robert Fox",
@@ -124,7 +141,7 @@ export const teamData = [
     rating: 4.9,
   },
 ];
-export const teamDataThree = [
+export const teamDataThree: TeamMember[] = [
   {
     id: 1,
     name: "Robert Fox",
@@ -155,7 +172,7 @@ export const teamDataThree = [
   },
 ];
 
-export const teamDataTwo = [
+export const teamDataTwo: TeamMember[] = [
   {
     id: 1,
     name: "Robert Fox",

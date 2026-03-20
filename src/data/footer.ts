@@ -1,4 +1,10 @@
-export const about = [
+interface FooterLink {
+  id: number;
+  name: string;
+  path: string;
+}
+
+export const about: FooterLink[] = [
   { id: 1, name: "Careers", path: "/" },
   { id: 2, name: "Press & News", path: "/" },
   { id: 3, name: "Partnerships", path: "/" },
@@ -7,7 +13,7 @@ export const about = [
   { id: 6, name: "Investor Relations", path: "/" },
 ];
 
-export const category = [
+export const category: FooterLink[] = [
   { id: 1, name: "Graphics & Design", path: "/" },
   { id: 2, name: "Digital Marketing", path: "/" },
   { id: 3, name: "Writing & Translation", path: "/" },
@@ -19,17 +25,17 @@ export const category = [
   { id: 9, name: "Lifestyle", path: "/" },
 ];
 
-export const support = [
+export const support: FooterLink[] = [
   { id: 1, name: "Help & Support", path: "/" },
   { id: 2, name: "Trust & Safety", path: "/" },
   { id: 3, name: "Selling on Freeio", path: "/" },
   { id: 4, name: "Buying on Freeio", path: "/" },
 ];
 
-export const momney = ["US$ USD", "Euro", "Pound"];
-export const lan = ["English", "Frenc", "Italian", "Spanish", "Turkey"];
+export const momney: string[] = ["US$ USD", "Euro", "Pound"];
+export const lan: string[] = ["English", "Frenc", "Italian", "Spanish", "Turkey"];
 
-export const footer = [
+export const footer: string[] = [
   "/dashboard",
   "/proposal",
   "/saved",

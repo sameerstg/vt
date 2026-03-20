@@ -1,4 +1,12 @@
-export const msgList = [
+interface Message {
+  id: number;
+  img: string;
+  name: string;
+  title: string;
+  status: boolean | "notify" | "online" | "away" | "busy";
+}
+
+export const msgList: Message[] = [
   {
     id: 1,
     img: "/images/inbox/ms1.png",

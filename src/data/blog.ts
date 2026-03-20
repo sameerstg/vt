@@ -1,4 +1,20 @@
-export const blog1 = [
+interface Author {
+  img: string;
+  name: string;
+}
+
+interface Blog {
+  id: number;
+  img: string;
+  date: string;
+  title: string;
+  brief: string;
+  description: string;
+  category: string;
+  author: Author;
+}
+
+export const blog1: Blog[] = [
   {
     id: 1,
     img: "/images/blog/blog-1.jpg",

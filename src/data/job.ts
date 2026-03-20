@@ -1,4 +1,17 @@
-export const job1 = [
+interface Job {
+  id: number;
+  img: string;
+  title: string;
+  server: string;
+  benefits: string[];
+  category: string;
+  salary: number;
+  jobType: "Freelance" | "Full Time" | "Part Time" | "Internship";
+  level: "top-rated" | "lavel-2" | "lavel-1" | "new";
+  sort: "best-seller" | "recommended" | "new-arrivals";
+}
+
+export const job1: Job[] = [
   {
     id: 1,
     img: "/images/team/client-2.png",

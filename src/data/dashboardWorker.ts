@@ -1,87 +1,140 @@
-export const dasboardNavigation = [
+interface DashboardWorkerNavigationItem {
+  id: number;
+  name: string;
+  icon: string;
+  path: string;
+}
+
+interface WorkerInvoice {
+  id: number;
+  invoiceId: number;
+  invoiceName: string;
+  purchaseDate: string;
+  amount: number;
+  status: 1 | 2 | 3;
+}
+
+interface WorkerPayout {
+  id: number;
+  amount: number;
+  date: string;
+  method: "Paypal" | "Payoneer" | "Bank Transfer";
+  status: 1 | 2 | 3;
+}
+
+interface WorkerStatement {
+  id: number;
+  date: string;
+  type: 1 | 2;
+  detail: string;
+  price: number;
+  amount: number;
+}
+
+interface WorkerManageService {
+  id: number;
+  img: string;
+  title: string;
+  list: string[];
+  category: string;
+  cost: number;
+}
+
+interface WorkerManageJob {
+  id: number;
+  img: string;
+  title: string;
+  server: string;
+  application: number;
+  created: string;
+  expired: string;
+  status: 1 | 2 | 3;
+}
+
+export const dasboardNavigation: DashboardWorkerNavigationItem[] = [
   {
     id: 1,
     name: "Dashboard",
     icon: "flaticon-home",
-    path: "/dashboard",
+    path: "/worker-dashboard",
   },
   {
     id: 2,
     name: "My Proposals",
     icon: "flaticon-document",
-    path: "/proposal",
+    path: "/worker-dashboard/proposal",
   },
   {
     id: 3,
     name: "Saved",
     icon: "flaticon-like",
-    path: "/saved",
+    path: "/worker-dashboard/saved",
   },
   {
     id: 4,
     name: "Message",
     icon: "flaticon-chat",
-    path: "/message",
+    path: "/worker-dashboard/message",
   },
   {
     id: 5,
     name: "Reviews",
     icon: "flaticon-review-1",
-    path: "/reviews",
+    path: "/worker-dashboard/reviews",
   },
   {
     id: 6,
     name: "Invoice",
     icon: "flaticon-receipt",
-    path: "/invoice",
+    path: "/worker-dashboard/invoice",
   },
   {
     id: 7,
     name: "Payouts",
     icon: "flaticon-dollar",
-    path: "/payouts",
+    path: "/worker-dashboard/payouts",
   },
   {
     id: 8,
     name: "Statements",
     icon: "flaticon-web",
-    path: "/statements",
+    path: "/worker-dashboard/statements",
   },
   {
     id: 9,
     name: "Manage Services",
     icon: "flaticon-presentation",
-    path: "/manage-services",
+    path: "/worker-dashboard/manage-services",
   },
   {
     id: 10,
     name: "Manage Jobs",
     icon: "flaticon-briefcase",
-    path: "/manage-jobs",
+    path: "/worker-dashboard/manage-jobs",
   },
   {
     id: 11,
     name: "Manage Project",
     icon: "flaticon-content",
-    path: "/manage-projects",
+    path: "/worker-dashboard/manage-projects",
   },
   {
     id: 12,
     name: "Add Services",
     icon: "flaticon-document",
-    path: "/add-services",
+    path: "/worker-dashboard/add-services",
   },
   {
     id: 13,
     name: "Create Project",
     icon: "flaticon-content",
-    path: "/create-projects",
+    path: "/worker-dashboard/create-projects",
   },
   {
     id: 14,
     name: "My Profile",
     icon: "flaticon-photo",
-    path: "/my-profile",
+    path: "/worker-dashboard/my-profile",
   },
   {
     id: 15,
@@ -91,7 +144,7 @@ export const dasboardNavigation = [
   },
 ];
 
-export const invoice = [
+export const invoice: WorkerInvoice[] = [
   {
     id: 1,
     invoiceId: 99,
@@ -166,7 +219,7 @@ export const invoice = [
   },
 ];
 
-export const payout = [
+export const payout: WorkerPayout[] = [
   {
     id: 1,
     amount: 1.8,
@@ -239,7 +292,7 @@ export const payout = [
   },
 ];
 
-export const statement = [
+export const statement: WorkerStatement[] = [
   {
     id: 1,
     date: "April 9, 2023",
@@ -306,7 +359,7 @@ export const statement = [
   },
 ];
 
-export const manageService = [
+export const manageService: WorkerManageService[] = [
   {
     id: 1,
     img: "/images/listings/g-1.jpg",
@@ -369,7 +422,7 @@ export const manageService = [
   },
 ];
 
-export const managejob = [
+export const managejob: WorkerManageJob[] = [
   {
     id: 1,
     img: "/images/team/client-2.png",

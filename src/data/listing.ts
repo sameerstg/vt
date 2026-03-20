@@ -1,18 +1,89 @@
-export const deliveryTime = [
+interface DeliveryTime {
+  id: number;
+  title: string;
+  value: string;
+  total: string;
+}
+
+interface Level {
+  id: number;
+  title: string;
+  value: string;
+  total: string;
+}
+
+interface Location {
+  id: number;
+  title: string;
+  value: string;
+  total: string;
+}
+
+interface BestSeller {
+  id: number;
+  title: string;
+  value: string;
+}
+
+interface DesignTool {
+  id: number;
+  title: string;
+  value: string;
+  total: string;
+}
+
+interface Speaks {
+  id: number;
+  title: string;
+  value: string;
+  total: string;
+}
+
+interface Category {
+  id: number;
+  title: string;
+  total: string;
+}
+
+interface ProjectType {
+  id: number;
+  title: string;
+  total: string;
+}
+
+interface EnglishLevel {
+  id: number;
+  title: string;
+  total: string;
+}
+
+interface JobType {
+  id: number;
+  title: string;
+  total: string;
+}
+
+interface NoOfEmployee {
+  id: number;
+  totalEmployee: string;
+  total: string;
+}
+
+export const deliveryTime: DeliveryTime[] = [
   { id: 1, title: "Express 24H", value: "24h", total: "1,945" },
   { id: 2, title: "Up to 3 days", value: "3d", total: "8,136" },
   { id: 3, title: "Up to 7 days", value: "7d", total: "917" },
   { id: 4, title: "Anytime", value: "anytime", total: "240" },
 ];
 
-export const level = [
+export const level: Level[] = [
   { id: 1, title: "Top Rated Seller", value: "top-rated", total: "1,945" },
   { id: 2, title: "Level Two", value: "lavel-2", total: "8,136" },
   { id: 3, title: "Level One", value: "lavel-1", total: "917" },
   { id: 4, title: "New Seller", value: "new", total: "240" },
 ];
 
-export const location = [
+export const location: Location[] = [
   { id: 1, title: "United States", value: "united-states", total: "1,945" },
   { id: 2, title: "United Kingdom", value: "united-kingdom", total: "8,136" },
   { id: 3, title: "Canada", value: "canada", total: "917" },
@@ -20,13 +91,13 @@ export const location = [
   { id: 5, title: "Turkey", value: "turkey", total: "2,460" },
 ];
 
-export const bestSeller = [
+export const bestSeller: BestSeller[] = [
   { id: 1, title: "Best Seller", value: "best-seller" },
   { id: 2, title: "Recommended", value: "recommended" },
   { id: 3, title: "New Arrivals", value: "new-arrivals" },
 ];
 
-export const designTools = [
+export const designTools: DesignTool[] = [
   {
     id: 1,
     title: "Adobe Photoshop",
@@ -59,7 +130,7 @@ export const designTools = [
   },
 ];
 
-export const speaks = [
+export const speaks: Speaks[] = [
   {
     id: 1,
     title: "Turkish",
@@ -86,7 +157,7 @@ export const speaks = [
   },
 ];
 
-export const category = [
+export const category: Category[] = [
   { id: 1, title: "UX Designer", total: "1,945" },
   { id: 2, title: "Web Developers", total: "8,136" },
   { id: 3, title: "Illustrators", total: "917" },
@@ -94,7 +165,7 @@ export const category = [
   { id: 5, title: "Project Managers", total: "2,460" },
 ];
 
-export const categor2 = [
+export const categor2: Category[] = [
   { id: 1, title: "Electronics", total: "1,945" },
   { id: 2, title: "Clothing", total: "8,136" },
   { id: 3, title: "Home and Kitchen", total: "917" },
@@ -102,7 +173,7 @@ export const categor2 = [
   { id: 5, title: "Sports and Outdoors", total: "2,460" },
 ];
 
-export const projectType = [
+export const projectType: ProjectType[] = [
   {
     id: 1,
     title: "Fixed",
@@ -115,14 +186,14 @@ export const projectType = [
   },
 ];
 
-export const englishLevel = [
+export const englishLevel: EnglishLevel[] = [
   { id: 1, title: "Basic level", total: "1,945" },
   { id: 2, title: "Bilingual", total: "8,136" },
   { id: 3, title: "Fluent", total: "917" },
   { id: 4, title: "Native", total: "240" },
 ];
 
-export const jobType = [
+export const jobType: JobType[] = [
   {
     id: 1,
     title: "Freelance",
@@ -145,7 +216,7 @@ export const jobType = [
   },
 ];
 
-export const noOfEmployee = [
+export const noOfEmployee: NoOfEmployee[] = [
   {
     id: 1,
     totalEmployee: "1-10",

@@ -1,6 +1,8 @@
-export const header1 = ["/"];
-export const header2 = ["/home-2"];
-export const header3 = [
+type HeaderPathArray = string[];
+
+export const header1: HeaderPathArray = ["/"];
+export const header2: HeaderPathArray = ["/home-2"];
+export const header3: HeaderPathArray = [
     "/register",
     "/login",
     "/become-seller",
@@ -31,7 +33,7 @@ export const header3 = [
     "/terms",
     "/ui-elements",
 ];
-export const header4 = ["/home-3"];
+export const header4: HeaderPathArray = ["/home-3"];
 export const header5 = ["/home-4"];
 export const header6 = ["/home-5"];
 export const header7 = ["/home-6"];

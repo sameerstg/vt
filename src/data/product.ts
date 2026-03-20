@@ -1,4 +1,127 @@
-export const product1 = [
+interface ProductAuthor {
+  img: string;
+  name: string;
+}
+
+interface Product {
+  id: number;
+  img: string;
+  img2: string;
+  category: string;
+  title: string;
+  rating: number;
+  review: number;
+  author: ProductAuthor;
+  price: number;
+  tag: string;
+  deliveryTime: string;
+  level: "top-rated" | "lavel-2" | "lavel-1" | "new";
+  location: string;
+  sort: "best-seller" | "recommended" | "new-arrivals";
+  tool: string;
+  language: string;
+  lat?: number;
+  long?: number;
+  gallery?: string[];
+}
+
+interface HighlightedRated {
+  id: number;
+  avatar: string;
+  name: string;
+  skill: string;
+  rating: number;
+  review: number;
+  tag: string[];
+  location: string;
+  hourlyRate: number;
+  jobSuccess: number;
+}
+
+interface ShopProduct {
+  id: number;
+  img: string;
+  shortTitle: string;
+  title: string;
+  brandInfo: string;
+  inStock: number;
+  description: string;
+  price: number;
+  oldPrice: number;
+  sku: string;
+  category: string;
+  tag: string;
+  gallery: string[];
+  author: ProductAuthor;
+  sort: "best-seller" | "recommended" | "new-arrivals";
+}
+
+interface Project {
+  id: number;
+  title: string;
+  img: string;
+  brief: string;
+  location: string;
+  tags: string[];
+  category: string;
+  price: { min: number; max: number };
+  projectType: "Hourly" | "Fixed";
+  skills: string;
+  englishLevel: string;
+  language: string;
+  sort: "best-seller" | "recommended" | "new-arrivals";
+}
+
+interface ProjectProposal {
+  id: number;
+  name: string;
+  img: string;
+  reviews: number;
+  rating: number;
+  brief: string;
+  price: { min: number; max: number };
+  hours: number;
+}
+
+interface Employee {
+  id: number;
+  img: string;
+  server: string;
+  rating: number;
+  reviews: number;
+  location: string;
+  openJobs: number;
+  category: string;
+  jobs: string;
+  sort: "best-seller" | "recommended" | "new-arrivals";
+}
+
+interface Worker {
+  id: number;
+  img: string;
+  name: string;
+  profession: string;
+  rating: number;
+  reviews: number;
+  tags: string[];
+  skill: string;
+  price: number;
+  location: string;
+  level: "top-rated" | "lavel-2" | "lavel-1" | "new";
+  language: string;
+  sort: "best-seller" | "recommended" | "new-arrivals";
+  title: string;
+}
+
+interface InspiringProject {
+  id: number;
+  title: string;
+  imageSrc: string;
+  workerImageSrc: string;
+  author: string;
+}
+
+export const product1: Product[] = [
   {
     id: 1,
     img: "/images/listings/g-1.jpg",
@@ -290,7 +413,7 @@ export const product1 = [
   },
 ];
 
-export const hightedRated1 = [
+export const hightedRated1: HighlightedRated[] = [
   {
     id: 1,
     avatar: "/images/team/fl-1.png",
@@ -389,7 +512,7 @@ export const hightedRated1 = [
   },
 ];
 
-export const shopProduct1 = [
+export const shopProduct1: ShopProduct[] = [
   {
     id: 1,
     img: "/images/shop/1.png",
@@ -631,7 +754,7 @@ export const shopProduct1 = [
   },
 ];
 
-export const project1 = [
+export const project1: Project[] = [
   {
     id: 1,
     title: "Food Delviery Mobile App",
@@ -786,7 +909,7 @@ export const project1 = [
   },
 ];
 
-export const projectProposal1 = [
+export const projectProposal1: ProjectProposal[] = [
   {
     id: 1,
     name: "Leslie Alexander",
@@ -831,7 +954,7 @@ export const projectProposal1 = [
   },
 ];
 
-export const employee = [
+export const employee: Employee[] = [
   {
     id: 1,
     img: "/images/team/client-1.png",
@@ -1026,7 +1149,7 @@ export const employee = [
   },
 ];
 
-export const worker1 = [
+export const worker1: Worker[] = [
   {
     id: 1,
     img: "/images/team/fl-1.png",
@@ -1227,7 +1350,7 @@ export const worker1 = [
       "I will optimize your online presence as an SEO Specialist - Node.js",
   },
 ];
-export const inspiringProjects = [
+export const inspiringProjects: InspiringProject[] = [
   {
     id: 1,
     title: "Caricatures",

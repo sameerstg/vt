@@ -1,87 +1,140 @@
-export const dasboardNavigation = [
+interface DashboardContractorNavigationItem {
+  id: number;
+  name: string;
+  icon: string;
+  path: string;
+}
+
+interface ContractorInvoice {
+  id: number;
+  invoiceId: number;
+  invoiceName: string;
+  purchaseDate: string;
+  amount: number;
+  status: 1 | 2 | 3;
+}
+
+interface ContractorPayout {
+  id: number;
+  amount: number;
+  date: string;
+  method: "Paypal" | "Payoneer" | "Bank Transfer";
+  status: 1 | 2 | 3;
+}
+
+interface ContractorStatement {
+  id: number;
+  date: string;
+  type: 1 | 2;
+  detail: string;
+  price: number;
+  amount: number;
+}
+
+interface ContractorManageService {
+  id: number;
+  img: string;
+  title: string;
+  list: string[];
+  category: string;
+  cost: number;
+}
+
+interface ContractorManageJob {
+  id: number;
+  img: string;
+  title: string;
+  server: string;
+  application: number;
+  created: string;
+  expired: string;
+  status: 1 | 2 | 3;
+}
+
+export const dasboardNavigation: DashboardContractorNavigationItem[] = [
   {
     id: 1,
     name: "Dashboard",
     icon: "flaticon-home",
-    path: "/worker",
+    path: "/contractor-dashboard",
   },
   {
     id: 2,
     name: "My Proposals",
     icon: "flaticon-document",
-    path: "/worker/proposal",
+    path: "/contractor-dashboard/proposal",
   },
   {
     id: 3,
     name: "Saved",
     icon: "flaticon-like",
-    path: "/worker/saved",
+    path: "/contractor-dashboard/saved",
   },
   {
     id: 4,
     name: "Message",
     icon: "flaticon-chat",
-    path: "/worker/message",
+    path: "/contractor-dashboard/message",
   },
   {
     id: 5,
     name: "Reviews",
     icon: "flaticon-review-1",
-    path: "/worker/reviews",
+    path: "/contractor-dashboard/reviews",
   },
   {
     id: 6,
     name: "Invoice",
     icon: "flaticon-receipt",
-    path: "/worker/invoice",
+    path: "/contractor-dashboard/invoice",
   },
   {
     id: 7,
     name: "Payouts",
     icon: "flaticon-dollar",
-    path: "/worker/payouts",
+    path: "/contractor-dashboard/payouts",
   },
   {
     id: 8,
     name: "Statements",
     icon: "flaticon-web",
-    path: "/worker/statements",
+    path: "/contractor-dashboard/statements",
   },
   {
     id: 9,
     name: "Manage Services",
     icon: "flaticon-presentation",
-    path: "/worker/manage-services",
+    path: "/contractor-dashboard/manage-services",
   },
   {
     id: 10,
     name: "Manage Jobs",
     icon: "flaticon-briefcase",
-    path: "/worker/manage-jobs",
+    path: "/contractor-dashboard/manage-jobs",
   },
   {
     id: 11,
     name: "Manage Project",
     icon: "flaticon-content",
-    path: "/worker/manage-projects",
+    path: "/contractor-dashboard/manage-projects",
   },
   {
     id: 12,
     name: "Add Services",
     icon: "flaticon-document",
-    path: "/worker/add-services",
+    path: "/contractor-dashboard/add-services",
   },
   {
     id: 13,
     name: "Create Project",
     icon: "flaticon-content",
-    path: "/worker/create-projects",
+    path: "/contractor-dashboard/create-projects",
   },
   {
     id: 14,
     name: "My Profile",
     icon: "flaticon-photo",
-    path: "/worker/my-profile",
+    path: "/contractor-dashboard/my-profile",
   },
   {
     id: 15,
@@ -91,7 +144,7 @@ export const dasboardNavigation = [
   },
 ];
 
-export const invoice = [
+export const invoice: ContractorInvoice[] = [
   {
     id: 1,
     invoiceId: 99,
@@ -166,7 +219,7 @@ export const invoice = [
   },
 ];
 
-export const payout = [
+export const payout: ContractorPayout[] = [
   {
     id: 1,
     amount: 1.8,
@@ -239,7 +292,7 @@ export const payout = [
   },
 ];
 
-export const statement = [
+export const statement: ContractorStatement[] = [
   {
     id: 1,
     date: "April 9, 2023",
@@ -306,7 +359,7 @@ export const statement = [
   },
 ];
 
-export const manageService = [
+export const manageService: ContractorManageService[] = [
   {
     id: 1,
     img: "/images/listings/g-1.jpg",
@@ -369,7 +422,7 @@ export const manageService = [
   },
 ];
 
-export const managejob = [
+export const managejob: ContractorManageJob[] = [
   {
     id: 1,
     img: "/images/team/client-2.png",

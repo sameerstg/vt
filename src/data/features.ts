@@ -1,4 +1,17 @@
-export const frelancersFeatures = [
+interface FreelancerFeature {
+  id: number;
+  iconClass: string;
+  title: string;
+  content: string;
+}
+
+interface FeatureStat {
+  id: number;
+  value: number;
+  label: string;
+}
+
+export const frelancersFeatures: FreelancerFeature[] = [
   {
     id: 1,
     iconClass: "flaticon-badge",
@@ -22,13 +35,13 @@ export const frelancersFeatures = [
   },
 ];
 
-export const featuresTwo = [
+export const featuresTwo: string[] = [
   "The best for every budget",
   "Quality work done quickly",
   "Protected payments, every time",
   "24/7 support",
 ];
-export const features = [
+export const features: FeatureStat[] = [
   { id: 1, value: 834, label: "Total Freelancer" },
   { id: 2, value: 732, label: "Positive Review" },
   { id: 3, value: 90, label: "Order received" },

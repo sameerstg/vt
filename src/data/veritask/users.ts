@@ -1,4 +1,22 @@
-export const veritaskUsers = [
+type UserRole = "client" | "worker" | "contractor";
+
+interface VeritaskUser {
+  id: string;
+  role: UserRole;
+  name: string;
+  email: string;
+  phone: string;
+  location: string;
+  avatar: string;
+  verified: boolean;
+  rating: number;
+  skills?: string[];
+  completedTasks?: number;
+  teamSize?: number;
+  completedProjects?: number;
+}
+
+export const veritaskUsers: VeritaskUser[] = [
   {
     id: 'client-001',
     role: 'client',
@@ -88,8 +106,8 @@ export const veritaskUsers = [
   },
 ];
 
-export const getUserById = (id) => veritaskUsers.find(user => user.id === id);
-export const getUsersByRole = (role) => veritaskUsers.filter(user => user.role === role);
-export const getWorkers = () => getUsersByRole('worker');
-export const getClients = () => getUsersByRole('client');
-export const getContractors = () => getUsersByRole('contractor');
+export const getUserById = (id: string): VeritaskUser | undefined => veritaskUsers.find(user => user.id === id);
+export const getUsersByRole = (role: UserRole): VeritaskUser[] => veritaskUsers.filter(user => user.role === role);
+export const getWorkers = (): VeritaskUser[] => getUsersByRole('worker');
+export const getClients = (): VeritaskUser[] => getUsersByRole('client');
+export const getContractors = (): VeritaskUser[] => getUsersByRole('contractor');

@@ -1,5 +1,24 @@
 // after_style
-export const steps = [
+interface Step {
+  id: number;
+  iconClass: string;
+  title: string;
+  description: string;
+}
+
+interface StepTwo {
+  id: number;
+  text: string;
+}
+
+interface StepThree {
+  id: number;
+  imgSrc: string;
+  title: string;
+  description: string;
+}
+
+export const steps: Step[] = [
   {
     id: 1,
 
@@ -34,7 +53,7 @@ export const steps = [
   },
 ];
 
-export const stepsTwo = [
+export const stepsTwo: StepTwo[] = [
   {
     id: 1,
     text: "Connect to workers with proven business experience",
@@ -49,7 +68,7 @@ export const stepsTwo = [
   },
 ];
 
-export const stepsThree = [
+export const stepsThree: StepThree[] = [
   {
     id: 1,
     imgSrc: "/images/about/home19-vector-1.png",

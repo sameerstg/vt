@@ -1,4 +1,54 @@
-export const browserCategory = [
+interface BrowserCategory {
+  id: number;
+  icon: string;
+  skill: number;
+  title: string;
+  brif: string;
+  img: string;
+}
+
+interface LearnFreeio {
+  id: number;
+  title: string;
+  description: string;
+  avatar: string;
+  name: string;
+  skill: string;
+}
+
+interface Price {
+  id: number;
+  monthlyPrice: number;
+  yearlyPrice: number;
+  plan: string;
+  isActive: boolean;
+}
+
+interface OurTeam {
+  id: number;
+  img: string;
+  name: string;
+  skill: string;
+}
+
+interface ProjectTestimonial {
+  id: number;
+  title: string;
+  name: string;
+  company: string;
+  image: string;
+}
+
+interface BrowserCategory2 {
+  id: number;
+  iconClass: string;
+  skills: number;
+  title: string;
+  description: string;
+  classNames: string;
+}
+
+export const browserCategory: BrowserCategory[] = [
   {
     id: 1,
     icon: "flaticon-developer",
@@ -97,7 +147,7 @@ export const browserCategory = [
   },
 ];
 
-export const learnFreeio1 = [
+export const learnFreeio1: LearnFreeio[] = [
   {
     id: 1,
     title: "Great Work",
@@ -127,7 +177,7 @@ export const learnFreeio1 = [
   },
 ];
 
-export const price1 = [
+export const price1: Price[] = [
   {
     id: 1,
     monthlyPrice: 29,
@@ -158,7 +208,7 @@ export const price1 = [
   },
 ];
 
-export const ourTeam1 = [
+export const ourTeam1: OurTeam[] = [
   {
     id: 1,
     img: "/images/team/team-1.jpg",
@@ -233,7 +283,7 @@ export const ourTeam1 = [
   },
 ];
 
-export const testimonial = [
+export const testimonial: ProjectTestimonial[] = [
   {
     id: 1,
     title:
@@ -275,7 +325,7 @@ export const testimonial = [
     image: "/images/testimonials/testi-5.png",
   },
 ];
-export const browserCategory2 = [
+export const browserCategory2: BrowserCategory2[] = [
   {
     id: 1,
     iconClass: "flaticon-developer",
