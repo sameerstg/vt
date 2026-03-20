@@ -1,9 +1,9 @@
-# Freeio Next.js Codebase Analysis
+# VeriTask Codebase Analysis
 
 ## Project Overview
 
-**Project Name:** veritask (v1.6.0)  
-**Type:** Freelancer Marketplace / Job Board Template  
+**Project Name:** VeriTask  
+**Type:** Worker Marketplace / Job Board Template (originally based on Freeio)  
 **Framework:** Next.js 16.2.0 with React 19.2.4  
 **Package Manager:** Yarn
 
@@ -26,7 +26,7 @@
 |---------|---------|
 | tailwindcss | Utility-first CSS framework |
 | @tailwindcss/postcss | PostCSS plugin for Tailwind |
-| postcss | CSS transformation |
+| postcss | 8.4.31 (pinned) | CSS transformation |
 | autoprefixer | Vendor prefix automation |
 
 ### UI/UX Libraries
@@ -64,6 +64,7 @@ src/
 ├── components/    # Reusable UI components
 ├── data/          # Static data (mock data)
 ├── hook/          # Custom React hooks
+├── modules/       # VeriTask feature modules (client, contractor, worker, shared)
 ├── store/         # Zustand state stores
 └── utils/         # Utility functions
 ```
@@ -182,6 +183,88 @@ testimonials.js   // Customer testimonials
 |------|---------|
 | `isActiveNavigation.js` | Active route detection |
 | `wow.js` | WOW.js animation initialization |
+
+### 7. VeriTask Feature Modules (`src/modules/`)
+
+Modular feature architecture organized by role, each with its own components, pages, and store:
+
+```
+modules/
+├── client/         # Client role (job poster, task creator)
+├── contractor/     # Contractor role (team manager, payroll)
+├── worker/         # Worker role (task executor, offer submitter)
+└── shared/         # Shared utilities (auth, layout, utils)
+```
+
+**Client Module (`src/modules/client/`):**
+| File | Purpose |
+|------|---------|
+| `pages/ClientDashboard.jsx` | Client dashboard page |
+| `components/TaskCreator.jsx` | Create new tasks |
+| `components/OfferReviewer.jsx` | Review worker offers |
+| `components/EscrowFunding.jsx` | Fund escrow for tasks |
+| `components/PaymentReleaser.jsx` | Release payment on completion |
+| `store/clientStore.js` | Client-side state (tasks, offers) |
+
+**Contractor Module (`src/modules/contractor/`):**
+| File | Purpose |
+|------|---------|
+| `pages/ContractorDashboard.jsx` | Contractor dashboard page |
+| `components/TeamManager.jsx` | Manage worker teams |
+| `components/SubtaskAssigner.jsx` | Assign subtasks to workers |
+| `components/PayrollDistributor.jsx` | Distribute payroll to team |
+| `store/contractorStore.js` | Contractor state (teams, subtasks) |
+
+**Worker Module (`src/modules/worker/`):**
+| File | Purpose |
+|------|---------|
+| `pages/WorkerDashboard.jsx` | Worker dashboard page |
+| `components/ProfileBuilder.jsx` | Build worker profile |
+| `components/TaskBrowser.jsx` | Browse available tasks |
+| `components/TaskAcceptor.jsx` | Accept assigned tasks |
+| `components/OfferSubmitter.jsx` | Submit offers on tasks |
+| `store/workerStore.js` | Worker state (tasks, offers) |
+
+**Shared Module (`src/modules/shared/`):**
+| File | Purpose |
+|------|---------|
+| `components/DashboardLayout.jsx` | Shared dashboard layout wrapper |
+| `store/authStore.js` | Authentication state (role, user) |
+| `utils/api.js` | Shared API utilities |
+| `utils/taskStates.js` | Task state machine definitions |
+
+**VeriTask Data (`src/data/veritask/`):**
+| File | Purpose |
+|------|---------|
+| `tasks.js` | VeriTask task listings |
+| `offers.js` | Worker offers on tasks |
+| `users.js` | User profiles (client, contractor, worker) |
+| `escrow.js` | Escrow fund tracking |
+| `disputes.js` | Dispute resolution records |
+
+**VeriTask Task State Machine:**
+```
+POSTED → ACCEPTED → IN_PROGRESS → SUBMITTED → APPROVED → COMPLETED
+                            ↘ DISPUTED → RESOLVED
+         ↓
+      CANCELLED
+```
+
+**VeriTask Roles:**
+| Role | Description |
+|------|-------------|
+| `client` | Posts tasks, funds escrow, releases payment |
+| `contractor` | Manages teams, assigns subtasks, distributes payroll |
+| `worker` | Browses tasks, submits offers, completes work |
+
+---
+
+**Dashboard Pages (in `src/app/(dashboard)/`):**
+- `client-dashboard/page.jsx` - Client role dashboard
+- `contractor-dashboard/veritask-page/page.jsx` - Contractor role dashboard
+- `worker-dashboard/veritask-page/page.jsx` - Worker role dashboard
+
+---
 
 ---
 
@@ -414,6 +497,13 @@ yarn lint     # ESLint check
 2. Compose using existing section/card components
 3. Add navigation entry in `data/navigation.js`
 
+### Adding VeriTask Role Features
+1. Choose the appropriate role module (`client`, `contractor`, `worker`)
+2. Add components in the role's `components/` folder
+3. Manage state in the role's `store/` (Zustand)
+4. Add page in `src/app/(dashboard)/<role>-dashboard/`
+5. Add shared utilities to `modules/shared/` (auth, layout, API)
+
 ### Replacing Mock Data
 1. Replace data exports in `src/data/` with API calls
 2. Wrap components with data fetching logic
@@ -433,8 +523,9 @@ yarn lint     # ESLint check
 |-----------|-------|
 | components/ | ~300+ |
 | app/ | ~100+ |
-| data/ | 17 |
-| store/ | 4 |
+| data/ | 22 (17 + 5 veritask) |
+| modules/ | ~30 (client, contractor, worker, shared) |
+| store/ | 7 (4 + 3 role-specific) |
 | hook/ | 2 |
 | utils/ | 2 |
 
@@ -442,14 +533,18 @@ yarn lint     # ESLint check
 
 ## Conclusion
 
-This is a comprehensive freelancer marketplace template with:
+VeriTask is a comprehensive worker marketplace template with:
 - Multi-variant design system (20+ homepages, 30+ headers, etc.)
 - Full feature set for job/service/project listings
-- Separate dashboards for workers and contractors
+- Separate role-based dashboards for clients, contractors, and workers
+- VeriTask complete flow: task creation → offer submission → escrow funding → task execution → payment release
 - E-commerce functionality (shop, cart, checkout)
 - Rich component library ready for customization
 
-The codebase prioritizes template flexibility over backend integration, making it ideal for:
-- Quick deployment as a freelancer marketplace
+The codebase prioritizes template flexibility over backend integration, while the new VeriTask modules provide a structured pattern for implementing the full task marketplace lifecycle. It is ideal for:
+- Quick deployment as a worker marketplace
 - Customization for specific niche platforms
 - Learning Next.js 16 patterns and practices
+
+### Additional Documentation
+- `doc/rules.md` — VeriTask platform rules and workflows

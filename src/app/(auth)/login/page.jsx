@@ -4,10 +4,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Footer from "@/components/footer/Footer";
 import Header20 from "@/components/header/Header20";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import api from "@/modules/shared/utils/api";
+import { USER_ROLES } from "@/modules/shared/utils/taskStates";
 
 export default function Page() {
+    const router = useRouter();
     const [forgotStep, setForgotStep] = useState(0);
     const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [selectedRole, setSelectedRole] = useState(USER_ROLES.CLIENT);
+    const [loading, setLoading] = useState(false);
     const [otp, setOtp] = useState(["", "", "", ""]);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,6 +28,37 @@ export default function Page() {
             otpRefs.current[0]?.focus();
         }
     }, [forgotStep]);
+
+    const handleLogin = async () => {
+        if (!email || !password) {
+            setErrorText("Please enter email and password");
+            return;
+        }
+        setLoading(true);
+        setErrorText("");
+        try {
+            const result = await api.auth.login({ email, password });
+            if (result.success) {
+                switch (selectedRole) {
+                    case USER_ROLES.CLIENT:
+                        router.push("/client-dashboard");
+                        break;
+                    case USER_ROLES.WORKER:
+                        router.push("/worker-dashboard");
+                        break;
+                    case USER_ROLES.CONTRACTOR:
+                        router.push("/contractor-dashboard");
+                        break;
+                    default:
+                        router.push("/dashboard");
+                }
+            }
+        } catch (error) {
+            setErrorText("Login failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const openForgotModal = () => {
         setForgotStep(1);
@@ -102,8 +140,7 @@ export default function Page() {
                                 <div className="main-title text-center">
                                     <h2 className="title">Log In</h2>
                                     <p className="paragraph">
-                                        Give your visitor a smooth online
-                                        experience with a solid UX design
+                                        Access your VeriTask account
                                     </p>
                                 </div>
                             </div>
@@ -115,7 +152,7 @@ export default function Page() {
                             <div className="col-xl-6 mx-auto">
                                 <div className="log-reg-form search-modal form-style1 bgc-white p50 p30-sm default-box-shadow1 bdrs12">
                                     <div className="mb30">
-                                        <h4>We're glad to see you again!</h4>
+                                        <h4>Welcome back!</h4>
                                         <p className="text">
                                             Don't have an account?{" "}
                                             <Link
@@ -126,6 +163,37 @@ export default function Page() {
                                             </Link>
                                         </p>
                                     </div>
+
+                                    <div className="role-selector mb20">
+                                        <label className="form-label fw600 dark-color">Login as</label>
+                                        <div className="d-flex gap-2">
+                                            <button
+                                                type="button"
+                                                className={`role-btn flex-fill ${selectedRole === USER_ROLES.CLIENT ? 'active' : ''}`}
+                                                onClick={() => setSelectedRole(USER_ROLES.CLIENT)}
+                                            >
+                                                <i className="flaticon-briefcase d-block mb5" />
+                                                Client
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={`role-btn flex-fill ${selectedRole === USER_ROLES.WORKER ? 'active' : ''}`}
+                                                onClick={() => setSelectedRole(USER_ROLES.WORKER)}
+                                            >
+                                                <i className="flaticon-user d-block mb5" />
+                                                Worker
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={`role-btn flex-fill ${selectedRole === USER_ROLES.CONTRACTOR ? 'active' : ''}`}
+                                                onClick={() => setSelectedRole(USER_ROLES.CONTRACTOR)}
+                                            >
+                                                <i className="flaticon-users d-block mb5" />
+                                                Contractor
+                                            </button>
+                                        </div>
+                                    </div>
+
                                     <div className="mb20">
                                         <label className="form-label fw600 dark-color">
                                             Email Address
@@ -134,6 +202,8 @@ export default function Page() {
                                             type="email"
                                             className="form-control"
                                             placeholder="example@gmail.com"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </div>
                                     <div className="mb15">
@@ -141,9 +211,11 @@ export default function Page() {
                                             Password
                                         </label>
                                         <input
-                                            type="text"
+                                            type="password"
                                             className="form-control"
                                             placeholder="*******"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
                                         />
                                     </div>
                                     <div className="checkbox-style1 d-block d-sm-flex align-items-center justify-content-between mb20">
@@ -163,12 +235,17 @@ export default function Page() {
                                             Lost your password?
                                         </button>
                                     </div>
+                                    {errorText && (
+                                        <p className="text-danger mb20">{errorText}</p>
+                                    )}
                                     <div className="d-grid mb20">
                                         <button
                                             className="ud-btn btn-thm"
                                             type="button"
+                                            onClick={handleLogin}
+                                            disabled={loading}
                                         >
-                                            Log In{" "}
+                                            {loading ? "Logging in..." : "Log In"}
                                             <i className="fal fa-arrow-right-long" />
                                         </button>
                                     </div>
@@ -181,21 +258,21 @@ export default function Page() {
                                             className="ud-btn btn-fb fz14 fw400 mb-2 mb-md-0"
                                             type="button"
                                         >
-                                            <i className="fab fa-facebook-f pr10" />{" "}
+                                            <i className="fab fa-facebook-f pr10" />
                                             Continue Facebook
                                         </button>
                                         <button
                                             className="ud-btn btn-google fz14 fw400 mb-2 mb-md-0"
                                             type="button"
                                         >
-                                            <i className="fab fa-google" />{" "}
+                                            <i className="fab fa-google" />
                                             Continue Google
                                         </button>
                                         <button
                                             className="ud-btn btn-apple fz14 fw400"
                                             type="button"
                                         >
-                                            <i className="fab fa-apple" />{" "}
+                                            <i className="fab fa-apple" />
                                             Continue Apple
                                         </button>
                                     </div>
@@ -324,6 +401,30 @@ export default function Page() {
                     </div>
                 </div>
             )}
+
+            <style jsx>{`
+                .role-btn {
+                    padding: 12px;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    background: white;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    font-size: 14px;
+                    color: #333;
+                }
+                .role-btn:hover {
+                    border-color: #37047C;
+                }
+                .role-btn.active {
+                    border-color: #37047C;
+                    background: #37047C;
+                    color: white;
+                }
+                .role-btn.active i {
+                    color: white;
+                }
+            `}</style>
         </>
     );
 }
