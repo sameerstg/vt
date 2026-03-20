@@ -5,16 +5,20 @@ import { getOffersByTask } from "@/data/veritask/offers";
 import { getUserById } from "@/data/veritask/users";
 import api from "@/modules/shared/utils/api";
 
-export default function OfferReviewer({ task, onOfferAccepted }) {
+export default function OfferReviewer({ task, onOfferAccepted, onSuccess }) {
   const [loading, setLoading] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
   const offers = task ? getOffersByTask(task.id) : [];
 
   const handleAcceptOffer = async (offer) => {
     setLoading(offer.id);
     try {
       const result = await api.client.acceptOffer(offer.id);
-      if (result.success && onOfferAccepted) {
-        onOfferAccepted(offer);
+      if (result.success) {
+        setSuccessMsg(`Offer from ${getUserById(offer.workerId)?.name || "worker"} accepted!`);
+        if (onOfferAccepted) onOfferAccepted(offer);
+        if (onSuccess) onSuccess();
+        setTimeout(() => setSuccessMsg(null), 3000);
       }
     } finally {
       setLoading(null);
@@ -42,6 +46,10 @@ export default function OfferReviewer({ task, onOfferAccepted }) {
     <div className="bgc-white p30 bdrs12 default-box-shadow1">
       <h4 className="mb20">Review Offers</h4>
       <p className="text mb20">Task: {task.title}</p>
+
+      {successMsg && (
+        <div className="alert alert-success mb20">{successMsg}</div>
+      )}
 
       {offers.length === 0 ? (
         <p className="text-center">No offers received yet</p>

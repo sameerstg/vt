@@ -3,7 +3,7 @@
 import { useState } from "react";
 import api from "@/modules/shared/utils/api";
 
-export default function EscrowFunding({ task, onEscrowFunded }) {
+export default function EscrowFunding({ task, onEscrowFunded, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -15,6 +15,7 @@ export default function EscrowFunding({ task, onEscrowFunded }) {
       if (result.success) {
         setShowSuccess(true);
         if (onEscrowFunded) onEscrowFunded();
+        if (onSuccess) onSuccess();
         setTimeout(() => setShowSuccess(false), 3000);
       }
     } finally {

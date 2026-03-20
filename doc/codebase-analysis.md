@@ -110,7 +110,8 @@ src/
 | footer/ | 14 | Footer variants + ui/ subfolder |
 | card/ | 42 | Card components for jobs, services, projects |
 | section/ | 183 | Section components (CTA, listings, testimonials) |
-| dashboard/ | - | Dashboard-specific components |
+| dashboard/ | - | Default dashboard components |
+| dashboard-client/ | - | Client dashboard components (header, sidebar, footer, navigation) |
 | dashboard-contractor/ | - | Contractor dashboard components |
 | dashboard-worker/ | - | Worker dashboard components |
 | button/ | - | Button components (BottomToTop, etc.) |
@@ -130,9 +131,10 @@ Static mock data organized by feature:
 
 ```javascript
 blog.js           // Blog post data
-dashboard.js      // Dashboard navigation & sample data
-dashboardContractor.js  // Contractor-specific data
-dashboardWorker.js      // Worker-specific data
+dashboard.js      // Default dashboard navigation & sample data
+dashboardClient.js      // Client-specific dashboard navigation
+dashboardContractor.js  // Contractor-specific dashboard data
+dashboardWorker.js      // Worker-specific dashboard data
 fanfact.js        // Fun fact/counter data
 features.js       // Feature sections data
 footer.js         // Footer links & data
@@ -228,7 +230,6 @@ modules/
 **Shared Module (`src/modules/shared/`):**
 | File | Purpose |
 |------|---------|
-| `components/DashboardLayout.jsx` | Shared dashboard layout wrapper |
 | `store/authStore.js` | Authentication state (role, user) |
 | `utils/api.js` | Shared API utilities |
 | `utils/taskStates.js` | Task state machine definitions |
@@ -265,6 +266,14 @@ POSTED → ACCEPTED → IN_PROGRESS → SUBMITTED → APPROVED → COMPLETED
 - `worker-dashboard/veritask-page/page.jsx` - Worker role dashboard
 
 ---
+
+**VeriTask Dashboard Layout Pattern:**
+Each role dashboard uses a role-specific `DashboardLayout` wrapper (`src/components/dashboard-{role}/DashboardLayout.jsx`) that provides:
+- `DashboardHeader` — top bar with logo, search, notifications, user menu
+- `DashboardSidebar` — side navigation using `dashboard_sidebar_list` / `sidebar_list_item` CSS
+- `DashboardFooter` — copyright footer
+
+This ensures all three role dashboards share the same header/sidebar/footer styling as the template's original dashboards.
 
 ---
 
@@ -373,13 +382,13 @@ const menus = [
 ```
 
 ### Dashboard Navigation
-```javascript
-export const dasboardNavigation = [
-  { name: "Dashboard", icon: "flaticon-home", path: "/dashboard" },
-  { name: "My Proposals", icon: "flaticon-document", path: "/proposal" },
-  // ... 15 total items
-];
-```
+Each role has its own navigation defined in `src/data/`:
+
+**Client (`dashboardClient.js`):** 13 items — Dashboard, My Tasks, Review Offers, Escrow, Payments, Saved, Message, Reviews, Manage Projects, Create Project, Statements, My Profile, Logout
+
+**Worker (`dashboardWorker.js`):** 15 items — Dashboard, My Proposals, Saved, Message, Reviews, Invoice, Payouts, Statements, Manage Services, Manage Jobs, Manage Project, Add Services, Create Project, My Profile, Logout
+
+**Contractor (`dashboardContractor.js`):** 15 items — same structure as worker, prefixed with `/contractor-dashboard/`
 
 ---
 
@@ -503,6 +512,7 @@ yarn lint     # ESLint check
 3. Manage state in the role's `store/` (Zustand)
 4. Add page in `src/app/(dashboard)/<role>-dashboard/`
 5. Add shared utilities to `modules/shared/` (auth, layout, API)
+6. For dashboard UI, wrap pages with the role's `DashboardLayout` component (`src/components/dashboard-{role}/`)
 
 ### Replacing Mock Data
 1. Replace data exports in `src/data/` with API calls
@@ -521,9 +531,9 @@ yarn lint     # ESLint check
 
 | Directory | Files |
 |-----------|-------|
-| components/ | ~300+ |
+| components/ | ~310+ (incl. dashboard-client) |
 | app/ | ~100+ |
-| data/ | 22 (17 + 5 veritask) |
+| data/ | 23 (18 base + 5 veritask) |
 | modules/ | ~30 (client, contractor, worker, shared) |
 | store/ | 7 (4 + 3 role-specific) |
 | hook/ | 2 |

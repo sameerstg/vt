@@ -3,7 +3,7 @@
 import { useState } from "react";
 import api from "@/modules/shared/utils/api";
 
-export default function PaymentReleaser({ task, onPaymentReleased }) {
+export default function PaymentReleaser({ task, onPaymentReleased, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -15,6 +15,7 @@ export default function PaymentReleaser({ task, onPaymentReleased }) {
       if (result.success) {
         setShowSuccess(true);
         if (onPaymentReleased) onPaymentReleased();
+        if (onSuccess) onSuccess();
         setTimeout(() => setShowSuccess(false), 3000);
       }
     } finally {
