@@ -24,11 +24,11 @@ const useAuthStore = create((set) => ({
     const state = useAuthStore.getState();
     switch (state.userRole) {
       case USER_ROLES.CLIENT:
-        return '/client-dashboard';
+        return '/client/dashboard';
       case USER_ROLES.WORKER:
-        return '/worker-dashboard';
+        return '/worker/dashboard';
       case USER_ROLES.CONTRACTOR:
-        return '/contractor-dashboard';
+        return '/contractor/dashboard';
       default:
         return '/dashboard';
     }

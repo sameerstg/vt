@@ -26,8 +26,8 @@ const menus = [
     name: "Users",
     children: [
       { id: 1, name: "Dashboard", path: "/dashboard" },
-      { id: 2, name: "Worker Dashboard", path: "/worker-dashboard" },
-      { id: 3, name: "Contractor Dashboard", path: "/contractor-dashboard" },
+      { id: 2, name: "Worker Dashboard", path: "/worker/dashboard" },
+      { id: 3, name: "Contractor Dashboard", path: "/contractor/dashboard" },
       { id: 4, name: "Employee", path: "/employee-1" },
       { id: 5, name: "Employee Single", path: "/employee-single" },
       { id: 6, name: "Workers", path: "/worker-1" },

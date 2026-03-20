@@ -41,13 +41,13 @@ export default function Page() {
             if (result.success) {
                 switch (selectedRole) {
                     case USER_ROLES.CLIENT:
-                        router.push("/client-dashboard");
+                        router.push("/client/dashboard");
                         break;
                     case USER_ROLES.WORKER:
-                        router.push("/worker-dashboard");
+                        router.push("/worker/dashboard");
                         break;
                     case USER_ROLES.CONTRACTOR:
-                        router.push("/contractor-dashboard");
+                        router.push("/contractor/dashboard");
                         break;
                     default:
                         router.push("/dashboard");

@@ -261,9 +261,11 @@ POSTED → ACCEPTED → IN_PROGRESS → SUBMITTED → APPROVED → COMPLETED
 ---
 
 **Dashboard Pages (in `src/app/(dashboard)/`):**
-- `client-dashboard/page.jsx` - Client role dashboard
-- `contractor-dashboard/veritask-page/page.jsx` - Contractor role dashboard
-- `worker-dashboard/veritask-page/page.jsx` - Worker role dashboard
+- `client/dashboard/page.jsx` - Client role dashboard (VeriTask)
+- `worker/dashboard/page.jsx` - Worker role dashboard (VeriTask)
+- `contractor/dashboard/page.jsx` - Contractor role dashboard (VeriTask)
+
+Each role also has role-specific sub-pages for proposal, invoice, saved, reviews, message, payouts, statements, my-profile, manage-jobs, manage-projects, manage-services, add-services, create-projects.
 
 ---
 
@@ -365,10 +367,13 @@ Uses Bootstrap 5 breakpoints with custom container max-width:
 
 ### Route Groups
 ```
-(home)/         → Homepage variants
-(job)/job-1/    → /job-1
-(job)/job-2/    → /job-2
-(dashboard)/dashboard/  → /dashboard
+(home)/              → Homepage variants
+(job)/job-1/         → /job-1
+(job)/job-2/         → /job-2
+(dashboard)/dashboard/ → /dashboard
+(dashboard)/client/dashboard/     → /client/dashboard
+(dashboard)/worker/dashboard/     → /worker/dashboard
+(dashboard)/contractor/dashboard/ → /contractor/dashboard
 ```
 
 ### Navigation Structure (`data/navigation.js`)
@@ -388,7 +393,7 @@ Each role has its own navigation defined in `src/data/`:
 
 **Worker (`dashboardWorker.js`):** 15 items — Dashboard, My Proposals, Saved, Message, Reviews, Invoice, Payouts, Statements, Manage Services, Manage Jobs, Manage Project, Add Services, Create Project, My Profile, Logout
 
-**Contractor (`dashboardContractor.js`):** 15 items — same structure as worker, prefixed with `/contractor-dashboard/`
+**Contractor (`dashboardContractor.js`):** 15 items — same structure as worker, prefixed with `/contractor/`
 
 ---
 

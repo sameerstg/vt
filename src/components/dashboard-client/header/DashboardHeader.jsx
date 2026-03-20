@@ -106,7 +106,7 @@ export default function DashboardHeader() {
                         <div className="dboard_notific_dd px30 pt20 pb15">
                           <div className="d-grid">
                             <Link
-                              href="/client-dashboard/message"
+                              href="/client/message"
                               className="ud-btn btn-thm w-100"
                             >
                               View All Messages
