@@ -195,7 +195,51 @@ modules/
 ├── client/         # Client role (job poster, task creator)
 ├── contractor/     # Contractor role (team manager, payroll)
 ├── worker/         # Worker role (task executor, offer submitter)
-└── shared/         # Shared utilities (auth, layout, utils)
+└── shared/         # Shared utilities (auth, layout, utils, agents)
+```
+
+**Shared Module (`src/modules/shared/`):**
+| File | Purpose |
+|------|---------|
+| `store/authStore.js` | Authentication state (role, user) |
+| `utils/api.js` | Shared API utilities |
+| `utils/taskStates.js` | Task state machine definitions |
+| `agents/ruleEnforcementAgent.js` | Ensures development follows rules from doc/rules.md |
+| `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
+| `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
+
+### 7. VeriTask Feature Modules (`src/modules/`)
+
+Modular feature architecture organized by role, each with its own components, pages, and store:
+
+```
+modules/
+├── client/         # Client role (job poster, task creator)
+├── contractor/     # Contractor role (team manager, payroll)
+├── worker/         # Worker role (task executor, offer submitter)
+└── shared/         # Shared utilities (auth, layout, utils, agents)
+```
+
+**Shared Module (`src/modules/shared/`):**
+| File | Purpose |
+|------|---------|
+| `store/authStore.js` | Authentication state (role, user) |
+| `utils/api.js` | Shared API utilities |
+| `utils/taskStates.js` | Task state machine definitions |
+| `agents/ruleEnforcementAgent.js` | Ensures development follows rules from doc/rules.md |
+| `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
+| `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
+
+### 7. VeriTask Feature Modules (`src/modules/`)
+
+Modular feature architecture organized by role, each with its own components, pages, and store:
+
+```
+modules/
+├── client/         # Client role (job poster, task creator)
+├── contractor/     # Contractor role (team manager, payroll)
+├── worker/         # Worker role (task executor, offer submitter)
+└── shared/         # Shared utilities (auth, layout, utils, agents)
 ```
 
 **Client Module (`src/modules/client/`):**
@@ -233,6 +277,9 @@ modules/
 | `store/authStore.js` | Authentication state (role, user) |
 | `utils/api.js` | Shared API utilities |
 | `utils/taskStates.js` | Task state machine definitions |
+| `agents/ruleEnforcementAgent.js` | Ensures development follows rules from doc/rules.md |
+| `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
+| `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
 
 **VeriTask Data (`src/data/veritask/`):**
 | File | Purpose |
@@ -375,6 +422,8 @@ Uses Bootstrap 5 breakpoints with custom container max-width:
 (dashboard)/worker/dashboard/     → /worker/dashboard
 (dashboard)/contractor/dashboard/ → /contractor/dashboard
 ```
+
+*Note: Navigation paths in src/data/dashboardClient.ts, dashboardWorker.ts, and dashboardContractor.ts have been updated to remove redundant dashboard prefixes from navigation paths (e.g., "/client-dashboard/manage-jobs" became "/manage-jobs") to align with the route group structure where the role dashboard is already scoped under /{role}/dashboard.*
 
 ### Navigation Structure (`data/navigation.js`)
 ```javascript
@@ -540,6 +589,7 @@ npm run lint    # ESLint check
 | app/ | ~100+ |
 | data/ | 23 (18 base + 5 veritask) |
 | modules/ | ~30 (client, contractor, worker, shared) |
+| modules/shared/agents/ | 3 (ruleEnforcementAgent.js, codebaseAnalysisAgent.js, businessRequirementAgent.js) |
 | store/ | 7 (4 + 3 role-specific) |
 | hook/ | 2 |
 | utils/ | 2 |
