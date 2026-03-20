@@ -1,14 +1,21 @@
 import DashboardLayout from "@/components/dashboard-contractor/DashboardLayout";
-import ContractorDashboardComponent from "@/modules/contractor/pages/ContractorDashboard";
+import DashboardInfo from "@/components/dashboard-contractor/section/DashboardInfo";
+
+import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "VeriTask - Contractor Dashboard",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Dashboard",
 };
 
-export default function ContractorDashboardPage() {
+export default function page() {
   return (
-    <DashboardLayout>
-      <ContractorDashboardComponent />
-    </DashboardLayout>
+    <>
+    
+    <MobileNavigation2 />
+      <DashboardLayout>
+        <DashboardInfo />
+      </DashboardLayout>
+    </>
   );
 }
+

@@ -1,14 +1,21 @@
 import DashboardLayout from "@/components/dashboard-worker/DashboardLayout";
-import WorkerDashboardComponent from "@/modules/worker/pages/WorkerDashboard";
+import DashboardInfo from "@/components/dashboard-worker/section/DashboardInfo";
+
+import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "VeriTask - Worker Dashboard",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Dashboard",
 };
 
-export default function WorkerDashboardPage() {
+export default function page() {
   return (
-    <DashboardLayout>
-      <WorkerDashboardComponent />
-    </DashboardLayout>
+    <>
+    
+    <MobileNavigation2 />
+      <DashboardLayout>
+        <DashboardInfo />
+      </DashboardLayout>
+    </>
   );
 }
+
