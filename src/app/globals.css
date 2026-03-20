@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import "./../../public/css/bootstrap.min.css";
 @import "./../../public/css/animate.css";
 @import "./../../public/css/ace-responsive-menu.css";
@@ -14,6 +10,10 @@
 @import "./../../public/css/ud-custom-spacing.css";
 @import "./../../public/css/dashbord_navitaion.css";
 @import "./../../public/css/responsive.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 a {
   cursor: pointer;
