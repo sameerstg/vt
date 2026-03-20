@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**Project Name:** freeio-nextjs (v1.6.0)  
+**Project Name:** veritask (v1.6.0)  
 **Type:** Freelancer Marketplace / Job Board Template  
 **Framework:** Next.js 16.2.0 with React 19.2.4  
 **Package Manager:** Yarn

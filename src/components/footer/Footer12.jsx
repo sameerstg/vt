@@ -92,8 +92,8 @@ export default function Footer12() {
                       Need live support?
                     </p>
                     <h5 className="info-mail">
-                      <Link className="text-white" href="mailto:hi@freeio.com">
-                        hi@freeio.com
+                      <Link className="text-white" href="mailto:hi@veritask.com">
+                        hi@veritask.com
                       </Link>
                     </h5>
                   </div>
@@ -148,7 +148,7 @@ export default function Footer12() {
           <div className="col-sm-6">
             <div className="text-center text-lg-start">
               <p className="copyright-text mb-2 mb-md-0 text-white ff-heading">
-                Â© Freeio. 2023{" "}
+                Â© Veritask. 2023{" "}
                 <Link
                   style={{ color: "inherit" }}
                   href="https://themeforest.net/user/ib-themes/portfolio"

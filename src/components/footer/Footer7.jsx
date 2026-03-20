@@ -106,8 +106,8 @@ export default function Footer7() {
                                                 Need live support?
                                             </p>
                                             <h5 className="info-mail">
-                                                <Link href="mailto:hi@freeio.com">
-                                                    hi@freeio.com
+                                                <Link href="mailto:hi@veritask.com">
+                                                    hi@veritask.com
                                                 </Link>
                                             </h5>
                                         </div>
@@ -162,7 +162,7 @@ export default function Footer7() {
                         <div className="col-sm-6">
                             <div className="text-center text-lg-start">
                                 <p className="copyright-text mb-0 at-home8 ff-heading">
-                                    Â© Freeio. 2023{" "}
+                                    Â© Veritask. 2023{" "}
                                     <Link
                                         href="https://themeforest.net/user/ib-themes/portfolio"
                                         target="_blank"
