@@ -476,10 +476,10 @@ Each role has its own navigation defined in `src/data/`:
 ## Development Commands
 
 ```bash
-yarn dev      # Start development server
-yarn build    # Production build
-yarn start    # Start production server
-yarn lint     # ESLint check
+npm run dev     # Start development server
+npm run build   # Production build
+npm run start   # Start production server
+npm run lint    # ESLint check
 ```
 
 ---
