@@ -1,0 +1,208 @@
+VeriTask Platform 
+Phase 01 – Detailed Scope of Work 
+1. Document Overview 
+This document defines the formal Scope of Work (SOW) for Phase 01 of the VeriTask 
+Platform. 
+Phase 01 represents the initial production-ready release of the platform and includes all 
+functionality explicitly described in this document. Any features, workflows, or capabilities 
+not documented here are considered: 
+• Out of scope for Phase 01 
+• Planned for Phase 02, or 
+• Subject to a formal Change Request (CR), including potential impact on cost and 
+timeline 
+This phase is designed to deliver a core task marketplace platform, conceptually 
+similar to Upwork, adapted for both physical and virtual tasks, with escrow-based 
+payments, scheduling, and accountability. 
+2. Phase 01 Objectives 
+The objective of Phase 01 is to: 
+• Enable users to post tasks and apply for work 
+• Facilitate secure payments through escrow 
+• Support offer-based task assignment 
+• Enforce task scheduling and completion workflows 
+• Establish trust through identity verification and platform governance 
+Phase 01 focuses on core usability and business validation, not advanced 
+automation or AI-driven optimization. 
+3. User Roles (Phase 01) 
+3.1 Client (Task Poster) 
+• Creates and manages tasks 
+• Reviews applications and offers 
+• Funds escrow and approves payments 
+• Confirms task completion or raises disputes 
+3.2 Worker (Individual Task Performer) 
+• Creates a service profile 
+• Applies for tasks or accepts posted pricing 
+• Completes assigned tasks 
+• Receives payment through the platform 
+3.3 Contractor (Team Lead) 
+• Applies for and manages complex or multi-person tasks 
+• Assigns registered subcontractors 
+• Manages internal payment distribution 
+• Holds full responsibility for task delivery 
+3.4 Platform Admin 
+• Verifies users and documents 
+• Oversees disputes and enforcement 
+• Manages financial overrides and suspensions 
+4. Authentication & User Verification 
+Included in Phase 01 
+• User registration via email address or phone number 
+• OTP-based verification (email or SMS) 
+• Secure login and session management 
+• Profile creation including: 
+o Full name 
+o Phone number 
+o Location (city / ZIP) 
+o Profile photo upload 
+o Government-issued ID upload 
+• Role selection during onboarding (Client, Worker, Contractor) 
+5. Task Creation & Management 
+Included in Phase 01 
+• Task creation with the following attributes: 
+o Task title 
+o Detailed description 
+o Task type (Physical or Virtual) 
+o For Physical tasks: 
+▪ Client must either upload the task location or allow current GPS 
+location 
+▪ System will resolve and display area, city, and state 
+▪ Location is shown on the job to workers 
+▪ Task visibility priority: 
+1. Workers in nearby radius 
+2. Workers in the same city 
+3. Workers in the same state 
+o For Virtual tasks: 
+▪ No location requirement 
+o Budget model: 
+▪ Fixed-price 
+▪ Milestone-based 
+o Urgency level 
+o Preferred date or time window 
+• Task bundling support: 
+o Parent task with one or more subtasks 
+o Each subtask may have its own scope and amount 
+• Task editing prior to acceptance 
+6. Task Application, Offers & Assignment 
+Included in Phase 01 (Upwork-style Workflow) 
+• Workers may: 
+o Accept the posted task price, or 
+o Submit a custom offer with proposed pricing and terms 
+• Clients may: 
+o View all applications and offers 
+o Review worker profiles 
+o Select and assign one candidate 
+• Task lifecycle states: 
+o Posted 
+o Applications Received 
+o Offer Accepted 
+o In Progress 
+o Completed 
+o Disputed 
+7. Worker Tier System (Early Adoption – Phase 01) 
+Phase 01 Strategy Note (Important) 
+For the initial launch of VeriTask, the primary objective is to build liquidity on both 
+sides of the marketplace — meaning: - Attract as many workers as possible - Attract 
+as many jobs as possible 
+To achieve this, VeriTask will operate Phase 01 as an early-adoption growth phase. 
+7.1 Early Adopter Model (Phase 01) 
+• For the first defined group of workers (example: first 1,000 registered 
+workers): 
+o No tier subscription fees will be charged 
+o All workers will have equal access to tasks within their location and 
+eligibility 
+• This approach ensures: 
+o Sufficient job coverage 
+o Faster task fulfillment 
+o Real value for workers before monetization 
+The exact number of early adopters and duration of the free period will be 
+configurable by Admin prior to launch. 
+7.2 Tier System Deferred to Phase 02 
+• A formal paid tier-based subscription system for workers is planned for Phase 
+02 
+• Tier-based benefits such as: 
+o Priority task visibility 
+o Faster payout windows 
+o Premium positioning 
+will be introduced once: 
+o Job volume is stable 
+o Worker demand justifies paid tiers 
+8. Scheduling & Task Execution 
+Included in Phase 01 
+• Scheduling rules based on task type and user tier 
+• Worker confirmation required before task start 
+• Time-window based scheduling support 
+• In-app and email notifications for: 
+o Task assignment 
+o Schedule confirmation 
+o Task completion 
+8. Payments, Escrow & Milestones 
+Included in Phase 01 
+• All payments processed exclusively through the platform 
+• Escrow funding required before work begins 
+• Two supported payment models: 
+o Fixed-price escrow 
+o Milestone-based escrow 
+• Milestone functionality: 
+o Milestones defined during offer acceptance 
+o Each milestone requires client approval for release 
+• Payment release mechanisms: 
+o Manual client approval 
+o Auto-release after a predefined approval window 
+9. Contractor Teams & Payroll 
+Included in Phase 01 
+• Contractors may create and manage teams 
+• Contractors may assign registered subcontractors to tasks 
+• Escrow funds are received by the contractor 
+• Contractor distributes payments to assigned team members 
+• All internal distributions are logged for recordkeeping 
+• Contractor retains full accountability for task delivery 
+10. Financial Management & Admin Controls 
+Included in Phase 01 
+• Admin dashboard providing: 
+o User management 
+o Task monitoring 
+o Dispute resolution tools 
+o Manual suspension and ban controls 
+• Financial visibility including: 
+o Transaction history 
+o Escrow balances 
+o Payout records 
+o Platform fee tracking 
+11. Disputes & Enforcement 
+Included in Phase 01 
+• Client-initiated dispute submission 
+• Manual review by Admin 
+• Resolution outcomes may include: 
+o Approval of task completion 
+o Refund of labor amount 
+o User suspension or removal 
+12. Phase 01 Deliverables 
+• Web-based platform with Client, Worker, and Contractor workflows 
+• Escrow-enabled task lifecycle 
+• Offer-based task assignment system 
+• Basic admin control panel 
+• Deployment to agreed environment (staging or production) 
+13. Acceptance Criteria 
+Phase 01 will be considered complete when: 
+• A client can post a task and fund escrow 
+• A worker can apply, be assigned, and complete the task 
+• Payments are successfully released through escrow 
+• Admin can intervene in disputes and manage users 
+14. Scope Governance 
+Any feature, workflow, or enhancement not explicitly described in this document is not 
+included in Phase 01 and will require: 
+• Inclusion in Phase 02 planning, or 
+• A formally approved Change Request (CR) 
+Approval: 
+Above SOW is very well align with my vision and, App Vertices can proceed with Project 
+Scope. 
+Project Name: VeriTask 
+Client  
+Signature:   
+Name: Bernie Dorse      
+Date: __01/27/2026__  
+Project Team 
+Signature:   
+1. Head of Delivery & Sales: Max Miller      
+Date: __01/27/2026__  
+Signature:   
+2. Project Manager: Mike Bowen      
+Date: __01/27/2026__  
