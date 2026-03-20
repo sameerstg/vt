@@ -271,6 +271,15 @@ modules/
 | `components/OfferSubmitter.jsx` | Submit offers on tasks |
 | `store/workerStore.js` | Worker state (tasks, offers) |
 
+**Admin Module (`src/modules/admin/`):**
+| File | Purpose |
+|------|---------|
+| `pages/AdminDashboard.jsx` | Admin dashboard page |
+| `components/DisputeManager.jsx` | Manage dispute resolution |
+| `components/UserManager.jsx` | Manage user accounts |
+| `components/FinancialOversight.jsx` | Monitor platform finances |
+| `store/adminStore.js` | Admin-side state (users, disputes, transactions) |
+
 **Shared Module (`src/modules/shared/`):**
 | File | Purpose |
 |------|---------|
@@ -588,9 +597,9 @@ npm run lint    # ESLint check
 | components/ | ~310+ (incl. dashboard-client) |
 | app/ | ~100+ |
 | data/ | 23 (18 base + 5 veritask) |
-| modules/ | ~30 (client, contractor, worker, shared) |
+| modules/ | ~35 (client, contractor, worker, admin, shared) |
 | modules/shared/agents/ | 3 (ruleEnforcementAgent.js, codebaseAnalysisAgent.js, businessRequirementAgent.js) |
-| store/ | 7 (4 + 3 role-specific) |
+| store/ | 8 (4 + 4 role-specific) |
 | hook/ | 2 |
 | utils/ | 2 |
 
