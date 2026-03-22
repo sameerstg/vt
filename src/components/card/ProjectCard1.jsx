@@ -18,7 +18,9 @@ export default function ProjectCard1({ data }) {
               <span className="online-badge2" />
             </div>
             <div className="details ml15 ml0-md mb15-md">
-              <h5 className="title mb-3">{data.title}</h5>
+              <Link href={`/project-single/${data.id}`} className="text-decoration-none">
+                <h5 className="title mb-3 text-dark hover:underline">{data.title}</h5>
+              </Link>
               <p className="mb-0 fz14 list-inline-item mb5-sm pe-1">
                 <i className="flaticon-place fz16 vam text-thm2 me-1" />{" "}
                 {data.location}
