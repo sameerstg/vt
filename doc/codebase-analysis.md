@@ -420,6 +420,8 @@ Each DashboardLayout provides:
 
 **Client layout consolidation:** `src/app/client/layout.jsx` wraps all client pages with `<MobileNavigation2 />` and `<DashboardLayout>` (from `dashboard-client`), so individual client `page.jsx` files export only their content component.
 
+**User dropdown (worker & client):** The user avatar dropdown in both `DashboardHeader` components shows only **My Profile** and **Logout**. Positioned via `position: fixed; top: 75px; right: 30px` in `public/css/style.css` to always appear just below the fixed header.
+
 ---
 
 ## Component Patterns

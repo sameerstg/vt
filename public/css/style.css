@@ -802,7 +802,11 @@ li {
   box-shadow: 0px 6px 15px rgba(64, 79, 104, 0.05);
   padding: 20px 30px;
   width: 330px;
-  transform: translate(-272px, 60px) !important;
+  position: fixed !important;
+  top: 75px !important;
+  right: 30px !important;
+  left: auto !important;
+  transform: none !important;
 }
 .user_setting .dropdown-menu .dropdown-item {
   border-radius: 4px;

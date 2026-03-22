@@ -1,13 +1,10 @@
 "use client";
-import { dasboardNavigation } from "@/data/dashboardWorker";
 import toggleStore from "@/store/toggleStore";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export default function DashboardHeader() {
   const toggle = toggleStore((state) => state.dashboardSlidebarToggleHandler);
-  const path = usePathname();
 
   return (
     <>
@@ -280,52 +277,16 @@ export default function DashboardHeader() {
                             alt="user.png"
                           />
                         </a>
-                        <div className="dropdown-menu">
+                        <div className="dropdown-menu dropdown-menu-end">
                           <div className="user_setting_content">
-                            {/* <p className="fz15 fw400 ff-heading mb10 pl30">
-                              Start
-                            </p> */}
-                            {dasboardNavigation.slice(0, 8).map((item, i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${path === item.path ? "active" : ""
-                                  }`}
-                                href={item.path}
-                              >
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))}
-                            {/* <p className="fz15 fw400 ff-heading mt30 pl30">
-                              Organize and Manage
-                            </p>
-                            {dasboardNavigation.slice(8, 13).map((item,i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
-                                href={item.path}
-                              >
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))}
-                            <p className="fz15 fw400 ff-heading mt30 pl30">
-                              Account
-                            </p>
-                            {dasboardNavigation.slice(13, 15).map((item,i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
-                                href={item.path}
-                              >
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))} */}
+                            <Link className="dropdown-item" href="/worker/my-profile">
+                              <i className="flaticon-user mr10" />
+                              My Profile
+                            </Link>
+                            <Link className="dropdown-item" href="/login">
+                              <i className="flaticon-logout mr10" />
+                              Logout
+                            </Link>
                           </div>
                         </div>
                       </div>
