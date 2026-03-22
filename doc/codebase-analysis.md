@@ -189,67 +189,32 @@ testimonials.js   // Customer testimonials
 ### 7. VeriTask Feature Modules
 
 Modular feature architecture with dual organization:
-1. Role-based modules in `src/modules/` for business logic and state management
-2. Role-scoped UI components in `src/app/(dashboard)/[role]/` for route isolation
+1. Role-based modules in role-specific folders for business logic and state management
+2. Role-scoped UI components in role-specific folders
 
+**Client (top-level route `src/app/client/`):**
 ```
-modules/
-├── client/         # Client role (job poster, task creator) - business logic & state
-├── contractor/     # Contractor role (team manager, payroll) - business logic & state
-├── worker/         # Worker role (task executor, offer submitter) - business logic & state
-└── shared/         # Shared utilities (auth, layout, utils, agents)
-```
-
-Role-scoped UI organization:
-```
-src/app/(dashboard)/
-├── client/
-│   ├── components/     # Client-specific UI components
-│   └── modules/        # Client-specific modules (pages, store, etc.)
-├── worker/
-│   ├── components/     # Worker-specific UI components
-│   └── modules/        # Worker-specific modules (pages, store, etc.)
-└── contractor/
-    ├── components/     # Contractor-specific UI components
-    └── modules/        # Contractor-specific modules (pages, store, etc.)
+src/app/client/
+├── components/         # Client-specific UI components (cards, sections, etc.)
+├── modules/            # Client business logic (TaskCreator, OfferReviewer, etc.)
+├── dashboard/          # Dashboard page
+├── create-projects/    # Create project page
+└── ...                 # Other client pages (invoice, message, etc.)
 ```
 
-**Shared Module (`src/modules/shared/`):**
-| File | Purpose |
-|------|---------|
-| `store/authStore.js` | Authentication state (role, user) |
-| `utils/api.js` | Shared API utilities |
-| `utils/taskStates.js` | Task state machine definitions |
-| `agents/ruleEnforcementAgent.js` | Ensures development follows rules from doc/rules.md |
-| `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
-| `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
-
-### 7. VeriTask Feature Modules
-
-Modular feature architecture with dual organization:
-1. Role-based modules in `src/modules/` for business logic and state management
-2. Role-scoped UI components in `src/app/(dashboard)/[role]/` for route isolation
-
+**Worker & Contractor (inside `(dashboard)` route group):**
 ```
-modules/
-├── client/         # Client role (job poster, task creator) - business logic & state
-├── contractor/     # Contractor role (team manager, payroll) - business logic & state
-├── worker/         # Worker role (task executor, offer submitter) - business logic & state
-└── shared/         # Shared utilities (auth, layout, utils, agents)
-```
+src/app/(dashboard)/worker/
+├── components/         # Worker-specific UI components
+├── modules/            # Worker business logic (TaskBrowser, OfferSubmitter, etc.)
+├── dashboard/          # Dashboard page
+└── ...                 # Other worker pages
 
-Role-scoped UI organization:
-```
-src/app/(dashboard)/
-├── client/
-│   ├── components/     # Client-specific UI components
-│   └── modules/        # Client-specific modules (pages, store, etc.)
-├── worker/
-│   ├── components/     # Worker-specific UI components
-│   └── modules/        # Worker-specific modules (pages, store, etc.)
-└── contractor/
-    ├── components/     # Contractor-specific UI components
-    └── modules/        # Contractor-specific modules (pages, store, etc.)
+src/app/(dashboard)/contractor/
+├── components/         # Contractor-specific UI components
+├── modules/            # Contractor business logic
+├── dashboard/          # Dashboard page
+└── ...                 # Other contractor pages
 ```
 
 **Shared Module (`src/modules/shared/`):**
@@ -262,7 +227,7 @@ src/app/(dashboard)/
 | `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
 | `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
 
-**Client Module (`src/modules/client/`):**
+**Client Module (`src/app/client/modules/`):**
 | File | Purpose |
 |------|---------|
 | `pages/ClientDashboard.jsx` | Client dashboard page |
@@ -272,16 +237,7 @@ src/app/(dashboard)/
 | `components/PaymentReleaser.jsx` | Release payment on completion |
 | `store/clientStore.js` | Client-side state (tasks, offers) |
 
-**Contractor Module (`src/modules/contractor/`):**
-| File | Purpose |
-|------|---------|
-| `pages/ContractorDashboard.jsx` | Contractor dashboard page |
-| `components/TeamManager.jsx` | Manage worker teams |
-| `components/SubtaskAssigner.jsx` | Assign subtasks to workers |
-| `components/PayrollDistributor.jsx` | Distribute payroll to team |
-| `store/contractorStore.js` | Contractor state (teams, subtasks) |
-
-**Worker Module (`src/modules/worker/`):**
+**Worker Module (`src/app/(dashboard)/worker/modules/`):**
 | File | Purpose |
 |------|---------|
 | `pages/WorkerDashboard.jsx` | Worker dashboard page |
@@ -291,7 +247,16 @@ src/app/(dashboard)/
 | `components/OfferSubmitter.jsx` | Submit offers on tasks |
 | `store/workerStore.js` | Worker state (tasks, offers) |
 
-**Admin Module (`src/modules/admin/`):**
+**Contractor Module (`src/app/(dashboard)/contractor/modules/`):**
+| File | Purpose |
+|------|---------|
+| `pages/ContractorDashboard.jsx` | Contractor dashboard page |
+| `components/TeamManager.jsx` | Manage worker teams |
+| `components/SubtaskAssigner.jsx` | Assign subtasks to workers |
+| `components/PayrollDistributor.jsx` | Distribute payroll to team |
+| `store/contractorStore.js` | Contractor state (teams, subtasks) |
+
+**Admin Module (`src/app/admin/`):**
 | File | Purpose |
 |------|---------|
 | `pages/AdminDashboard.jsx` | Admin dashboard page |
@@ -336,22 +301,29 @@ POSTED → ACCEPTED → IN_PROGRESS → SUBMITTED → APPROVED → COMPLETED
 
 ---
 
-**Dashboard Pages (in `src/app/(dashboard)/`):**
-- `client/dashboard/page.jsx` - Client role dashboard (VeriTask)
-- `worker/dashboard/page.jsx` - Worker role dashboard (VeriTask)
-- `contractor/dashboard/page.jsx` - Contractor role dashboard (VeriTask)
+**Dashboard Pages:**
+- `src/app/client/dashboard/page.jsx` - Client role dashboard (top-level route)
+- `src/app/(dashboard)/worker/dashboard/page.jsx` - Worker role dashboard
+- `src/app/(dashboard)/contractor/dashboard/page.jsx` - Contractor role dashboard
+- `src/app/admin/dashboard/page.jsx` - Admin role dashboard
 
 Each role also has role-specific sub-pages for proposal, invoice, saved, reviews, message, payouts, statements, my-profile, manage-jobs, manage-projects, manage-services, add-services, create-projects.
 
 ---
 
 **VeriTask Dashboard Layout Pattern:**
-Each role dashboard uses a role-specific `DashboardLayout` wrapper (`src/app/(dashboard)/[role]/components/DashboardLayout.jsx`) that provides:
+Each role dashboard uses a role-specific `DashboardLayout` wrapper:
+- **Client:** `src/app/client/components/DashboardLayout.jsx`
+- **Worker:** `src/app/(dashboard)/worker/components/DashboardLayout.jsx`
+- **Contractor:** `src/app/(dashboard)/contractor/components/DashboardLayout.jsx`
+- **Admin:** `src/app/admin/components/DashboardLayout.jsx`
+
+Each DashboardLayout provides:
 - `DashboardHeader` — top bar with logo, search, notifications, user menu
 - `DashboardSidebar` — side navigation using `dashboard_sidebar_list` / `sidebar_list_item` CSS
 - `DashboardFooter` — copyright footer
 
-This ensures all three role dashboards share the same header/sidebar/footer styling as the template's original dashboards.
+This ensures all role dashboards share the same header/sidebar/footer styling as the template's original dashboards.
 
 ---
 
@@ -446,13 +418,21 @@ Uses Bootstrap 5 breakpoints with custom container max-width:
 (home)/              → Homepage variants
 (job)/job-1/         → /job-1
 (job)/job-2/         → /job-2
-(dashboard)/dashboard/ → /dashboard
-(dashboard)/client/dashboard/     → /client/dashboard
 (dashboard)/worker/dashboard/     → /worker/dashboard
+(dashboard)/worker/my-profile/    → /worker/my-profile
+(dashboard)/worker/...            → /worker/* (all worker sub-pages)
 (dashboard)/contractor/dashboard/ → /contractor/dashboard
+(dashboard)/contractor/...         → /contractor/* (all contractor sub-pages)
 ```
 
-*Note: Navigation paths in src/data/dashboardClient.ts, dashboardWorker.ts, and dashboardContractor.ts have been updated to include role-specific prefixes (e.g., "/manage-jobs" became "/client/manage-jobs") to align with the route group structure where role-specific pages are scoped under /{role}/*. Additionally, role-specific components and modules have been moved to src/app/(dashboard)/[role]/components/ and src/app/(dashboard)/[role]/modules/ respectively to ensure proper route isolation.*
+### Top-level Routes (outside route groups)
+```
+client/              → /client/* (client dashboard pages - not in route group)
+admin/               → /admin/* (admin dashboard pages)
+add-services/        → /add-services
+```
+
+*Note: The client route group was moved outside the `(dashboard)` parentheses to separate it from worker/contractor routes. Navigation paths in src/data/dashboardClient.ts and dashboardWorker.ts have been updated to include role-specific prefixes. Role-specific components and modules for client are now in `src/app/client/`, while worker and contractor remain in `src/app/(dashboard)/`.*
 
 ### Navigation Structure (`data/navigation.js`)
 ```javascript
@@ -467,11 +447,11 @@ const menus = [
 ### Dashboard Navigation
 Each role has its own navigation defined in `src/data/`:
 
-**Client (`dashboardClient.js`):** 13 items — Dashboard, My Tasks, Review Offers, Escrow, Payments, Saved, Message, Reviews, Manage Projects, Create Project, Statements, My Profile, Logout
+**Client (`dashboardClient.js`):** Active items — Dashboard, Manage Projects, Message (other items commented out for focused UI)
 
-**Worker (`dashboardWorker.js`):** 15 items — Dashboard, My Proposals, Saved, Message, Reviews, Invoice, Payouts, Statements, Manage Services, Manage Jobs, Manage Project, Add Services, Create Project, My Profile, Logout
+**Worker (`dashboardWorker.js`):** Active items — Dashboard, Manage Project, Message, Payouts (other items commented out for focused UI)
 
-**Contractor (`dashboardContractor.js`):** 15 items — same structure as worker, prefixed with `/contractor/`
+**Contractor (`dashboardContractor.js`):** Same structure as worker, prefixed with `/contractor/`
 
 ---
 
@@ -591,11 +571,13 @@ npm run lint    # ESLint check
 
 ### Adding VeriTask Role Features
 1. Choose the appropriate role module (`client`, `contractor`, `worker`)
-2. Add components in the role's `components/` folder
-3. Manage state in the role's `store/` (Zustand)
-4. Add page in `src/app/(dashboard)/<role>-dashboard/`
-5. Add shared utilities to `modules/shared/` (auth, layout, API)
-6. For dashboard UI, wrap pages with the role's `DashboardLayout` component (`src/components/dashboard-{role}/`)
+2. **Client:** Add components in `src/app/client/components/`, modules in `src/app/client/modules/`
+3. **Worker:** Add components in `src/app/(dashboard)/worker/components/`, modules in `src/app/(dashboard)/worker/modules/`
+4. **Contractor:** Add components in `src/app/(dashboard)/contractor/components/`, modules in `src/app/(dashboard)/contractor/modules/`
+5. Manage state in the role's `store/` (Zustand)
+6. Add page in the appropriate role folder
+7. Add shared utilities to `modules/shared/` (auth, layout, API)
+8. For dashboard UI, wrap pages with the role's `DashboardLayout` component
 
 ### Replacing Mock Data
 1. Replace data exports in `src/data/` with API calls
