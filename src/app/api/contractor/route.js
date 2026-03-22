@@ -1,5 +1,5 @@
-import { projects as allProjects, updateProject } from '../../projects';
-import { getProjectsState } from '../../uiState';
+import { projects as allProjects, updateProject } from '../projects';
+import { getProjectsState } from '../uiState';
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 

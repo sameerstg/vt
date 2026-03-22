@@ -1,21 +1,9 @@
-import DashboardLayout from "@/app/contractor/components/DashboardLayout";
 import ManageJobInfo from "@/app/contractor/components/section/ManageJobInfo";
 
-import MobileNavigation2 from "@/components/header/MobileNavigation2";
-
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Manage Job",
+  title: "VeriTask - Manage Jobs",
 };
 
 export default function page() {
-  return (
-    <>
-
-      <MobileNavigation2 />
-      <DashboardLayout>
-        <ManageJobInfo />
-      </DashboardLayout>
-    </>
-  );
+  return <ManageJobInfo />;
 }
-

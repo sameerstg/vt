@@ -224,10 +224,11 @@ src/app/worker/
 └── ...                 # Other worker pages (each exports only its content component)
 
 src/app/contractor/
+├── layout.jsx          # Shared layout: reuses worker's MobileNavigation2 + DashboardLayout (same header & sidebar)
 ├── components/         # Contractor-specific UI components
 ├── modules/            # Contractor business logic
 ├── dashboard/          # Dashboard page
-└── ...                 # Other contractor pages
+└── ...                 # Other contractor pages (each exports only its content component)
 ```
 
 **Shared Module (`src/modules/shared/`):**
@@ -420,6 +421,8 @@ Each DashboardLayout provides:
 
 **Client layout consolidation:** `src/app/client/layout.jsx` wraps all client pages with `<MobileNavigation2 />` and `<DashboardLayout>` (from `dashboard-client`), so individual client `page.jsx` files export only their content component.
 
+**Contractor layout consolidation:** `src/app/contractor/layout.jsx` reuses the worker's `DashboardLayout` directly (same header and sidebar), so all 15 contractor `page.jsx` files export only their content component.
+
 **User dropdown (worker & client):** The user avatar dropdown in both `DashboardHeader` components shows only **My Profile** and **Logout**. Positioned via `position: fixed; top: 75px; right: 30px` in `public/css/style.css` to always appear just below the fixed header.
 
 ---
@@ -532,7 +535,7 @@ worker/browse-projects/    → /worker/browse-projects
 worker/manage-projects/    → /worker/manage-projects
 worker/...                 → /worker/* (all worker sub-pages, wrapped by worker/layout.jsx)
 contractor/dashboard/      → /contractor/dashboard
-contractor/...             → /contractor/* (all contractor sub-pages)
+contractor/...             → /contractor/* (all contractor sub-pages, wrapped by contractor/layout.jsx)
 ```
 
 ### Top-level Routes (outside route groups)

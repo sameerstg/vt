@@ -1,21 +1,9 @@
-import DashboardLayout from "@/app/(dashboard)/contractor/components/DashboardLayout";
-import MyProfileInfo from "@/app/(dashboard)/contractor/components/section/MyProfileInfo";
-
-import MobileNavigation2 from "@/components/header/MobileNavigation2";
+import MyProfileInfo from "@/app/contractor/components/section/MyProfileInfo";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | My Profile",
+  title: "VeriTask - My Profile",
 };
 
 export default function page() {
-  return (
-    <>
-    
-    <MobileNavigation2 />
-      <DashboardLayout>
-        <MyProfileInfo />
-      </DashboardLayout>
-    </>
-  );
+  return <MyProfileInfo />;
 }
-
