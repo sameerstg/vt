@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export default function ProjectCard1({ data }) {
@@ -8,18 +7,11 @@ export default function ProjectCard1({ data }) {
         <div className="col-lg-8 ps-0">
           <div className="d-lg-flex bdrr1 bdrn-xl pr15 pr0-lg">
             <div className="thumb w60 position-relative rounded-circle mb15-md">
-              {/* <Image
-                height={60}
-                width={60}
-                className="rounded-circle mx-auto"
-                src={data.img}
-                alt="rounded-circle"
-              /> */}
               <span className="online-badge2" />
             </div>
             <div className="details ml15 ml0-md mb15-md">
-              <Link href={`/project-single/${data.id}`} className="text-decoration-none">
-                <h5 className="title mb-3 text-dark hover:underline">{data.title}</h5>
+              <Link href={`/worker/project/${data.id}`} className="text-decoration-none">
+                <h5 className="title mb-3 text-thm2" style={{cursor:"pointer"}}>{data.title}</h5>
               </Link>
               <p className="mb-0 fz14 list-inline-item mb5-sm pe-1">
                 <i className="flaticon-place fz16 vam text-thm2 me-1" />{" "}
@@ -54,10 +46,10 @@ export default function ProjectCard1({ data }) {
             </div>
             <div className="d-grid mt15">
               <Link
-                href={`/project-single/${data.id}`}
+                href={`/worker/project/${data.id}`}
                 className="ud-btn btn-light-thm"
               >
-                Send Proposal
+                View Project
                 <i className="fal fa-arrow-right-long" />
               </Link>
             </div>

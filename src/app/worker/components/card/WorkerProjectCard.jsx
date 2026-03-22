@@ -7,6 +7,8 @@ const statusConfig = {
   IN_PROGRESS: { label: "In Progress", class: "badge-in-progress" },
   SUBMITTED: { label: "Submitted", class: "badge-submitted" },
   COMPLETED: { label: "Completed", class: "badge-completed" },
+  IN_DISPUTE: { label: "In Dispute", class: "badge-dispute" },
+  CANCELLED: { label: "Cancelled", class: "badge-cancelled" },
 };
 
 export default function WorkerProjectCard({ project }) {
@@ -19,7 +21,7 @@ export default function WorkerProjectCard({ project }) {
           <div className="d-lg-flex px-0">
             <div className="details mb15-md-md">
               <h5 className="title mb10">
-                <Link 
+                <Link
                   href={`/worker/project/${project.id}`}
                   className="text-dark text-decoration-none hover-text-primary"
                 >

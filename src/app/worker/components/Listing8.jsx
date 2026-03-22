@@ -101,17 +101,17 @@ export default function Listing8() {
             <div className="col-lg-12">
               <div className="row mb30">
                 <div className="col-md-4">
-                  <div className="search_area position-relative">
+                  <div className="search_area">
                     <input
                       type="text"
-                      className="form-control pe-5"
+                      className="form-control"
                       placeholder="Search projects..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <span className="position-absolute top-50 end-0 translate-middle-y me-3 text-muted">
-                      <i className="flaticon-search" />
-                    </span>
+                    <label>
+                      <span className="flaticon-loupe" />
+                    </label>
                   </div>
                 </div>
                 <div className="col-md-2">

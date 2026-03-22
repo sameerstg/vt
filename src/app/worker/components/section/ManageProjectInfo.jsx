@@ -4,21 +4,18 @@ import DashboardNavigation from "../header/DashboardNavigation";
 import { useState, useEffect } from "react";
 import Pagination1 from "@/components/section/Pagination1";
 import WorkerProjectCard from "../card/WorkerProjectCard";
-import OfferCard from "../card/OfferCard";
 
 const tabs = [
-  { label: "Proposed Projects", status: "OFFERS" },
   { label: "In Progress", status: "IN_PROGRESS" },
   { label: "In Review", status: "SUBMITTED" },
   { label: "Completed", status: "COMPLETED" },
+  { label: "In Dispute", status: "IN_DISPUTE" },
 ];
 
 export default function ManageProjectInfo() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [projects, setProjects] = useState([]);
-  const [offers, setOffers] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
-  const [allOffers, setAllOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -36,22 +33,12 @@ export default function ManageProjectInfo() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      if (tabs[selectedTab].status === "OFFERS") {
-        const res = await fetch("/api/worker/offers");
-        const data = await res.json();
-        if (data.success) {
-          const pendingOffers = data.data.filter(o => o.status === "PENDING");
-          setAllOffers(pendingOffers);
-          setTotalItems(pendingOffers.length);
-        }
-      } else if (tabs[selectedTab].status === "IN_PROGRESS" || tabs[selectedTab].status === "SUBMITTED" || tabs[selectedTab].status === "COMPLETED") {
-        const res = await fetch("/api/worker/projects?type=assigned");
-        const data = await res.json();
-        if (data.success) {
-          const filtered = data.data.assigned.filter(p => p.status === tabs[selectedTab].status);
-          setAllProjects(filtered);
-          setTotalItems(filtered.length);
-        }
+      const res = await fetch("/api/worker/projects?type=assigned");
+      const data = await res.json();
+      if (data.success) {
+        const filtered = data.data.assigned.filter(p => p.status === tabs[selectedTab].status);
+        setAllProjects(filtered);
+        setTotalItems(filtered.length);
       }
     } catch (e) {
       console.error(e);
@@ -62,21 +49,10 @@ export default function ManageProjectInfo() {
 
   useEffect(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    if (tabs[selectedTab].status === "OFFERS") {
-      setOffers(allOffers.slice(start, start + itemsPerPage));
-    } else {
-      setProjects(allProjects.slice(start, start + itemsPerPage));
-    }
-  }, [allProjects, allOffers, currentPage, selectedTab]);
+    setProjects(allProjects.slice(start, start + itemsPerPage));
+  }, [allProjects, currentPage, selectedTab]);
 
-  const getCurrentItems = () => {
-    if (tabs[selectedTab].status === "OFFERS") {
-      return offers;
-    }
-    return projects;
-  };
-
-  const showOffers = tabs[selectedTab].status === "OFFERS";
+  const getCurrentItems = () => projects;
 
   return (
     <>
@@ -131,13 +107,7 @@ export default function ManageProjectInfo() {
                 ) : getCurrentItems().length === 0 ? (
                   <div className="text-center p50">
                     <i className="flaticon-folder fz60 text-muted mb20 d-block" />
-                    <h5 className="text-muted">No {tabs[selectedTab].label.toLowerCase()} found</h5>
-                    {tabs[selectedTab].status === "OFFERS" && (
-                      <Link href="/worker/browse-projects" className="ud-btn btn-thm mt20">
-                        Browse Projects
-                        <i className="fal fa-arrow-right-long" />
-                      </Link>
-                    )}
+                    <h5 className="text-muted">No {tabs[selectedTab].label.toLowerCase()} projects found</h5>
                   </div>
                 ) : (
                   <div className="packages_table table-responsive">
@@ -146,16 +116,12 @@ export default function ManageProjectInfo() {
                         <tr>
                           <th scope="col">Title</th>
                           <th scope="col">Category</th>
-                          <th scope="col">{showOffers ? "Your Bid" : "Status/Budget"}</th>
+                          <th scope="col">Status/Budget</th>
                         </tr>
                       </thead>
                       <tbody className="t-body">
                         {getCurrentItems().map((item) => (
-                          showOffers ? (
-                            <OfferCard key={item.id} offer={item} />
-                          ) : (
-                            <WorkerProjectCard key={item.id} project={item} />
-                          )
+                          <WorkerProjectCard key={item.id} project={item} />
                         ))}
                       </tbody>
                     </table>

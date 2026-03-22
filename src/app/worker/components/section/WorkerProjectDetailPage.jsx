@@ -37,11 +37,12 @@ export default function WorkerProjectDetailPage({ projectId }) {
 
   const fetchProject = async () => {
     try {
-      const res = await fetch(`/api/worker/projects?type=assigned`);
+      const res = await fetch(`/api/worker/projects`);
       const data = await res.json();
       if (data.success) {
-        const proj = data.data.assigned.find(p => p.id === projectId) ||
-          data.data.available.find(p => p.id === projectId);
+        const proj =
+          data.data.available.find(p => p.id === projectId) ||
+          data.data.assigned.find(p => p.id === projectId);
         setProject(proj);
       }
     } catch (e) {
@@ -50,6 +51,7 @@ export default function WorkerProjectDetailPage({ projectId }) {
       setLoading(false);
     }
   };
+
 
   const fetchMilestones = async () => {
     try {
@@ -243,12 +245,12 @@ export default function WorkerProjectDetailPage({ projectId }) {
                             </button>
                           )}
                           {milestone.status === "IN_PROGRESS" && (
-                            <button
-                              onClick={() => handleUpdateMilestone(milestone.id, "submit")}
+                            <Link
+                              href={`/worker/project/${projectId}/submit`}
                               className="ud-btn btn-thm bdrs4"
                             >
                               Submit
-                            </button>
+                            </Link>
                           )}
                           {milestone.status === "SUBMITTED" && (
                             <span className="badge badge-submitted p10">
@@ -268,6 +270,18 @@ export default function WorkerProjectDetailPage({ projectId }) {
                 </div>
               )}
             </>
+          )}
+
+          {project.status === "IN_PROGRESS" && project.budgetModel !== "MILESTONE" && (
+            <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
+              <div className="d-flex justify-content-between align-items-center">
+                <h5 className="mb0">Ready to submit?</h5>
+                <Link href={`/worker/project/${projectId}/submit`} className="ud-btn btn-thm">
+                  Submit Work
+                  <i className="fal fa-arrow-right-long" />
+                </Link>
+              </div>
+            </div>
           )}
 
           {project.status === "POSTED" && (

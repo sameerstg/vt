@@ -258,7 +258,7 @@ src/app/contractor/
 
 | Route | File | Purpose |
 |-------|------|---------|
-| `/api/worker/projects` | `projects/route.js` | Get available/assigned projects |
+| `/api/worker/projects` | `projects/route.js` | GET available/assigned projects; PUT submit project (action: "submit") |
 | `/api/worker/offers` | `offers/route.js` | Submit/withdraw offers |
 | `/api/worker/milestones` | `milestones/route.js` | Update milestone status |
 
@@ -624,15 +624,22 @@ npm run lint    # ESLint check
    - Project count display (showing X of Y projects)
    - 8 items per page with pagination
 3. **Manage Projects** → `worker/manage-projects/page.jsx` with `ManageProjectInfo`
-   - Unified view with tabs: Available Projects, My Offers, Assigned, In Progress, Completed
-   - Uses `WorkerProjectCard` and `OfferCard` components for consistent styling
-   - Matches client manage-projects styling pattern
+   - Tabbed view: In Progress, In Review, Completed, In Dispute (no Offers/Proposed tab)
+   - Uses `WorkerProjectCard` with full statusConfig including IN_DISPUTE and CANCELLED badges
+   - Mock IN_DISPUTE projects added: proj-031, proj-032, proj-033 (assigned to worker-021)
 4. **My Projects** → `worker/my-projects/page.jsx` with `AssignedProjectsInfo`
    - View assigned projects with milestone tracking
    - Start, submit, and track milestone progress
 5. **Project Detail** → `worker/project/[id]/page.jsx` with `WorkerProjectDetailPage`
-   - View project details and milestones
-   - Update milestone status (start, submit)
+   - View project details, escrow status, and milestones
+   - Milestone actions: "Start Work" (PENDING→IN_PROGRESS), "Submit" link (opens submit page)
+   - Fixed-price IN_PROGRESS projects show "Ready to submit?" bar linking to submit page
+   - Milestone-based projects do NOT show the "Ready to submit?" bar (per-milestone submit instead)
+6. **Submit Work** → `worker/project/[id]/submit/page.jsx` with `WorkerSubmitWorkPage`
+   - Description textarea (required) + click-to-upload file attachments (multi-file, removable)
+   - Project Info sidebar + "Before Submitting" checklist sidebar
+   - On submit: `PUT /api/worker/projects` `{projectId, action: "submit"}` → status becomes SUBMITTED
+   - Redirects back to project detail on success
 6. **My Proposals** → `worker/proposals/page.jsx` with `WorkerProposalsInfo`
    - Track submitted offers and their status
    - Withdraw pending offers
