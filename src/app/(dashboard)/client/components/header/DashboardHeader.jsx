@@ -28,17 +28,19 @@ export default function DashboardHeader() {
                     </Link>
                   </div>
                   <div className="fz20 ml90">
-                    <a
-                      onClick={toggle}
-                      className="dashboard_sidebar_toggle_icon vam"
-                    >
-                      <Image
-                        height={18}
-                        width={20}
-                        src="/images/dashboard-navicon.svg"
-                        alt="navicon"
-                      />
-                    </a>
+{/* Find the message navigation item */}
+{(function() {
+  const messageItem = dasboardNavigation.find(item => item.name === "Message");
+  return messageItem ? (
+    <Link
+      href={messageItem.path}
+      className="ud-btn btn-thm w-100"
+    >
+      View All Messages
+      <i className="fal fa-arrow-right-long" />
+    </Link>
+  ) : null;
+})()}
                   </div>
                   <div className="ml40 d-none d-xl-block">
                     <div className="search_area dashboard-style">
@@ -104,14 +106,19 @@ export default function DashboardHeader() {
                       </a>
                       <div className="dropdown-menu">
                         <div className="dboard_notific_dd px30 pt20 pb15">
-                          <div className="d-grid">
-                            <Link
-                              href="/client/message"
-                              className="ud-btn btn-thm w-100"
-                            >
-                              View All Messages
-                              <i className="fal fa-arrow-right-long" />
-                            </Link>
+<div className="d-grid">
+{(function() {
+  const messageItem = dasboardNavigation.find(item => item.name === "Message");
+  return messageItem ? (
+    <Link
+      href={messageItem.path}
+      className="ud-btn btn-thm w-100"
+    >
+      View All Messages
+      <i className="fal fa-arrow-right-long" />
+    </Link>
+  ) : null;
+})()}
                           </div>
                         </div>
                       </div>

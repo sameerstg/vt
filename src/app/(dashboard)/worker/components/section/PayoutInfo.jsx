@@ -3,7 +3,7 @@ import DashboardNavigation from "../header/DashboardNavigation";
 import Pagination1 from "@/components/section/Pagination1";
 import PaymentMethod from "./PaymentMethod";
 import PayoutCard1 from "../card/PayoutCard1";
-import { payout } from "@/data/dashboardWorker";
+import { payout } from "@/data/dashboard";
 
 export default function PayoutInfo() {
   return (

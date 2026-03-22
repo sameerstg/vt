@@ -4,7 +4,7 @@ import DashboardNavigation from "../header/DashboardNavigation";
 import { useState } from "react";
 import Pagination1 from "@/components/section/Pagination1";
 import ManageServiceCard1 from "../card/ManageServiceCard1";
-import { manageService } from "@/data/dashboardWorker";
+import { manageService } from "@/data/dashboard";
 import ProposalModal1 from "../modal/ProposalModal1";
 import DeleteModal from "../modal/DeleteModal";
 

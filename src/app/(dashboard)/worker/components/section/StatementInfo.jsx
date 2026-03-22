@@ -1,7 +1,7 @@
 import Pagination1 from "@/components/section/Pagination1";
 import DashboardNavigation from "../header/DashboardNavigation";
 import StatementCard1 from "../card/StatementCard1";
-import { statement } from "@/data/dashboardWorker";
+import { statement } from "@/data/dashboard";
 
 export default function StatementInfo() {
   return (

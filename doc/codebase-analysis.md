@@ -346,7 +346,7 @@ Each role also has role-specific sub-pages for proposal, invoice, saved, reviews
 ---
 
 **VeriTask Dashboard Layout Pattern:**
-Each role dashboard uses a role-specific `DashboardLayout` wrapper (`src/components/dashboard-{role}/DashboardLayout.jsx`) that provides:
+Each role dashboard uses a role-specific `DashboardLayout` wrapper (`src/app/(dashboard)/[role]/components/DashboardLayout.jsx`) that provides:
 - `DashboardHeader` — top bar with logo, search, notifications, user menu
 - `DashboardSidebar` — side navigation using `dashboard_sidebar_list` / `sidebar_list_item` CSS
 - `DashboardFooter` — copyright footer
@@ -452,7 +452,7 @@ Uses Bootstrap 5 breakpoints with custom container max-width:
 (dashboard)/contractor/dashboard/ → /contractor/dashboard
 ```
 
-*Note: Navigation paths in src/data/dashboardClient.ts, dashboardWorker.ts, and dashboardContractor.ts have been updated to include role-specific prefixes (e.g., "/manage-jobs" became "/client/manage-jobs") to align with the route group structure where role-specific pages are scoped under /{role}/*.*
+*Note: Navigation paths in src/data/dashboardClient.ts, dashboardWorker.ts, and dashboardContractor.ts have been updated to include role-specific prefixes (e.g., "/manage-jobs" became "/client/manage-jobs") to align with the route group structure where role-specific pages are scoped under /{role}/*. Additionally, role-specific components and modules have been moved to src/app/(dashboard)/[role]/components/ and src/app/(dashboard)/[role]/modules/ respectively to ensure proper route isolation.*
 
 ### Navigation Structure (`data/navigation.js`)
 ```javascript

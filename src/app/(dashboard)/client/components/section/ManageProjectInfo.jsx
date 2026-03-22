@@ -3,20 +3,20 @@ import Link from "next/link";
 import DashboardNavigation from "../header/DashboardNavigation";
 import { useState } from "react";
 import Pagination1 from "@/components/section/Pagination1";
-import ManageServiceCard1 from "../card/ManageServiceCard1";
-import { manageService } from "@/data/dashboard";
+import ManageProjectCard from "../card/ManageProjectCard";
 import ProposalModal1 from "../modal/ProposalModal1";
 import DeleteModal from "../modal/DeleteModal";
 
 const tab = [
-  "Active Services",
-  "Pending Services",
+  "Posted Projects",
+  "Pending Projects",
   "Ongoing Services",
+  "Expired Projects",
   "Completed Services",
   "Canceled Services",
 ];
 
-export default function ManageServiceInfo() {
+export default function ManageProjectInfo() {
   const [selectedTab, setSelectedTab] = useState(0);
 
   return (
@@ -28,17 +28,17 @@ export default function ManageServiceInfo() {
           </div>
           <div className="col-lg-9">
             <div className="dashboard_title_area">
-              <h2>Manage Services</h2>
+              <h2>Manage Project</h2>
               <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
           <div className="col-lg-3">
             <div className="text-lg-end">
               <Link
-                href="/dashboard-add-service"
+                href="/create-projects"
                 className="ud-btn btn-dark default-box-shadow2"
               >
-                Add Service
+                Create Project
                 <i className="fal fa-arrow-right-long" />
               </Link>
             </div>
@@ -75,9 +75,11 @@ export default function ManageServiceInfo() {
                         </tr>
                       </thead>
                       <tbody className="t-body">
-                        {manageService.map((item,i) => (
-                          <ManageServiceCard1 key={i} data={item} />
-                        ))}
+                        {Array(7)
+                          .fill(7)
+                          .map((_, i) => (
+                            <ManageProjectCard key={i} />
+                          ))}
                       </tbody>
                     </table>
                     <div className="mt30">
@@ -97,9 +99,11 @@ export default function ManageServiceInfo() {
                         </tr>
                       </thead>
                       <tbody className="t-body">
-                        {manageService.slice(0, 4).map((item,i) => (
-                          <ManageServiceCard1 key={i} data={item} />
-                        ))}
+                        {Array(7)
+                          .fill(7)
+                          .map((_, i) => (
+                            <ManageProjectCard key={i} />
+                          ))}
                       </tbody>
                     </table>
                     <div className="mt30">
@@ -119,9 +123,11 @@ export default function ManageServiceInfo() {
                         </tr>
                       </thead>
                       <tbody className="t-body">
-                        {manageService.slice(0, 3).map((item,i) => (
-                          <ManageServiceCard1 key={i} data={item} />
-                        ))}
+                        {Array(7)
+                          .fill(7)
+                          .map((_, i) => (
+                            <ManageProjectCard key={i} />
+                          ))}
                       </tbody>
                     </table>
                     <div className="mt30">
@@ -141,9 +147,11 @@ export default function ManageServiceInfo() {
                         </tr>
                       </thead>
                       <tbody className="t-body">
-                        {manageService.slice(0, 4).map((item,i) => (
-                          <ManageServiceCard1 key={i} data={item} />
-                        ))}
+                        {Array(7)
+                          .fill(7)
+                          .map((_, i) => (
+                            <ManageProjectCard key={i} />
+                          ))}
                       </tbody>
                     </table>
                     <div className="mt30">
@@ -163,9 +171,35 @@ export default function ManageServiceInfo() {
                         </tr>
                       </thead>
                       <tbody className="t-body">
-                        {manageService.slice(0, 5).map((item,i) => (
-                          <ManageServiceCard1 key={i} data={item} />
-                        ))}
+                        {Array(7)
+                          .fill(7)
+                          .map((_, i) => (
+                            <ManageProjectCard key={i} />
+                          ))}
+                      </tbody>
+                    </table>
+                    <div className="mt30">
+                      <Pagination1 />
+                    </div>
+                  </div>
+                )}
+                {selectedTab === 5 && (
+                  <div className="packages_table table-responsive">
+                    <table className="table-style3 table at-savesearch">
+                      <thead className="t-head">
+                        <tr>
+                          <th scope="col">Title</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Type/Cost</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="t-body">
+                        {Array(7)
+                          .fill(7)
+                          .map((_, i) => (
+                            <ManageProjectCard key={i} />
+                          ))}
                       </tbody>
                     </table>
                     <div className="mt30">

@@ -1,7 +1,7 @@
 import Pagination1 from "@/components/section/Pagination1";
 import DashboardNavigation from "../header/DashboardNavigation";
 import InvoiceCard1 from "../card/InvoiceCard1";
-import { invoice } from "@/data/dashboardWorker";
+import { invoice } from "@/data/dashboard";
 
 export default function InvoiceInfo() {
   return (
