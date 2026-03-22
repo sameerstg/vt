@@ -1,6 +1,7 @@
 export interface Project {
   id: string;
   clientId: string;
+  contractorId?: string;
   title: string;
   description: string;
   type: "VIRTUAL" | "PHYSICAL";
@@ -20,6 +21,7 @@ export const projects: Project[] = [
   {
     id: "proj-001",
     clientId: "client-001",
+    contractorId: "contractor-001",
     title: "Website Redesign Project",
     description: "Complete redesign of company website with modern UI/UX. Need responsive design compatible with all devices.",
     type: "VIRTUAL",
@@ -47,6 +49,7 @@ export const projects: Project[] = [
   {
     id: "proj-003",
     clientId: "client-001",
+    contractorId: "contractor-001",
     title: "Mobile App for Food Delivery",
     description: "iOS and Android app for food delivery service with real-time tracking and payment integration.",
     type: "VIRTUAL",
@@ -74,6 +77,7 @@ export const projects: Project[] = [
   {
     id: "proj-005",
     clientId: "client-001",
+    contractorId: "contractor-001",
     title: "Logo Design for Startup",
     description: "Modern, minimalist logo design for tech startup. Need multiple concepts and revisions.",
     type: "VIRTUAL",
