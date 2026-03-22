@@ -647,13 +647,21 @@ npm run lint    # ESLint check
    - Track submitted offers and their status
    - Withdraw pending offers
 
+6. **My Assignments** → `worker/assignments/page.jsx` with `WorkerAssignmentsInfo`
+   - Lists assignments sent by contractors (PENDING / ACCEPTED / DECLINED tabs)
+   - PENDING tab shows badge count; Accept and Decline buttons per row
+   - On accept/decline: `PUT /api/assignments` `{action:"respond", assignmentId, status}` → row moves to correct tab
+   - Each row shows: project + milestone (if set), contractor ID, pay amount, deadline, optional note
+
 ### Contractor Journey Implementation
 1. **Dashboard** → `contractor/dashboard/page.jsx` with `ContractorDashboardInfo`
    - Shows active projects, team members count, completed count, total revenue
    - Quick actions for team management and payroll
 2. **Team Management** → `contractor/team/page.jsx` with `TeamManagementInfo`
-   - Add/remove team members
-   - Set hourly rates for subcontractors
+   - **Team Members tab:** Add/remove team members; each row has "Assign" button
+   - **Assign modal:** Select project (from contractor's assigned projects), optional milestone (MILESTONE budget model only), pay amount, deadline, optional note
+   - **Assignments tab:** Table of all sent assignments with status badges; Cancel button for PENDING assignments
+   - Calls `POST /api/assignments` to create; `PUT /api/assignments` `{action:"cancel"}` to remove
 3. **My Projects** → `contractor/my-projects/page.jsx` with `ContractorAssignedProjectsInfo`
    - View assigned projects
    - Track project status and milestones
@@ -663,6 +671,14 @@ npm run lint    # ESLint check
 - Dynamic page number generation with ellipsis for large datasets
 - Shows "X – Y of Z projects" count
 - Disabled state for first/last page navigation
+
+### Assignments API (`/api/assignments`)
+Independent in-memory Map store for contractor→worker assignments.
+- `GET ?contractorId=x` — contractor's sent assignments; `GET ?workerId=x` — worker's received assignments
+- `POST {action:"create"}` — contractor creates assignment (required: contractorId, workerId, workerName, projectId, projectTitle, pay, deadline)
+- `PUT {action:"respond"}` — worker accepts/declines (PENDING only)
+- `PUT {action:"cancel"}` — contractor cancels a PENDING assignment
+- Pre-seeded with 3 assignments for worker-021/contractor-001: asgn-001 (PENDING), asgn-002 (ACCEPTED, milestone-level), asgn-003 (DECLINED)
 
 ### API Integration Pattern
 1. Original data in `src/app/api/projects/*.ts` (static)
@@ -678,7 +694,7 @@ npm run lint    # ESLint check
 |-----------|-------|
 | components/ | ~310+ (incl. dashboard-client) |
 | app/ | ~110+ |
-| api/ | 16+ (client routes + data files) |
+| api/ | 17+ (client routes + data files, incl. /api/assignments) |
 | data/ | 23 (18 base + 5 veritask) |
 | modules/ | ~35 (client, contractor, worker, admin, shared) |
 | modules/shared/agents/ | 3 (ruleEnforcementAgent.js, codebaseAnalysisAgent.js, businessRequirementAgent.js) |
