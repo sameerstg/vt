@@ -1,18 +1,19 @@
 import DashboardLayout from "@/components/dashboard-client/DashboardLayout";
-import CreateProjectForm from "@/app/client/components/section/CreateProjectForm";
+import ProjectDetailPage from "@/app/client/components/section/ProjectDetailPage";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "VeriTask - Create Project",
+  title: "VeriTask - Project Details",
 };
 
-export default function page() {
+export default async function ProjectDetail({ params }) {
+  const resolvedParams = await params;
   return (
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <CreateProjectForm />
+        <ProjectDetailPage projectId={resolvedParams.id} />
       </DashboardLayout>
     </>
   );

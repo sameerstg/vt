@@ -6,7 +6,7 @@ export default function ManageProjectCard() {
     <>
       <tr>
         <th scope="row">
-            <div className="worker-style1 box-shadow-none row m-0 p-0 align-items-lg-end">
+          <div className="worker-style1 box-shadow-none row m-0 p-0 align-items-lg-end">
             <div className="d-lg-flex px-0">
               <div className="details mb15-md-md">
                 <h5 className="title mb10">Food Delviery Mobile App</h5>
@@ -32,7 +32,7 @@ export default function ManageProjectCard() {
         <td className="vam">
           <span className="fz14 fw400">$500.00/Fixed</span>
         </td>
-        <td>
+        {/* <td>
           <div className="d-flex">
             <a
               className="icon me-2"
@@ -61,7 +61,7 @@ export default function ManageProjectCard() {
               <span className="flaticon-delete" />
             </a>
           </div>
-        </td>
+        </td> */}
       </tr>
     </>
   );

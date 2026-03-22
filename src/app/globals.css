@@ -562,6 +562,33 @@ h6 a {
   font-weight: 500;
 }
 
+.badge-submitted {
+  background: #f97316;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-dispute {
+  background: #dc2626;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-cancelled {
+  background: #6b7280;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 /* Border highlight */
 .bdr-thm {
   border: 2px solid var(--primary-color) !important;

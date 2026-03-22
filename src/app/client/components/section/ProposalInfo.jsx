@@ -1,11 +1,12 @@
+"use client";
+import { useState } from "react";
 import Pagination1 from "@/components/section/Pagination1";
-import ProposalCard1 from "../card/ProposalCard1";
 import DashboardNavigation from "../header/DashboardNavigation";
-import { project1 } from "@/data/product";
-import DeleteModal from "../modal/DeleteModal";
-import ProposalModal1 from "../modal/ProposalModal1";
 
 export default function ProposalInfo() {
+  const [proposals, setProposals] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   return (
     <>
       <div className="dashboard__content hover-bgc-color">
@@ -16,7 +17,7 @@ export default function ProposalInfo() {
           <div className="col-lg-12">
             <div className="dashboard_title_area">
               <h2>My Proposals</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              <p className="text">View offers received for your projects</p>
             </div>
           </div>
         </div>
@@ -27,27 +28,29 @@ export default function ProposalInfo() {
                 <table className="table-style3 table at-savesearch">
                   <thead className="t-head">
                     <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Cost / Delivery</th>
-                      <th scope="col">Action</th>
+                      <th scope="col">Worker</th>
+                      <th scope="col">Project</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="t-body">
-                    {project1.slice(0, 7).map((item,i) => (
-                      <ProposalCard1 key={i} data={item} />
-                    ))}
+                    <tr>
+                      <td colSpan={5} className="text-center p50">
+                        <i className="flaticon-folder fz40 text-muted mb15 d-block" />
+                        <p className="text-muted mb0">
+                          Proposals will appear here when workers submit offers on your projects
+                        </p>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
-                <div className="mt30">
-                  <Pagination1 />
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <ProposalModal1 />
-      <DeleteModal />
     </>
   );
 }

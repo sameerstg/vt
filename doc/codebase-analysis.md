@@ -196,9 +196,21 @@ Modular feature architecture with dual organization:
 ```
 src/app/client/
 ├── components/         # Client-specific UI components (cards, sections, etc.)
-├── modules/            # Client business logic (ProjectCreator, OfferReviewer, etc.)
+│   ├── card/          # ProjectCard, OfferCard, MilestoneCard, etc.
+│   ├── element/       # MilestoneForm, ReviewComment, etc.
+│   ├── header/        # DashboardHeader, DashboardNavigation
+│   ├── sidebar/       # DashboardSidebar
+│   ├── footer/        # DashboardFooter
+│   ├── chart/         # LineChart, DoughnutChart
+│   ├── modal/          # ProposalModal, DeleteModal
+│   ├── option/         # SelectInput
+│   └── section/       # CreateProjectForm, ManageProjectInfo, ReviewsInfo, etc.
+├── modules/            # Client business logic (TaskCreator, OfferReviewer, etc.)
 ├── dashboard/          # Dashboard page
 ├── create-projects/    # Create project page
+├── manage-projects/    # Manage projects page
+├── project/[id]/       # Project detail page
+├── reviews/            # Reviews page
 └── ...                 # Other client pages (invoice, message, etc.)
 ```
 
@@ -227,17 +239,90 @@ src/app/(dashboard)/contractor/
 | `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
 | `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
 
-**Client Module (`src/app/client/modules/`):**
+---
+
+## API Architecture (`src/app/api/`)
+
+### Client API Routes (`src/app/api/client/`)
+
+| Route | File | Purpose |
+|-------|------|---------|
+| `/api/client/projects` | `projects/route.js` | Get/create projects |
+| `/api/client/offers` | `offers/route.js` | Get offers, accept/reject offers |
+| `/api/client/escrow` | `escrow/route.js` | Get/fund escrow |
+| `/api/client/milestones` | `milestones/route.js` | Get/approve milestones |
+| `/api/client/reviews` | `reviews/route.js` | Get/add reviews |
+
+### Centralized Data Layer (`src/app/api/projects/`)
+
+```
+src/app/api/projects/
+├── index.ts       # Exports all data and functions
+├── data.ts        # 30 projects (10 posted, 10 ongoing, 10 completed)
+├── offers.ts      # 25 offers with worker details
+├── milestones.ts # 42 milestones across projects
+├── escrow.ts     # 20 escrow accounts (ongoing + completed)
+└── reviews.ts    # 10 reviews for completed projects
+```
+
+### UI State Management (`src/app/api/uiState.js`)
+
+In-memory state storage for UI changes:
+- Tracks temporary changes (accept/reject offers, create projects, etc.)
+- State persists during dev server session
+- Original data remains unchanged
+
+---
+
+## Client Module (`src/app/client/modules/`)
+
 | File | Purpose |
 |------|---------|
 | `pages/ClientDashboard.jsx` | Client dashboard page |
-| `components/ProjectCreator.jsx` | Create new projects |
+| `components/TaskCreator.jsx` | Create new tasks |
 | `components/OfferReviewer.jsx` | Review worker offers |
 | `components/EscrowFunding.jsx` | Fund escrow for tasks |
 | `components/PaymentReleaser.jsx` | Release payment on completion |
 | `store/clientStore.js` | Client-side state (projects, offers) |
 
-**Worker Module (`src/app/(dashboard)/worker/modules/`):**
+**Client UI Components (`src/app/client/components/`):**
+
+| Component | Purpose |
+|-----------|---------|
+| `card/ProjectCard.jsx` | Project listing card with status badges |
+| `card/OfferCard.jsx` | Worker offer card with accept/reject |
+| `card/MilestoneCard.jsx` | Milestone with approve button |
+| `card/ManageProjectCard.jsx` | Manage project table row |
+| `card/ProposalCard1.jsx` | Proposal card for listings |
+| `section/CreateProjectForm.jsx` | Full project creation form with milestones |
+| `section/ProjectDetail.jsx` | Project detail view (inline) |
+| `section/ProjectDetailPage.jsx` | Project detail page component |
+| `section/ManageProjectInfo.jsx` | Tabbed project management view |
+| `section/ReviewsInfo.jsx` | Reviews listing with tabs |
+| `section/ReviewForm.jsx` | Write review form |
+| `element/MilestoneForm.jsx` | Add milestone modal |
+| `element/ReviewComment.jsx` | Review comment display |
+
+**Client Pages (`src/app/client/`):**
+
+| Page | Route | Purpose |
+|------|-------|---------|
+| Dashboard | `/client/dashboard` | Overview dashboard |
+| Create Projects | `/client/create-projects` | Create new project |
+| Manage Projects | `/client/manage-projects` | List/manage all projects |
+| Project Detail | `/client/project/[id]` | Single project with offers/milestones |
+| Reviews | `/client/reviews` | View/write reviews |
+| Proposal | `/client/proposal` | View proposals |
+| Message | `/client/message` | Messages |
+| Invoice | `/client/invoice` | Invoices |
+| Statements | `/client/statements` | Financial statements |
+| Payouts | `/client/payouts` | Payout history |
+| My Profile | `/client/my-profile` | User profile |
+
+---
+
+## Worker Module (`src/app/(dashboard)/worker/modules/`)
+
 | File | Purpose |
 |------|---------|
 | `pages/WorkerDashboard.jsx` | Worker dashboard page |
@@ -247,7 +332,10 @@ src/app/(dashboard)/contractor/
 | `components/OfferSubmitter.jsx` | Submit offers on tasks |
 | `store/workerStore.js` | Worker state (projects, offers) |
 
-**Contractor Module (`src/app/(dashboard)/contractor/modules/`):**
+---
+
+## Contractor Module (`src/app/(dashboard)/contractor/modules/`)
+
 | File | Purpose |
 |------|---------|
 | `pages/ContractorDashboard.jsx` | Contractor dashboard page |
@@ -256,7 +344,10 @@ src/app/(dashboard)/contractor/
 | `components/PayrollDistributor.jsx` | Distribute payroll to team |
 | `store/contractorStore.js` | Contractor state (teams, subprojects) |
 
-**Admin Module (`src/app/admin/`):**
+---
+
+## Admin Module (`src/app/admin/`)
+
 | File | Purpose |
 |------|---------|
 | `pages/AdminDashboard.jsx` | Admin dashboard page |
@@ -265,53 +356,40 @@ src/app/(dashboard)/contractor/
 | `components/FinancialOversight.jsx` | Monitor platform finances |
 | `store/adminStore.js` | Admin-side state (users, disputes, transactions) |
 
-**Shared Module (`src/modules/shared/`):**
-| File | Purpose |
-|------|---------|
-| `store/authStore.js` | Authentication state (role, user) |
-| `utils/api.js` | Shared API utilities |
-| `utils/taskStates.js` | Task state machine definitions |
-| `agents/ruleEnforcementAgent.js` | Ensures development follows rules from doc/rules.md |
-| `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
-| `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
+---
 
-**VeriTask Data (`src/data/veritask/`):**
-| File | Purpose |
-|------|---------|
-| `projects.js` | VeriTask project listings |
-| `offers.js` | Worker offers on projects |
-| `users.js` | User profiles (client, contractor, worker) |
-| `escrow.js` | Escrow fund tracking |
-| `disputes.js` | Dispute resolution records |
+## VeriTask Project State Machine
 
-**VeriTask Project State Machine:**
 ```
-POSTED → ACCEPTED → IN_PROGRESS → SUBMITTED → APPROVED → COMPLETED
-                            ↘ DISPUTED → RESOLVED
-         ↓
-      CANCELLED
+POSTED → ASSIGNED → IN_PROGRESS → SUBMITTED → COMPLETED
+                            ↘ IN_DISPUTE → RESOLVED
 ```
 
-**VeriTask Roles:**
+### Project States
+
+| State | Description |
+|-------|-------------|
+| `POSTED` | Project created, waiting for offers |
+| `ASSIGNED` | Offer accepted, worker assigned |
+| `IN_PROGRESS` | Work is being done |
+| `SUBMITTED` | Work submitted for review |
+| `COMPLETED` | Project finished, payment released |
+| `IN_DISPUTE` | Dispute raised |
+| `CANCELLED` | Project cancelled |
+
+### VeriTask Roles
+
 | Role | Description |
 |------|-------------|
 | `client` | Posts projects, funds escrow, releases payment |
 | `contractor` | Manages teams, assigns subprojects, distributes payroll |
 | `worker` | Browses projects, submits offers, completes work |
+| `ADMIN` | Verifies users, resolves disputes, manages platform |
 
 ---
 
-**Dashboard Pages:**
-- `src/app/client/dashboard/page.jsx` - Client role dashboard (top-level route)
-- `src/app/(dashboard)/worker/dashboard/page.jsx` - Worker role dashboard
-- `src/app/(dashboard)/contractor/dashboard/page.jsx` - Contractor role dashboard
-- `src/app/admin/dashboard/page.jsx` - Admin role dashboard
+## Dashboard Layout Pattern
 
-Each role also has role-specific sub-pages for proposal, invoice, saved, reviews, message, payouts, statements, my-profile, manage-jobs, manage-projects, manage-services, add-services, create-projects.
-
----
-
-**VeriTask Dashboard Layout Pattern:**
 Each role dashboard uses a role-specific `DashboardLayout` wrapper:
 - **Client:** `src/app/client/components/DashboardLayout.jsx`
 - **Worker:** `src/app/(dashboard)/worker/components/DashboardLayout.jsx`
@@ -322,8 +400,6 @@ Each DashboardLayout provides:
 - `DashboardHeader` — top bar with logo, search, notifications, user menu
 - `DashboardSidebar` — side navigation using `dashboard_sidebar_list` / `sidebar_list_item` CSS
 - `DashboardFooter` — copyright footer
-
-This ensures all role dashboards share the same header/sidebar/footer styling as the template's original dashboards.
 
 ---
 
@@ -365,6 +441,18 @@ Sections are self-contained page sections (183 total):
 @import "./../../public/css/bootstrap.min.css";
 @import "./../../public/css/animate.css";
 /* ... additional CSS imports */
+```
+
+### Custom Badge Styles
+```css
+.badge-new { background: #22c55e; }      /* Posted/Open */
+.badge-applications { background: #3b82f6; } /* Applications */
+.badge-assigned { background: #8b5cf6; }    /* Assigned */
+.badge-in-progress { background: #f59e0b; } /* In Progress */
+.badge-submitted { background: #f97316; }   /* Submitted */
+.badge-completed { background: #10b981; }   /* Completed */
+.badge-dispute { background: #dc2626; }     /* In Dispute */
+.badge-cancelled { background: #6b7280; }   /* Cancelled */
 ```
 
 ### Tailwind Configuration (`tailwind.config.js`)
@@ -432,101 +520,19 @@ admin/               → /admin/* (admin dashboard pages)
 add-services/        → /add-services
 ```
 
-*Note: The client route group was moved outside the `(dashboard)` parentheses to separate it from worker/contractor routes. Navigation paths in src/data/dashboardClient.ts and dashboardWorker.ts have been updated to include role-specific prefixes. Role-specific components and modules for client are now in `src/app/client/`, while worker and contractor remain in `src/app/(dashboard)/`.*
-
-### Navigation Structure (`data/navigation.js`)
-```javascript
-const menus = [
-  { id: 1, name: "Home", children: [...] },
-  { id: 2, name: "Browse Jobs", children: [...] },
-  { id: 3, name: "Users", children: [...] },
-  // ...
-];
+### Client Routes (`/client/`)
 ```
-
-### Dashboard Navigation
-Each role has its own navigation defined in `src/data/`:
-
-**Client (`dashboardClient.js`):** Active items — Dashboard, Manage Projects, Message (other items commented out for focused UI)
-
-**Worker (`dashboardWorker.js`):** Active items — Dashboard, Manage Project, Message, Payouts (other items commented out for focused UI)
-
-**Contractor (`dashboardContractor.js`):** Same structure as worker, prefixed with `/contractor/`
-
----
-
-## Key Architectural Decisions
-
-### 1. Multiple Homepage Variants
-- 20 different homepage layouts (`(home)/home-1` through `home-20`)
-- Each uses different section combinations
-- Supports various business models (jobs, services, projects)
-
-### 2. Component Variant Pattern
-- Heavy use of numbered variants (Card1, Card2, Section1, Section2)
-- Facilitates template customization
-- Makes swapping designs straightforward
-
-### 3. Client-Side State
-- All client components marked with `"use client"`
-- Root layout initializes Bootstrap dynamically
-- WOW.js animations triggered on route change
-
-### 4. Static Mock Data
-- No API integration (static template)
-- All data in `src/data/` as JS exports
-- Easy to replace with real API calls
-
-### 5. Modular CSS
-- Bootstrap base + custom CSS imports
-- Component-scoped styles via classes
-- Primary color easily customizable via CSS variable
-
-### 6. Dual Styling Strategy (Tailwind + Existing CSS)
-- **Coexistence approach**: Tailwind added alongside existing Bootstrap/custom CSS
-- **Migration-ready**: New components can use Tailwind; existing components unchanged
-- **Brand colors**: Available as Tailwind utilities (`bg-primary`, `text-primary`, etc.)
-- **Build verified**: All 121 static pages compile successfully
-
----
-
-## Data Models
-
-### Job Data Structure
-```javascript
-{
-  id: number,
-  img: string,          // Client avatar
-  title: string,
-  server: string,       // Company name
-  benefits: string[],   // ["$125k-$135k Hourly", "1-5 Days", ...]
-  category: string,
-  salary: number,
-  jobType: "Freelance" | "Full Time" | "Part Time" | "Internship",
-  level: "top-rated" | "lavel-2" | "lavel-1" | "new",
-  sort: "best-seller" | "recommended" | "new-arrivals"
-}
-```
-
-### Dashboard Navigation Item
-```javascript
-{
-  id: number,
-  name: string,
-  icon: string,    // flaticon class name
-  path: string
-}
-```
-
-### Invoice/Payout Structure
-```javascript
-{
-  id: number,
-  amount: number,
-  date: string,
-  method?: string,    // For payouts
-  status: number      // 1, 2, or 3 (paid/pending/etc.)
-}
+client/dashboard           → Overview
+client/create-projects     → Create new project
+client/manage-projects      → Manage all projects
+client/project/[id]        → Project detail page
+client/reviews             → Reviews
+client/proposal            → Proposals
+client/message             → Messages
+client/invoice             → Invoices
+client/statements          → Statements
+client/payouts             → Payouts
+client/my-profile         → Profile
 ```
 
 ---
@@ -564,31 +570,24 @@ npm run lint    # ESLint check
 
 ## Extensibility Points
 
-### Adding New Pages
-1. Create route in appropriate group or top-level
-2. Compose using existing section/card components
-3. Add navigation entry in `data/navigation.js`
+### Adding New Features
+1. Create route in appropriate folder (client pages in `src/app/client/`)
+2. Create components in `src/app/client/components/`
+3. Add API routes in `src/app/api/client/`
+4. Update navigation in `src/data/dashboardClient.js`
 
-### Adding VeriTask Role Features
-1. Choose the appropriate role module (`client`, `contractor`, `worker`)
-2. **Client:** Add components in `src/app/client/components/`, modules in `src/app/client/modules/`
-3. **Worker:** Add components in `src/app/(dashboard)/worker/components/`, modules in `src/app/(dashboard)/worker/modules/`
-4. **Contractor:** Add components in `src/app/(dashboard)/contractor/components/`, modules in `src/app/(dashboard)/contractor/modules/`
-5. Manage state in the role's `store/` (Zustand)
-6. Add page in the appropriate role folder
-7. Add shared utilities to `modules/shared/` (auth, layout, API)
-8. For dashboard UI, wrap pages with the role's `DashboardLayout` component
+### Client Journey Implementation
+1. **Create Project** → `create-projects/page.jsx` with `CreateProjectForm`
+2. **Manage Projects** → `manage-projects/page.jsx` with tabs (Posted/Ongoing/Completed)
+3. **Project Detail** → `project/[id]/page.jsx` with offers, milestones, escrow
+4. **Accept Offer** → API updates state, UI reflects change
+5. **Review Project** → `reviews/page.jsx` with `ReviewForm`
 
-### Replacing Mock Data
-1. Replace data exports in `src/data/` with API calls
-2. Wrap components with data fetching logic
-3. Use Zustand stores for client-side filtering
-
-### Customizing Styling
-1. Override CSS variables in `globals.css`
-2. Add custom SCSS in `public/css/`
-3. Use Bootstrap utility classes
-4. Use Tailwind utility classes for new components (e.g., `className="flex items-center bg-primary"`)
+### API Integration Pattern
+1. Original data in `src/app/api/projects/*.ts` (static)
+2. UI changes in `src/app/api/uiState.js` (in-memory)
+3. GET requests merge original + state data
+4. State resets on server restart
 
 ---
 
@@ -597,7 +596,8 @@ npm run lint    # ESLint check
 | Directory | Files |
 |-----------|-------|
 | components/ | ~310+ (incl. dashboard-client) |
-| app/ | ~100+ |
+| app/ | ~110+ |
+| api/ | 16+ (client routes + data files) |
 | data/ | 23 (18 base + 5 veritask) |
 | modules/ | ~35 (client, contractor, worker, admin, shared) |
 | modules/shared/agents/ | 3 (ruleEnforcementAgent.js, codebaseAnalysisAgent.js, businessRequirementAgent.js) |
@@ -609,20 +609,22 @@ npm run lint    # ESLint check
 
 ## Conclusion
 
-VeriTask is a comprehensive worker marketplace template with:
-- Multi-variant design system (20+ homepages, 30+ headers, etc.)
-- Full feature set for job/service/project listings
-- Separate role-based dashboards for clients, contractors, and workers
-- VeriTask complete flow: project creation → offer submission → escrow funding → project execution → payment release
-- E-commerce functionality (shop, cart, checkout)
-- Rich component library ready for customization
+VeriTask is a comprehensive worker marketplace platform with:
 
-The codebase prioritizes template flexibility over backend integration, while the new VeriTask modules provide a structured pattern for implementing the full task marketplace lifecycle. It is ideal for:
+- **Complete Client Journey:** Create project → Manage → View offers → Accept → Track milestones → Review
+- **Multi-variant Design System:** 20+ homepages, 30+ headers, extensive component library
+- **Role-Based Dashboards:** Separate workflows for clients, contractors, workers, and admins
+- **Escrow System:** Project funding, milestone tracking, payment release
+- **API Architecture:** RESTful API routes with centralized data layer
+- **UI State Management:** In-memory state for demo/development without database
+
+The codebase is structured for:
 - Quick deployment as a worker marketplace
 - Customization for specific niche platforms
 - Learning Next.js 16 patterns and practices
 
 ### Additional Documentation
 - `doc/rules.md` — VeriTask platform rules and workflows
+- `doc/business-requirement.md` — VeriTask business requirements
 - `doc/schema.md` — VeriTask database schema
 - `src/models/schema.prisma` — Prisma database schema

@@ -8,6 +8,7 @@ import OfferReviewer from "@/modules/client/components/OfferReviewer";
 import EscrowFunding from "@/modules/client/components/EscrowFunding";
 import PaymentReleaser from "@/modules/client/components/PaymentReleaser";
 import DashboardNavigation from "@/components/dashboard-client/header/DashboardNavigation";
+import Link from "next/link";
 
 export default function ClientDashboard() {
   const { tasks, selectedTask, selectTask, getClientTasks, getTaskOffers } = useClientStore();
@@ -39,12 +40,13 @@ export default function ClientDashboard() {
           <div className="col-lg-12">
             <div className="dashboard_title_area">
               <h2>Client Dashboard</h2>
-              <button
+              {/* <button
                 className="ud-btn btn-thm mt-3"
                 onClick={() => setShowTaskCreator(true)}
               >
-                <i className="fal fa-plus" /> Create Task
-              </button>
+                <i className="fal fa-plus" /> Create Project
+              </button> */}
+              <Link href="/client/create-projects" className="ud-btn btn-thm mt-3"><i className="fal fa-plus" /> Create Project</Link>
             </div>
           </div>
         </div>
@@ -108,7 +110,7 @@ export default function ClientDashboard() {
           </div>
         </div>
 
-        <div className="row">
+        {/* <div className="row">
           <div className="col-xl-4">
             <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
               <div className="d-flex justify-content-between bdrb1 pb15 mb20">
@@ -198,8 +200,8 @@ export default function ClientDashboard() {
               )}
             </div>
           </div>
-        </div>
-
+        </div> */}
+        {/* 
         <div className="row">
           <div className="col-md-12">
             <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
@@ -236,10 +238,10 @@ export default function ClientDashboard() {
               )}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
-      {showTaskCreator && (
+      {/* {showTaskCreator && (
         <div
           className="modal-overlay"
           style={{
@@ -263,7 +265,7 @@ export default function ClientDashboard() {
             />
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }
