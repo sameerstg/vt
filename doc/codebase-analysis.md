@@ -578,10 +578,20 @@ npm run lint    # ESLint check
 
 ### Client Journey Implementation
 1. **Create Project** → `create-projects/page.jsx` with `CreateProjectForm`
-2. **Manage Projects** → `manage-projects/page.jsx` with tabs (Posted/Ongoing/Completed)
+2. **Manage Projects** → `manage-projects/page.jsx` with tabs (Posted/Ongoing/Completed) and pagination (5 items per page)
 3. **Project Detail** → `project/[id]/page.jsx` with offers, milestones, escrow
+   - Page component (`page.jsx`) handles async params resolution
+   - Component receives `projectId` prop for dynamic data loading
+   - "Edit Project" button removed
+   - "Message Worker" button only visible for ASSIGNED/IN_PROGRESS/SUBMITTED projects
 4. **Accept Offer** → API updates state, UI reflects change
 5. **Review Project** → `reviews/page.jsx` with `ReviewForm`
+
+### Pagination Component (`Pagination1.jsx`)
+- Functional pagination with props: `currentPage`, `totalItems`, `itemsPerPage`, `onPageChange`
+- Dynamic page number generation with ellipsis for large datasets
+- Shows "X – Y of Z projects" count
+- Disabled state for first/last page navigation
 
 ### API Integration Pattern
 1. Original data in `src/app/api/projects/*.ts` (static)

@@ -14,11 +14,19 @@ const tabs = [
 export default function ManageProjectInfo() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [projects, setProjects] = useState([]);
+  const [totalProjects, setTotalProjects] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchProjects();
+  }, [selectedTab]);
 
   useEffect(() => {
     fetchProjects();
-  }, [selectedTab]);
+  }, [currentPage]);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -27,7 +35,11 @@ export default function ManageProjectInfo() {
       const res = await fetch(`/api/client/projects?status=${status}`);
       const data = await res.json();
       if (data.success) {
-        setProjects(data.data);
+        const allProjects = data.data;
+        setTotalProjects(allProjects.length);
+        const start = (currentPage - 1) * itemsPerPage;
+        const paginatedProjects = allProjects.slice(start, start + itemsPerPage);
+        setProjects(paginatedProjects);
       }
     } catch (e) {
       console.error(e);
@@ -115,7 +127,12 @@ export default function ManageProjectInfo() {
                       </tbody>
                     </table>
                     <div className="mt30">
-                      <Pagination1 />
+                      <Pagination1
+                        currentPage={currentPage}
+                        totalItems={totalProjects}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                      />
                     </div>
                   </div>
                 )}
