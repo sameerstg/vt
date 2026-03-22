@@ -27,13 +27,13 @@ export const category: FooterLink[] = [
 
 export const support: FooterLink[] = [
   { id: 1, name: "Help & Support", path: "/" },
-  { id: 2, name: "Trust & Safety", path: "/" },
-  { id: 3, name: "Selling on Freeio", path: "/" },
-  { id: 4, name: "Buying on Freeio", path: "/" },
+  // { id: 2, name: "Trust & Safety", path: "/" },
+  // { id: 3, name: "Selling on Freeio", path: "/" },
+  // { id: 4, name: "Buying on Freeio", path: "/" },
 ];
 
-export const momney: string[] = ["US$ USD", "Euro", "Pound"];
-export const lan: string[] = ["English", "Frenc", "Italian", "Spanish", "Turkey"];
+// export const momney: string[] = ["US$ USD", "Euro", "Pound"];
+// export const lan: string[] = ["English", "Frenc", "Italian", "Spanish", "Turkey"];
 
 export const footer: string[] = [
   "/dashboard",

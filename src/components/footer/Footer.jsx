@@ -8,7 +8,7 @@ export default function Footer() {
         <>
             <section className="footer-style1 pt25 pb-0">
                 <div className="container">
-                    <FooterHeader />
+                    {/* <FooterHeader /> */}
                     <div className="row">
                         <div className="col-sm-6 col-lg-3">
                             <div className="link-style1 mb-4 mb-sm-5">
@@ -108,11 +108,11 @@ export default function Footer() {
                                 </p>
                             </div>
                         </div>
-                        <div className="col-md-6">
+                        {/* <div className="col-md-6">
                             <div className="footer_bottom_right_btns text-center text-lg-end">
                                 <FooterSelect2 />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>

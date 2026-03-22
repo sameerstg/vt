@@ -1,10 +1,10 @@
 "use client";
-import { lan, momney } from "@/data/footer";
+// import { lan, momney } from "@/data/footer";
 import { useState } from "react";
 
 export default function FooterSelect2() {
-    const [getMoneySelect, setMoneySelect] = useState("Euro");
-    const [getLanSelect, setLanSelect] = useState("English");
+    // const [getMoneySelect, setMoneySelect] = useState("Euro");
+    // const [getLanSelect, setLanSelect] = useState("English");
 
     return (
         <>

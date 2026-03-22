@@ -1,5 +1,5 @@
 "use client";
-import { lan, momney } from "@/data/footer";
+// import { lan, momney } from "@/data/footer";
 import { useState } from "react";
 
 export default function FooterSelect1() {
@@ -24,7 +24,7 @@ export default function FooterSelect1() {
                                 </div>
                             </div>
                         </button>
-                        <div className="dropdown-menu ">
+                        {/* <div className="dropdown-menu ">
                             <div className="inner show">
                                 <ul className="dropdown-menu inner show">
                                     {momney.map((item, index) => (
@@ -50,7 +50,7 @@ export default function FooterSelect1() {
                                     ))}
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </li>
                 <li className="list-inline-item bg-white">
@@ -71,7 +71,7 @@ export default function FooterSelect1() {
                         <div className="dropdown-menu ">
                             <div className="inner show">
                                 <ul className="dropdown-menu inner show">
-                                    {lan.map((item, index) => (
+                                    {/* {lan.map((item, index) => (
                                         <li
                                             key={index}
                                             className={
@@ -91,7 +91,7 @@ export default function FooterSelect1() {
                                                 </span>
                                             </a>
                                         </li>
-                                    ))}
+                                    ))} */}
                                 </ul>
                             </div>
                         </div>

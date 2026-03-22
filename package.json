@@ -8,11 +8,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "validate": "node src/modules/shared/agents/testAgents.js"
+    "validate": "node src/modules/shared/agents/testAgents.js",
+    "schema:generate": "npx prisma generate --schema src/models/schema.prisma",
+    "schema:validate": "npx prisma validate --schema src/models/schema.prisma",
+    "schema:visualize": "node scripts/generateSchema.js"
   },
   "dependencies": {
     "@babel/core": "^7.27.1",
     "@popperjs/core": "^2.11.8",
+    "@prisma/client": "^7.5.0",
     "@react-google-maps/api": "^2.20.6",
     "agentation": "^2.3.3",
     "bootstrap": "5.3.6",
@@ -35,11 +39,14 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@dbml/core": "^6.4.0",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "autoprefixer": "^10.4.27",
     "postcss": "8.4.31",
+    "prisma": "^7.5.0",
+    "prisma-erd-generator": "^2.4.2",
     "sass": "^1.89.0",
     "tailwindcss": "^4.2.2"
   }

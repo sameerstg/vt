@@ -64,7 +64,7 @@ src/
 ├── components/    # Reusable UI components (shared/layout)
 ├── data/          # Static data (mock data)
 ├── hook/          # Custom React hooks
-├── modules/       # VeriTask feature modules (client, contractor, worker, shared) - business logic & state
+├── models/        # Database schema (Prisma models)
 ├── store/         # Zustand state stores
 └── utils/         # Utility functions
 ```
@@ -196,7 +196,7 @@ Modular feature architecture with dual organization:
 ```
 src/app/client/
 ├── components/         # Client-specific UI components (cards, sections, etc.)
-├── modules/            # Client business logic (TaskCreator, OfferReviewer, etc.)
+├── modules/            # Client business logic (ProjectCreator, OfferReviewer, etc.)
 ├── dashboard/          # Dashboard page
 ├── create-projects/    # Create project page
 └── ...                 # Other client pages (invoice, message, etc.)
@@ -206,7 +206,7 @@ src/app/client/
 ```
 src/app/(dashboard)/worker/
 ├── components/         # Worker-specific UI components
-├── modules/            # Worker business logic (TaskBrowser, OfferSubmitter, etc.)
+├── modules/            # Worker business logic (ProjectBrowser, OfferSubmitter, etc.)
 ├── dashboard/          # Dashboard page
 └── ...                 # Other worker pages
 
@@ -231,30 +231,30 @@ src/app/(dashboard)/contractor/
 | File | Purpose |
 |------|---------|
 | `pages/ClientDashboard.jsx` | Client dashboard page |
-| `components/TaskCreator.jsx` | Create new tasks |
+| `components/ProjectCreator.jsx` | Create new projects |
 | `components/OfferReviewer.jsx` | Review worker offers |
 | `components/EscrowFunding.jsx` | Fund escrow for tasks |
 | `components/PaymentReleaser.jsx` | Release payment on completion |
-| `store/clientStore.js` | Client-side state (tasks, offers) |
+| `store/clientStore.js` | Client-side state (projects, offers) |
 
 **Worker Module (`src/app/(dashboard)/worker/modules/`):**
 | File | Purpose |
 |------|---------|
 | `pages/WorkerDashboard.jsx` | Worker dashboard page |
 | `components/ProfileBuilder.jsx` | Build worker profile |
-| `components/TaskBrowser.jsx` | Browse available tasks |
-| `components/TaskAcceptor.jsx` | Accept assigned tasks |
+| `components/ProjectBrowser.jsx` | Browse available projects |
+| `components/ProjectAcceptor.jsx` | Accept assigned projects |
 | `components/OfferSubmitter.jsx` | Submit offers on tasks |
-| `store/workerStore.js` | Worker state (tasks, offers) |
+| `store/workerStore.js` | Worker state (projects, offers) |
 
 **Contractor Module (`src/app/(dashboard)/contractor/modules/`):**
 | File | Purpose |
 |------|---------|
 | `pages/ContractorDashboard.jsx` | Contractor dashboard page |
 | `components/TeamManager.jsx` | Manage worker teams |
-| `components/SubtaskAssigner.jsx` | Assign subtasks to workers |
+| `components/SubprojectAssigner.jsx` | Assign subprojects to workers |
 | `components/PayrollDistributor.jsx` | Distribute payroll to team |
-| `store/contractorStore.js` | Contractor state (teams, subtasks) |
+| `store/contractorStore.js` | Contractor state (teams, subprojects) |
 
 **Admin Module (`src/app/admin/`):**
 | File | Purpose |
@@ -278,13 +278,13 @@ src/app/(dashboard)/contractor/
 **VeriTask Data (`src/data/veritask/`):**
 | File | Purpose |
 |------|---------|
-| `tasks.js` | VeriTask task listings |
-| `offers.js` | Worker offers on tasks |
+| `projects.js` | VeriTask project listings |
+| `offers.js` | Worker offers on projects |
 | `users.js` | User profiles (client, contractor, worker) |
 | `escrow.js` | Escrow fund tracking |
 | `disputes.js` | Dispute resolution records |
 
-**VeriTask Task State Machine:**
+**VeriTask Project State Machine:**
 ```
 POSTED → ACCEPTED → IN_PROGRESS → SUBMITTED → APPROVED → COMPLETED
                             ↘ DISPUTED → RESOLVED
@@ -295,9 +295,9 @@ POSTED → ACCEPTED → IN_PROGRESS → SUBMITTED → APPROVED → COMPLETED
 **VeriTask Roles:**
 | Role | Description |
 |------|-------------|
-| `client` | Posts tasks, funds escrow, releases payment |
-| `contractor` | Manages teams, assigns subtasks, distributes payroll |
-| `worker` | Browses tasks, submits offers, completes work |
+| `client` | Posts projects, funds escrow, releases payment |
+| `contractor` | Manages teams, assigns subprojects, distributes payroll |
+| `worker` | Browses projects, submits offers, completes work |
 
 ---
 
@@ -613,7 +613,7 @@ VeriTask is a comprehensive worker marketplace template with:
 - Multi-variant design system (20+ homepages, 30+ headers, etc.)
 - Full feature set for job/service/project listings
 - Separate role-based dashboards for clients, contractors, and workers
-- VeriTask complete flow: task creation → offer submission → escrow funding → task execution → payment release
+- VeriTask complete flow: project creation → offer submission → escrow funding → project execution → payment release
 - E-commerce functionality (shop, cart, checkout)
 - Rich component library ready for customization
 
@@ -624,3 +624,5 @@ The codebase prioritizes template flexibility over backend integration, while th
 
 ### Additional Documentation
 - `doc/rules.md` — VeriTask platform rules and workflows
+- `doc/schema.md` — VeriTask database schema
+- `src/models/schema.prisma` — Prisma database schema

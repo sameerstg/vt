@@ -1,0 +1,353 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CLIENT
+  WORKER
+  CONTRACTOR
+  ADMIN
+}
+
+enum ProjectType {
+  PHYSICAL
+  VIRTUAL
+}
+
+enum BudgetModel {
+  FIXED
+  MILESTONE
+}
+
+enum ProjectStatus {
+  POSTED
+  ASSIGNED
+  IN_PROGRESS
+  SUBMITTED
+  COMPLETED
+  IN_DISPUTE
+  CANCELLED
+}
+
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  IN_DISPUTE
+}
+
+enum EscrowStatus {
+  PENDING
+  FUNDED
+  PARTIALLY_RELEASED
+  RELEASED
+  REFUNDED
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  ESCALATED
+}
+
+enum DisputeResolution {
+  COMPLETION_APPROVED
+  REFUNDED
+  USER_SUSPENDED
+}
+
+enum TransactionType {
+  ESCROW_FUND
+  ESCROW_RELEASE
+  REFUND
+  PLATFORM_FEE
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum NotificationType {
+  PROJECT_ASSIGNED
+  OFFER_RECEIVED
+  OFFER_ACCEPTED
+  OFFER_REJECTED
+  PAYMENT_RELEASED
+  PAYMENT_RECEIVED
+  DISPUTE_RAISED
+  DISPUTE_RESOLVED
+  PROJECT_COMPLETED
+  SCHEDULE_CONFIRMED
+  ACCOUNT_VERIFIED
+  ACCOUNT_SUSPENDED
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  phone       String   @unique
+  password    String
+  role        UserRole
+  fullName    String
+  phoneNumber String?
+  location    String?
+  latitude    Float?
+  longitude   Float?
+  photo       String?
+  govId       String?
+  govIdPhoto  String?
+  isVerified  Boolean  @default(false)
+  isSuspended Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projectsCreated  Project[]        @relation("ClientProjects")
+  projectsAssigned Project[]        @relation("WorkerProjects")
+  teamsOwned       ContractorTeam[]
+  teamMemberships  TeamMember[]
+  offers           Offer[]
+  disputesRaised   Dispute[]        @relation("DisputeRaisedBy")
+  disputesResolved Dispute[]        @relation("DisputeResolvedBy")
+  notifications    Notification[]
+  transactions     Transaction[]
+  sessions         UserSession[]
+  escrowReleases   EscrowRelease[]
+  projects         Project[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([role])
+}
+
+model Project {
+  id              String        @id @default(uuid())
+  clientId        String
+  workerId        String?
+  contractorId    String?
+  title           String
+  description     String
+  type            ProjectType
+  budgetModel     BudgetModel
+  budget          Decimal       @db.Decimal(10, 2)
+  latitude        Float?
+  longitude       Float?
+  address         String?
+  status          ProjectStatus @default(POSTED)
+  scheduledAt     DateTime?
+  completedAt     DateTime?
+  parentProjectId String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  client        User          @relation("ClientProjects", fields: [clientId], references: [id])
+  worker        User?         @relation("WorkerProjects", fields: [workerId], references: [id])
+  contractor    User?         @relation(fields: [contractorId], references: [id])
+  parentProject Project?      @relation("Subprojects", fields: [parentProjectId], references: [id])
+  subprojects   Project[]     @relation("Subprojects")
+  offers        Offer[]
+  milestones    Milestone[]
+  escrow        Escrow?
+  disputes      Dispute[]
+  transactions  Transaction[]
+
+  @@index([clientId])
+  @@index([workerId])
+  @@index([status])
+  @@index([latitude, longitude])
+}
+
+model Offer {
+  id        String      @id @default(uuid())
+  projectId String
+  workerId  String
+  amount    Decimal     @db.Decimal(10, 2)
+  terms     String?
+  status    OfferStatus @default(PENDING)
+  isOffer   Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  worker  User    @relation(fields: [workerId], references: [id])
+
+  @@index([projectId])
+  @@index([workerId])
+}
+
+model Milestone {
+  id          String          @id @default(uuid())
+  projectId   String
+  title       String
+  description String?
+  amount      Decimal         @db.Decimal(10, 2)
+  order       Int
+  status      MilestoneStatus @default(PENDING)
+  dueDate     DateTime?
+  submittedAt DateTime?
+  approvedAt  DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  project        Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  escrowReleases EscrowRelease[]
+  disputes       Dispute[]
+
+  @@index([projectId])
+}
+
+model Escrow {
+  id          String       @id @default(uuid())
+  projectId   String       @unique
+  amount      Decimal      @db.Decimal(10, 2)
+  platformFee Decimal?     @db.Decimal(10, 2)
+  netAmount   Decimal?     @db.Decimal(10, 2)
+  status      EscrowStatus @default(PENDING)
+  fundedAt    DateTime?
+  releasedAt  DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  project  Project         @relation(fields: [projectId], references: [id])
+  releases EscrowRelease[]
+
+  @@index([projectId])
+}
+
+model EscrowRelease {
+  id          String            @id @default(uuid())
+  escrowId    String
+  milestoneId String?
+  amount      Decimal           @db.Decimal(10, 2)
+  releasedTo  String
+  status      TransactionStatus @default(PENDING)
+  releasedAt  DateTime?
+  createdAt   DateTime          @default(now())
+
+  escrow    Escrow     @relation(fields: [escrowId], references: [id])
+  milestone Milestone? @relation(fields: [milestoneId], references: [id])
+  recipient User       @relation(fields: [releasedTo], references: [id])
+
+  @@index([escrowId])
+}
+
+model ContractorTeam {
+  id           String   @id @default(uuid())
+  contractorId String
+  name         String
+  description  String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  contractor User         @relation(fields: [contractorId], references: [id])
+  members    TeamMember[]
+
+  @@index([contractorId])
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  teamId    String
+  workerId  String
+  role      String?
+  rate      Decimal? @db.Decimal(10, 2)
+  isActive  Boolean  @default(true)
+  joinedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  team   ContractorTeam @relation(fields: [teamId], references: [id])
+  worker User           @relation(fields: [workerId], references: [id])
+
+  @@unique([teamId, workerId])
+  @@index([teamId])
+  @@index([workerId])
+}
+
+model Dispute {
+  id          String             @id @default(uuid())
+  projectId   String
+  milestoneId String?
+  raisedBy    String
+  reason      String
+  evidence    String?
+  status      DisputeStatus      @default(OPEN)
+  resolution  DisputeResolution?
+  adminNotes  String?
+  adminId     String?
+  createdAt   DateTime           @default(now())
+  resolvedAt  DateTime?
+
+  project      Project    @relation(fields: [projectId], references: [id])
+  milestone    Milestone? @relation(fields: [milestoneId], references: [id])
+  raisedByUser User       @relation("DisputeRaisedBy", fields: [raisedBy], references: [id])
+  admin        User?      @relation("DisputeResolvedBy", fields: [adminId], references: [id])
+
+  @@index([projectId])
+  @@index([raisedBy])
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, isRead])
+}
+
+model Transaction {
+  id        String            @id @default(uuid())
+  type      TransactionType
+  projectId String?
+  userId    String
+  amount    Decimal           @db.Decimal(10, 2)
+  fee       Decimal?          @db.Decimal(10, 2)
+  status    TransactionStatus @default(PENDING)
+  reference String?
+  metadata  Json?
+  createdAt DateTime          @default(now())
+
+  project Project? @relation(fields: [projectId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([projectId])
+}
+
+model UserSession {
+  id         String   @id @default(uuid())
+  userId     String
+  token      String   @unique
+  deviceInfo String?
+  ipAddress  String?
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([token])
+}
