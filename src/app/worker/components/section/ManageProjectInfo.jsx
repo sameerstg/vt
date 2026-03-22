@@ -7,11 +7,10 @@ import WorkerProjectCard from "../card/WorkerProjectCard";
 import OfferCard from "../card/OfferCard";
 
 const tabs = [
-  { label: "Available Projects", status: "POSTED" },
-  { label: "My Offers", status: "OFFERS" },
-  { label: "Assigned Projects", status: "ASSIGNED" },
+  { label: "Proposed Projects", status: "OFFERS" },
   { label: "In Progress", status: "IN_PROGRESS" },
-  { label: "Completed Projects", status: "COMPLETED" },
+  { label: "In Review", status: "SUBMITTED" },
+  { label: "Completed", status: "COMPLETED" },
 ];
 
 export default function ManageProjectInfo() {
@@ -41,17 +40,11 @@ export default function ManageProjectInfo() {
         const res = await fetch("/api/worker/offers");
         const data = await res.json();
         if (data.success) {
-          setAllOffers(data.data);
-          setTotalItems(data.data.length);
+          const pendingOffers = data.data.filter(o => o.status === "PENDING");
+          setAllOffers(pendingOffers);
+          setTotalItems(pendingOffers.length);
         }
-      } else if (tabs[selectedTab].status === "POSTED") {
-        const res = await fetch("/api/worker/projects?type=available");
-        const data = await res.json();
-        if (data.success) {
-          setAllProjects(data.data.available);
-          setTotalItems(data.data.available.length);
-        }
-      } else {
+      } else if (tabs[selectedTab].status === "IN_PROGRESS" || tabs[selectedTab].status === "SUBMITTED" || tabs[selectedTab].status === "COMPLETED") {
         const res = await fetch("/api/worker/projects?type=assigned");
         const data = await res.json();
         if (data.success) {
@@ -83,7 +76,7 @@ export default function ManageProjectInfo() {
     return projects;
   };
 
-  const showTable = tabs[selectedTab].status === "OFFERS";
+  const showOffers = tabs[selectedTab].status === "OFFERS";
 
   return (
     <>
@@ -138,8 +131,8 @@ export default function ManageProjectInfo() {
                 ) : getCurrentItems().length === 0 ? (
                   <div className="text-center p50">
                     <i className="flaticon-folder fz60 text-muted mb20 d-block" />
-                    <h5 className="text-muted">No projects found</h5>
-                    {tabs[selectedTab].status === "POSTED" && (
+                    <h5 className="text-muted">No {tabs[selectedTab].label.toLowerCase()} found</h5>
+                    {tabs[selectedTab].status === "OFFERS" && (
                       <Link href="/worker/browse-projects" className="ud-btn btn-thm mt20">
                         Browse Projects
                         <i className="fal fa-arrow-right-long" />
@@ -153,12 +146,12 @@ export default function ManageProjectInfo() {
                         <tr>
                           <th scope="col">Title</th>
                           <th scope="col">Category</th>
-                          <th scope="col">{showTable ? "Bid/Budget" : "Status/Budget"}</th>
+                          <th scope="col">{showOffers ? "Your Bid" : "Status/Budget"}</th>
                         </tr>
                       </thead>
                       <tbody className="t-body">
                         {getCurrentItems().map((item) => (
-                          showTable ? (
+                          showOffers ? (
                             <OfferCard key={item.id} offer={item} />
                           ) : (
                             <WorkerProjectCard key={item.id} project={item} />

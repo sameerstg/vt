@@ -10,7 +10,7 @@ export default function FooterSelect2() {
         <>
             <ul className="p-0 m-0">
                 <li className="list-inline-item">
-                    <div className="dropdown bootstrap-select show-tick">
+                    {/* <div className="dropdown bootstrap-select show-tick">
                         <button
                             type="button"
                             className="btn dropdown-toggle btn-light"
@@ -51,11 +51,11 @@ export default function FooterSelect2() {
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </li>
                 <li className="list-inline-item">
                     <div className="dropdown bootstrap-select show-tick">
-                        <button
+                        {/* <button
                             type="button"
                             className="btn dropdown-toggle btn-light"
                             data-bs-toggle="dropdown"
@@ -67,8 +67,8 @@ export default function FooterSelect2() {
                                     </div>
                                 </div>
                             </div>
-                        </button>
-                        <div className="dropdown-menu ">
+                        </button> */}
+                        {/* <div className="dropdown-menu ">
                             <div className="inner show">
                                 <ul className="dropdown-menu inner show">
                                     {" "}
@@ -95,7 +95,7 @@ export default function FooterSelect2() {
                                     ))}
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </li>
             </ul>

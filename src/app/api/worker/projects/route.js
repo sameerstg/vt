@@ -25,7 +25,7 @@ export async function GET(request) {
   if (type === "assigned" || !type) {
     let assignedProjects = allProjects.filter(p => 
       p.workerId === workerId && 
-      ["ASSIGNED", "IN_PROGRESS", "SUBMITTED"].includes(p.status)
+      ["ASSIGNED", "IN_PROGRESS", "SUBMITTED", "COMPLETED"].includes(p.status)
     );
     const projectsState = getProjectsState();
     assignedProjects = assignedProjects.map(proj => {

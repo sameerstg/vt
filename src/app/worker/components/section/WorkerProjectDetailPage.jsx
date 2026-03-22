@@ -41,7 +41,7 @@ export default function WorkerProjectDetailPage({ projectId }) {
       const data = await res.json();
       if (data.success) {
         const proj = data.data.assigned.find(p => p.id === projectId) ||
-                     data.data.available.find(p => p.id === projectId);
+          data.data.available.find(p => p.id === projectId);
         setProject(proj);
       }
     } catch (e) {
@@ -128,7 +128,7 @@ export default function WorkerProjectDetailPage({ projectId }) {
         </div>
         <div className="col-lg-12">
           <div className="d-flex align-items-center gap-3 mb-3">
-            <Link href="/worker/my-projects" className="text-muted">
+            <Link href="/worker/manage-projects" className="text-muted">
               <i className="fal fa-arrow-left-long" />
             </Link>
             <div className="dashboard_title_area mb-0">
@@ -302,7 +302,7 @@ export default function WorkerProjectDetailPage({ projectId }) {
                 </Link>
               )}
               <Link
-                href="/worker/my-projects"
+                href="/worker/manage-projects"
                 className="ud-btn btn-light"
               >
                 Back to Projects

@@ -168,7 +168,7 @@ export default function WorkerDashboardInfo() {
                 </div>
               </div>
 
-              <div className="col-md-6 col-xxl-4">
+              {/* <div className="col-md-6 col-xxl-4">
                 <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
                   <div className="d-flex justify-content-between bdrb1 pb15 mb20">
                     <h5 className="title">Pending Offers</h5>
@@ -198,9 +198,9 @@ export default function WorkerDashboardInfo() {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
 
-              <div className="col-md-6 col-xxl-4">
+              {/* <div className="col-md-6 col-xxl-4">
                 <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
                   <div className="d-flex justify-content-between bdrb1 pb15 mb20">
                     <h5 className="title">Quick Actions</h5>
@@ -224,7 +224,7 @@ export default function WorkerDashboardInfo() {
                     </Link>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="row">

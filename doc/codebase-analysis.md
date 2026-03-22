@@ -272,7 +272,7 @@ src/app/(dashboard)/contractor/
 ```
 src/app/api/projects/
 ├── index.ts       # Exports all data and functions
-├── data.ts        # 30 projects (10 posted, 10 ongoing, 10 completed)
+├── data.ts        # 100+ projects (100 posted, 10 ongoing, 10 completed)
 ├── offers.ts      # 25 offers with worker details
 ├── milestones.ts # 42 milestones across projects
 ├── escrow.ts     # 20 escrow accounts (ongoing + completed)
@@ -605,9 +605,16 @@ npm run lint    # ESLint check
 1. **Dashboard** → `worker/dashboard/page.jsx` with `WorkerDashboardInfo`
    - Shows active projects, pending offers, completed count, total earnings
    - Quick actions for browsing projects and viewing proposals
-2. **Browse Projects** → `worker/browse-projects/page.jsx` with `BrowseProjectsInfo`
-   - Search and filter projects by category
-   - Submit offers directly from the list
+2. **Browse Projects** → `worker/browse-projects/page.jsx` with `Listing8.jsx`
+   - Displays 100+ available projects from `/api/worker/projects`
+   - **Filter Options:**
+     - Search by title/description
+     - Category filter dropdown (Web Dev, Mobile, Design, Cleaning, etc.)
+     - Type filter (All Types / Remote-Virtual / On-site-Physical)
+     - Budget range filter (Under $500 / $500-$1,000 / $1,000-$5,000 / $5,000-$10,000 / Over $10,000)
+   - Active filter badges with clear filters button
+   - Project count display (showing X of Y projects)
+   - 8 items per page with pagination
 3. **Manage Projects** → `worker/manage-projects/page.jsx` with `ManageProjectInfo`
    - Unified view with tabs: Available Projects, My Offers, Assigned, In Progress, Completed
    - Uses `WorkerProjectCard` and `OfferCard` components for consistent styling
@@ -668,11 +675,13 @@ npm run lint    # ESLint check
 VeriTask is a comprehensive worker marketplace platform with:
 
 - **Complete Client Journey:** Create project → Manage → View offers → Accept → Track milestones → Review
+- **Complete Worker Journey:** Browse 100+ projects → Filter by type/budget/category → Submit offers → Track milestones
 - **Multi-variant Design System:** 20+ homepages, 30+ headers, extensive component library
 - **Role-Based Dashboards:** Separate workflows for clients, contractors, workers, and admins
 - **Escrow System:** Project funding, milestone tracking, payment release
 - **API Architecture:** RESTful API routes with centralized data layer
 - **UI State Management:** In-memory state for demo/development without database
+- **Rich Mock Data:** 100+ POSTED projects with diverse categories, types, and budgets for testing
 
 The codebase is structured for:
 - Quick deployment as a worker marketplace

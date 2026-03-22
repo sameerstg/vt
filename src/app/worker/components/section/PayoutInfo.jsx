@@ -18,20 +18,9 @@ export default function PayoutInfo() {
           <div className="col-lg-6">
             <div className="dashboard_title_area">
               <h2>Payouts</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
             </div>
           </div>
-          <div className="col-lg-6">
-            <div className="text-lg-end">
-              <Link
-                href="/worker-1"
-                className="ud-btn btn-dark default-box-shadow2"
-              >
-                Create Payout
-                <i className="fal fa-arrow-right-long" />
-              </Link>
-            </div>
-          </div>
+
         </div>
         <div className="row">
           <div className="col-xl-12">
@@ -47,7 +36,7 @@ export default function PayoutInfo() {
                     </tr>
                   </thead>
                   <tbody className="t-body">
-                    {payout.map((item,i) => (
+                    {payout.map((item, i) => (
                       <PayoutCard1 key={i} data={item} />
                     ))}
                   </tbody>
@@ -57,13 +46,13 @@ export default function PayoutInfo() {
                 </div>
               </div>
             </div>
-            <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative">
+            {/* <div className="ps-widget bgc-white bdrs4 p30 mb30 position-relative">
               <div className="row">
                 <div className="col-lg-9">
                   <PaymentMethod />
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

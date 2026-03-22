@@ -1,19 +1,18 @@
-import DashboardLayout from "@/app/worker/components/DashboardLayout";
-import BrowseProjectsInfo from "@/app/worker/components/section/BrowseProjectsInfo";
-
-import MobileNavigation2 from "@/components/header/MobileNavigation2";
+import Breadcumb9 from "@/app/worker/components/breadcumb/Breadcumb9";
+import TabSection1 from "@/app/worker/components/section/TabSection1";
+import Listing8 from "@/app/worker/components/Listing8";
+import DashboardLayout from "../components/DashboardLayout";
 
 export const metadata = {
-  title: "VeriTask - Browse Projects",
+    title: "VeriTask - Browse Projects",
 };
 
 export default function page() {
-  return (
-    <>
-      <MobileNavigation2 />
-      <DashboardLayout>
-        <BrowseProjectsInfo />
-      </DashboardLayout>
-    </>
-  );
+    return (
+        <DashboardLayout>
+            <Breadcumb9 />
+            <TabSection1 />
+            <Listing8 />
+        </DashboardLayout>
+    );
 }
