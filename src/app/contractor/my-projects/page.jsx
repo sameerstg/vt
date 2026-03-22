@@ -1,10 +1,10 @@
 import DashboardLayout from "@/app/contractor/components/DashboardLayout";
-import ContractorDashboardInfo from "@/app/contractor/components/section/ContractorDashboardInfo";
+import ContractorAssignedProjectsInfo from "@/app/contractor/components/section/ContractorAssignedProjectsInfo";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "VeriTask - Contractor Dashboard",
+  title: "VeriTask - My Projects",
 };
 
 export default function page() {
@@ -12,9 +12,8 @@ export default function page() {
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <ContractorDashboardInfo />
+        <ContractorAssignedProjectsInfo />
       </DashboardLayout>
     </>
   );
 }
-

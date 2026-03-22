@@ -577,15 +577,43 @@ npm run lint    # ESLint check
 4. Update navigation in `src/data/dashboardClient.js`
 
 ### Client Journey Implementation
-1. **Create Project** → `create-projects/page.jsx` with `CreateProjectForm`
-2. **Manage Projects** → `manage-projects/page.jsx` with tabs (Posted/Ongoing/Completed) and pagination (5 items per page)
-3. **Project Detail** → `project/[id]/page.jsx` with offers, milestones, escrow
+1. **Create Project** → `client/create-projects/page.jsx` with `CreateProjectForm`
+2. **Manage Projects** → `client/manage-projects/page.jsx` with tabs (Posted/Ongoing/Completed) and pagination (5 items per page)
+3. **Project Detail** → `client/project/[id]/page.jsx` with offers, milestones, escrow
    - Page component (`page.jsx`) handles async params resolution
    - Component receives `projectId` prop for dynamic data loading
    - "Edit Project" button removed
    - "Message Worker" button only visible for ASSIGNED/IN_PROGRESS/SUBMITTED projects
 4. **Accept Offer** → API updates state, UI reflects change
-5. **Review Project** → `reviews/page.jsx` with `ReviewForm`
+5. **Review Project** → `client/reviews/page.jsx` with `ReviewForm`
+
+### Worker Journey Implementation
+1. **Dashboard** → `worker/dashboard/page.jsx` with `WorkerDashboardInfo`
+   - Shows active projects, pending offers, completed count, total earnings
+   - Quick actions for browsing projects and viewing proposals
+2. **Browse Projects** → `worker/browse-projects/page.jsx` with `BrowseProjectsInfo`
+   - Search and filter projects by category
+   - Submit offers directly from the list
+3. **My Projects** → `worker/my-projects/page.jsx` with `AssignedProjectsInfo`
+   - View assigned projects with milestone tracking
+   - Start, submit, and track milestone progress
+4. **Project Detail** → `worker/project/[id]/page.jsx` with `WorkerProjectDetailPage`
+   - View project details and milestones
+   - Update milestone status (start, submit)
+5. **My Proposals** → `worker/proposals/page.jsx` with `WorkerProposalsInfo`
+   - Track submitted offers and their status
+   - Withdraw pending offers
+
+### Contractor Journey Implementation
+1. **Dashboard** → `contractor/dashboard/page.jsx` with `ContractorDashboardInfo`
+   - Shows active projects, team members count, completed count, total revenue
+   - Quick actions for team management and payroll
+2. **Team Management** → `contractor/team/page.jsx` with `TeamManagementInfo`
+   - Add/remove team members
+   - Set hourly rates for subcontractors
+3. **My Projects** → `contractor/my-projects/page.jsx` with `ContractorAssignedProjectsInfo`
+   - View assigned projects
+   - Track project status and milestones
 
 ### Pagination Component (`Pagination1.jsx`)
 - Functional pagination with props: `currentPage`, `totalItems`, `itemsPerPage`, `onPageChange`

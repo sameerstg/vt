@@ -1,10 +1,10 @@
 import DashboardLayout from "@/app/worker/components/DashboardLayout";
-import WorkerDashboardInfo from "@/app/worker/components/section/WorkerDashboardInfo";
+import AssignedProjectsInfo from "@/app/worker/components/section/AssignedProjectsInfo";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
-  title: "VeriTask - Worker Dashboard",
+  title: "VeriTask - My Projects",
 };
 
 export default function page() {
@@ -12,9 +12,8 @@ export default function page() {
     <>
       <MobileNavigation2 />
       <DashboardLayout>
-        <WorkerDashboardInfo />
+        <AssignedProjectsInfo />
       </DashboardLayout>
     </>
   );
 }
-
