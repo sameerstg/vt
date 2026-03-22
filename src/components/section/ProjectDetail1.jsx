@@ -1,7 +1,4 @@
 "use client";
-import { projectProposal1 } from "@/data/product";
-import ProjectProposalCard1 from "../card/ProjectProposalCard1";
-import ServiceDetailExtra1 from "../element/ServiceDetailExtra1";
 import Sticky from "react-stickynode";
 
 import ProjectPriceWidget1 from "../element/ProjectPriceWidget1";
@@ -147,69 +144,6 @@ export default function ProjectDetail1() {
                           {item}
                         </a>
                       ))}
-                    </div>
-                    <hr className="opacity-100 mb60" />
-                    <h4 className="mb30">Project Proposals (3)</h4>
-                    <div className="row">
-                      {projectProposal1.slice(0, 3).map((item, i) => (
-                        <div key={i} className="col-md-6 col-lg-12">
-                          <ProjectProposalCard1 data={item} />
-                        </div>
-                      ))}
-                    </div>
-                    <div className="bsp_reveiw_wrt mt25">
-                      <h4>Send Your Proposal</h4>
-                      <form className="comments_form mt30 mb30-md">
-                        <div className="row">
-                          <div className="col-md-6">
-                            <div className="mb20">
-                              <label className="fw500 ff-heading dark-color mb-2">
-                                Your hourly price
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="$99"
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="mb20">
-                              <label className="fw500 ff-heading dark-color mb-2">
-                                Estimated Hours
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder={4}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <div className="mb-4">
-                              <label className="fw500 fz16 ff-heading dark-color mb-2">
-                                Cover Letter
-                              </label>
-                              <textarea
-                                className="pt15"
-                                rows={6}
-                                placeholder="There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text."
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <ServiceDetailExtra1 />
-                          </div>
-                          <div className="col-md-12">
-                            <div className="d-grid">
-                              <a className="ud-btn btn-thm">
-                                Submit a Proposal
-                                <i className="fal fa-arrow-right-long" />
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
                     </div>
                   </div>
                 </div>

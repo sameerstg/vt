@@ -28,25 +28,6 @@ export default function ProjectContactWidget1() {
           </div>
         </div>
         <hr className="opacity-100" />
-        <div className="details">
-          <div className="fl-meta d-flex align-items-center justify-content-between">
-            <a className="meta fw500 text-start">
-              Location
-              <br />
-              <span className="fz14 fw400">London</span>
-            </a>
-            <a className="meta fw500 text-start">
-              Employees
-              <br />
-              <span className="fz14 fw400">11-20</span>
-            </a>
-            <a className="meta fw500 text-start">
-              Departments
-              <br />
-              <span className="fz14 fw400">Designer</span>
-            </a>
-          </div>
-        </div>
         <div className="d-grid mt30">
           <Link href="/submit-proposal" className="ud-btn btn-thm-border">
             Contact Buyer

@@ -19,13 +19,6 @@ export default function Breadcumb11() {
             src="/images/vector-img/right-bottom.png"
             alt="right-bottom"
           />
-          <Image
-            height={300}
-            width={532}
-            className="service-v1-vector bounce-y d-none d-xl-block"
-            src="/images/vector-img/vector-service-v1.png"
-            alt="vector-service"
-          />
           <div className="container">
             <div className="row wow fadeInUp">
               <div className="col-xl-7">

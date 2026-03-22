@@ -1,20 +1,9 @@
-import DashboardLayout from "@/app/worker/components/DashboardLayout";
 import WorkerDashboardInfo from "@/app/worker/components/section/WorkerDashboardInfo";
-
-import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
   title: "VeriTask - Worker Dashboard",
 };
 
 export default function page() {
-  return (
-    <>
-      <MobileNavigation2 />
-      <DashboardLayout>
-        <WorkerDashboardInfo />
-      </DashboardLayout>
-    </>
-  );
+  return <WorkerDashboardInfo />;
 }
-

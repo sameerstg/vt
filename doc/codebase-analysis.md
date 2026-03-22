@@ -214,15 +214,16 @@ src/app/client/
 └── ...                 # Other client pages (invoice, message, etc.)
 ```
 
-**Worker & Contractor (inside `(dashboard)` route group):**
+**Worker & Contractor (top-level routes):**
 ```
-src/app/(dashboard)/worker/
+src/app/worker/
+├── layout.jsx          # Shared layout: MobileNavigation2 + DashboardLayout (wraps all worker pages)
 ├── components/         # Worker-specific UI components
 ├── modules/            # Worker business logic (ProjectBrowser, OfferSubmitter, etc.)
 ├── dashboard/          # Dashboard page
-└── ...                 # Other worker pages
+└── ...                 # Other worker pages (each exports only its content component)
 
-src/app/(dashboard)/contractor/
+src/app/contractor/
 ├── components/         # Contractor-specific UI components
 ├── modules/            # Contractor business logic
 ├── dashboard/          # Dashboard page
@@ -406,14 +407,16 @@ POSTED → ASSIGNED → IN_PROGRESS → SUBMITTED → COMPLETED
 
 Each role dashboard uses a role-specific `DashboardLayout` wrapper:
 - **Client:** `src/app/client/components/DashboardLayout.jsx`
-- **Worker:** `src/app/(dashboard)/worker/components/DashboardLayout.jsx`
-- **Contractor:** `src/app/(dashboard)/contractor/components/DashboardLayout.jsx`
+- **Worker:** `src/app/worker/components/DashboardLayout.jsx`
+- **Contractor:** `src/app/contractor/components/DashboardLayout.jsx`
 - **Admin:** `src/app/admin/components/DashboardLayout.jsx`
 
 Each DashboardLayout provides:
 - `DashboardHeader` — top bar with logo, search, notifications, user menu
 - `DashboardSidebar` — side navigation using `dashboard_sidebar_list` / `sidebar_list_item` CSS
 - `DashboardFooter` — copyright footer
+
+**Worker layout consolidation:** `src/app/worker/layout.jsx` wraps all worker pages with `<MobileNavigation2 />` and `<DashboardLayout>`, so individual worker `page.jsx` files export only their content component.
 
 ---
 
@@ -520,11 +523,12 @@ Uses Bootstrap 5 breakpoints with custom container max-width:
 (home)/              → Homepage variants
 (job)/job-1/         → /job-1
 (job)/job-2/         → /job-2
-(dashboard)/worker/dashboard/     → /worker/dashboard
-(dashboard)/worker/my-profile/    → /worker/my-profile
-(dashboard)/worker/...            → /worker/* (all worker sub-pages)
-(dashboard)/contractor/dashboard/ → /contractor/dashboard
-(dashboard)/contractor/...         → /contractor/* (all contractor sub-pages)
+worker/dashboard/          → /worker/dashboard
+worker/browse-projects/    → /worker/browse-projects
+worker/manage-projects/    → /worker/manage-projects
+worker/...                 → /worker/* (all worker sub-pages, wrapped by worker/layout.jsx)
+contractor/dashboard/      → /contractor/dashboard
+contractor/...             → /contractor/* (all contractor sub-pages)
 ```
 
 ### Top-level Routes (outside route groups)

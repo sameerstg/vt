@@ -10,7 +10,6 @@ export default function DashboardSidebar() {
     <>
       <div className="dashboard__sidebar d-none d-lg-block">
         <div className="dashboard_sidebar_list">
-          <p className="fz15 fw400 ff-heading pl30">Start</p>
           {dasboardNavigation.slice(0, 8).map((item, i) => (
             <div key={i} className="sidebar_list_item mb-1">
               <Link

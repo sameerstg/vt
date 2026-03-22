@@ -47,7 +47,7 @@ export default function DashboardHeader() {
                   >
                     <span className="flaticon-loupe" />
                   </a>
-                  <div className="ml40 d-none d-xl-block">
+                  {/* <div className="ml40 d-none d-xl-block">
                     <div className="search_area dashboard-style">
                       <input
                         type="text"
@@ -58,7 +58,7 @@ export default function DashboardHeader() {
                         <span className="flaticon-loupe" />
                       </label>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="col-6 col-lg-auto">
@@ -196,13 +196,13 @@ export default function DashboardHeader() {
                       </div>
                     </li>
                     <li className="d-none d-sm-block">
-                      <a
+                      {/* <a
                         className="text-center mr5 text-thm2 dropdown-toggle fz20"
                         type="button"
                         data-bs-toggle="dropdown"
                       >
                         <span className="flaticon-like" />
-                      </a>
+                      </a> */}
                       <div className="dropdown-menu">
                         <div className="dboard_notific_dd px30 pt10 pb15">
                           <div className="notif_list d-flex align-items-center bdrb1 pb15 mb10">
@@ -282,22 +282,21 @@ export default function DashboardHeader() {
                         </a>
                         <div className="dropdown-menu">
                           <div className="user_setting_content">
-                            <p className="fz15 fw400 ff-heading mb10 pl30">
+                            {/* <p className="fz15 fw400 ff-heading mb10 pl30">
                               Start
-                            </p>
-                            {dasboardNavigation.slice(0, 8).map((item,i) => (
+                            </p> */}
+                            {dasboardNavigation.slice(0, 8).map((item, i) => (
                               <Link
                                 key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
+                                className={`dropdown-item ${path === item.path ? "active" : ""
+                                  }`}
                                 href={item.path}
                               >
                                 <i className={`${item.icon} mr10`} />
                                 {item.name}
                               </Link>
                             ))}
-                            <p className="fz15 fw400 ff-heading mt30 pl30">
+                            {/* <p className="fz15 fw400 ff-heading mt30 pl30">
                               Organize and Manage
                             </p>
                             {dasboardNavigation.slice(8, 13).map((item,i) => (
@@ -326,7 +325,7 @@ export default function DashboardHeader() {
                                 <i className={`${item.icon} mr10`} />
                                 {item.name}
                               </Link>
-                            ))}
+                            ))} */}
                           </div>
                         </div>
                       </div>
