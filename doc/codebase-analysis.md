@@ -253,6 +253,20 @@ src/app/(dashboard)/contractor/
 | `/api/client/milestones` | `milestones/route.js` | Get/approve milestones |
 | `/api/client/reviews` | `reviews/route.js` | Get/add reviews |
 
+### Worker API Routes (`src/app/api/worker/`)
+
+| Route | File | Purpose |
+|-------|------|---------|
+| `/api/worker/projects` | `projects/route.js` | Get available/assigned projects |
+| `/api/worker/offers` | `offers/route.js` | Submit/withdraw offers |
+| `/api/worker/milestones` | `milestones/route.js` | Update milestone status |
+
+### Contractor API Routes (`src/app/api/contractor/`)
+
+| Route | File | Purpose |
+|-------|------|---------|
+| `/api/contractor` | `route.js` | Team management, subprojects, payroll |
+
 ### Centralized Data Layer (`src/app/api/projects/`)
 
 ```
@@ -594,13 +608,17 @@ npm run lint    # ESLint check
 2. **Browse Projects** → `worker/browse-projects/page.jsx` with `BrowseProjectsInfo`
    - Search and filter projects by category
    - Submit offers directly from the list
-3. **My Projects** → `worker/my-projects/page.jsx` with `AssignedProjectsInfo`
+3. **Manage Projects** → `worker/manage-projects/page.jsx` with `ManageProjectInfo`
+   - Unified view with tabs: Available Projects, My Offers, Assigned, In Progress, Completed
+   - Uses `WorkerProjectCard` and `OfferCard` components for consistent styling
+   - Matches client manage-projects styling pattern
+4. **My Projects** → `worker/my-projects/page.jsx` with `AssignedProjectsInfo`
    - View assigned projects with milestone tracking
    - Start, submit, and track milestone progress
-4. **Project Detail** → `worker/project/[id]/page.jsx` with `WorkerProjectDetailPage`
+5. **Project Detail** → `worker/project/[id]/page.jsx` with `WorkerProjectDetailPage`
    - View project details and milestones
    - Update milestone status (start, submit)
-5. **My Proposals** → `worker/proposals/page.jsx` with `WorkerProposalsInfo`
+6. **My Proposals** → `worker/proposals/page.jsx` with `WorkerProposalsInfo`
    - Track submitted offers and their status
    - Withdraw pending offers
 

@@ -1,23 +1,89 @@
 "use client";
 import Link from "next/link";
 import DashboardNavigation from "../header/DashboardNavigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Pagination1 from "@/components/section/Pagination1";
-import ManageProjectCard from "../card/ManageProjectCard";
-import ProposalModal1 from "../modal/ProposalModal1";
-import DeleteModal from "../modal/DeleteModal";
+import WorkerProjectCard from "../card/WorkerProjectCard";
+import OfferCard from "../card/OfferCard";
 
-const tab = [
-  "Posted Projects",
-  "Pending Projects",
-  "Ongoing Services",
-  "Expired Projects",
-  "Completed Services",
-  "Canceled Services",
+const tabs = [
+  { label: "Available Projects", status: "POSTED" },
+  { label: "My Offers", status: "OFFERS" },
+  { label: "Assigned Projects", status: "ASSIGNED" },
+  { label: "In Progress", status: "IN_PROGRESS" },
+  { label: "Completed Projects", status: "COMPLETED" },
 ];
 
 export default function ManageProjectInfo() {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [projects, setProjects] = useState([]);
+  const [offers, setOffers] = useState([]);
+  const [allProjects, setAllProjects] = useState([]);
+  const [allOffers, setAllOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 5;
+
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchData();
+  }, [selectedTab]);
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      if (tabs[selectedTab].status === "OFFERS") {
+        const res = await fetch("/api/worker/offers");
+        const data = await res.json();
+        if (data.success) {
+          setAllOffers(data.data);
+          setTotalItems(data.data.length);
+        }
+      } else if (tabs[selectedTab].status === "POSTED") {
+        const res = await fetch("/api/worker/projects?type=available");
+        const data = await res.json();
+        if (data.success) {
+          setAllProjects(data.data.available);
+          setTotalItems(data.data.available.length);
+        }
+      } else {
+        const res = await fetch("/api/worker/projects?type=assigned");
+        const data = await res.json();
+        if (data.success) {
+          const filtered = data.data.assigned.filter(p => p.status === tabs[selectedTab].status);
+          setAllProjects(filtered);
+          setTotalItems(filtered.length);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    if (tabs[selectedTab].status === "OFFERS") {
+      setOffers(allOffers.slice(start, start + itemsPerPage));
+    } else {
+      setProjects(allProjects.slice(start, start + itemsPerPage));
+    }
+  }, [allProjects, allOffers, currentPage, selectedTab]);
+
+  const getCurrentItems = () => {
+    if (tabs[selectedTab].status === "OFFERS") {
+      return offers;
+    }
+    return projects;
+  };
+
+  const showTable = tabs[selectedTab].status === "OFFERS";
 
   return (
     <>
@@ -29,180 +95,84 @@ export default function ManageProjectInfo() {
           <div className="col-lg-9">
             <div className="dashboard_title_area">
               <h2>Manage Project</h2>
-              <p className="text">Lorem ipsum dolor sit amet, consectetur.</p>
+              <p className="text">View and manage your projects</p>
             </div>
           </div>
-          {/* <div className="col-lg-3">
+          <div className="col-lg-3">
             <div className="text-lg-end">
               <Link
-                href="/create-projects"
+                href="/worker/browse-projects"
                 className="ud-btn btn-dark default-box-shadow2"
               >
-                Create Project
+                Browse Projects
                 <i className="fal fa-arrow-right-long" />
               </Link>
             </div>
-          </div> */}
+          </div>
         </div>
+
         <div className="row">
           <div className="col-xl-12">
             <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
               <div className="navtab-style1">
                 <nav>
                   <div className="nav nav-tabs mb30">
-                    {tab.map((item, i) => (
+                    {tabs.map((tab, i) => (
                       <button
                         key={i}
-                        className={`nav-link fw500 ps-0 ${selectedTab == i ? "active" : ""
-                          }`}
+                        className={`nav-link fw500 ps-0 ${selectedTab === i ? "active" : ""}`}
                         onClick={() => setSelectedTab(i)}
                       >
-                        {item}
+                        {tab.label}
                       </button>
                     ))}
                   </div>
                 </nav>
-                {selectedTab === 0 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
+
+                {loading ? (
+                  <div className="text-center p50">
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
                     </div>
                   </div>
-                )}
-                {selectedTab === 1 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
+                ) : getCurrentItems().length === 0 ? (
+                  <div className="text-center p50">
+                    <i className="flaticon-folder fz60 text-muted mb20 d-block" />
+                    <h5 className="text-muted">No projects found</h5>
+                    {tabs[selectedTab].status === "POSTED" && (
+                      <Link href="/worker/browse-projects" className="ud-btn btn-thm mt20">
+                        Browse Projects
+                        <i className="fal fa-arrow-right-long" />
+                      </Link>
+                    )}
                   </div>
-                )}
-                {selectedTab === 2 && (
+                ) : (
                   <div className="packages_table table-responsive">
                     <table className="table-style3 table at-savesearch">
                       <thead className="t-head">
                         <tr>
                           <th scope="col">Title</th>
                           <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
+                          <th scope="col">{showTable ? "Bid/Budget" : "Status/Budget"}</th>
                         </tr>
                       </thead>
                       <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
+                        {getCurrentItems().map((item) => (
+                          showTable ? (
+                            <OfferCard key={item.id} offer={item} />
+                          ) : (
+                            <WorkerProjectCard key={item.id} project={item} />
+                          )
+                        ))}
                       </tbody>
                     </table>
                     <div className="mt30">
-                      <Pagination1 />
-                    </div>
-                  </div>
-                )}
-                {selectedTab === 3 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
-                  </div>
-                )}
-                {selectedTab === 4 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
-                    </div>
-                  </div>
-                )}
-                {selectedTab === 5 && (
-                  <div className="packages_table table-responsive">
-                    <table className="table-style3 table at-savesearch">
-                      <thead className="t-head">
-                        <tr>
-                          <th scope="col">Title</th>
-                          <th scope="col">Category</th>
-                          <th scope="col">Type/Cost</th>
-                          <th scope="col">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="t-body">
-                        {Array(7)
-                          .fill(7)
-                          .map((_, i) => (
-                            <ManageProjectCard key={i} />
-                          ))}
-                      </tbody>
-                    </table>
-                    <div className="mt30">
-                      <Pagination1 />
+                      <Pagination1
+                        currentPage={currentPage}
+                        totalItems={totalItems}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={setCurrentPage}
+                      />
                     </div>
                   </div>
                 )}
@@ -211,8 +181,6 @@ export default function ManageProjectInfo() {
           </div>
         </div>
       </div>
-      <ProposalModal1 />
-      <DeleteModal />
     </>
   );
 }
