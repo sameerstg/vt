@@ -1,9 +1,9 @@
-import ContractorDashboardInfo from "@/app/contractor/components/section/ContractorDashboardInfo";
+import WorkerDashboardInfo from "@/app/contractor/components/section/WorkerDashboardInfo";
 
 export const metadata = {
-  title: "VeriTask - Contractor Dashboard",
+  title: "VeriTask - Worker Dashboard",
 };
 
 export default function page() {
-  return <ContractorDashboardInfo />;
+  return <WorkerDashboardInfo />;
 }

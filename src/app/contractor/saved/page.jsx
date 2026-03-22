@@ -1,7 +1,7 @@
-import SavedInfo from "@/app/contractor/components/section/SavedInfo";
+import SavedInfo from "@/app/worker/components/section/SavedInfo";
 
 export const metadata = {
-  title: "VeriTask - Saved",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Saved",
 };
 
 export default function page() {

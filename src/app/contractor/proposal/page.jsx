@@ -1,7 +1,7 @@
-import ProposalInfo from "@/app/contractor/components/section/ProposalInfo";
+import ProposalInfo from "@/app/worker/components/section/ProposalInfo";
 
 export const metadata = {
-  title: "VeriTask - Proposals",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Proposal",
 };
 
 export default function page() {

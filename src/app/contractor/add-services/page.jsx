@@ -1,7 +1,7 @@
-import AddServiceInfo from "@/app/contractor/components/section/AddServiceInfo";
+import AddServiceInfo from "@/app/worker/components/section/AddServiceInfo";
 
 export const metadata = {
-  title: "VeriTask - Add Service",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Add Service",
 };
 
 export default function page() {

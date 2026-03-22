@@ -37,11 +37,21 @@ export async function GET(request) {
   const type = searchParams.get("type");
   const contractorId = searchParams.get("contractorId") || "contractor-001";
 
-  let result = { assignedProjects: [], team: null, subprojects: [], payroll: [] };
+  let result = { available: [], assignedProjects: [], team: null, subprojects: [], payroll: [] };
+
+  if (type === "available") {
+    const projectsState = getProjectsState();
+    let available = allProjects.filter(p => p.contractorOnly === true && p.status === "POSTED");
+    available = available.map(proj => {
+      const stateProject = projectsState.get(proj.id);
+      return stateProject || proj;
+    });
+    result.available = available;
+  }
 
   if (type === "assigned" || !type) {
-    let assignedProjects = allProjects.filter(p => 
-      p.contractorId === contractorId
+    let assignedProjects = allProjects.filter(p =>
+      p.contractorId === contractorId && p.contractorOnly === true
     );
     const projectsState = getProjectsState();
     assignedProjects = assignedProjects.map(proj => {

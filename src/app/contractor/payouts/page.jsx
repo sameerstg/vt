@@ -1,7 +1,7 @@
-import PayoutInfo from "@/app/contractor/components/section/PayoutInfo";
+import PayoutInfo from "@/app/worker/components/section/PayoutInfo";
 
 export const metadata = {
-  title: "VeriTask - Payouts",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Payout",
 };
 
 export default function page() {

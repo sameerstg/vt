@@ -1,7 +1,7 @@
-import ReviewsInfo from "@/app/contractor/components/section/ReviewsInfo";
+import ReviewsInfo from "@/app/worker/components/section/ReviewsInfo";
 
 export const metadata = {
-  title: "VeriTask - Reviews",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Review",
 };
 
 export default function page() {

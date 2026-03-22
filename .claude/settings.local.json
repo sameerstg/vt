@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(find /f/vt/src/app/contractor/components/section -name *.jsx -type f)"
     ]
   }
 }

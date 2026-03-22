@@ -1,7 +1,7 @@
-import ManageServiceInfo from "@/app/contractor/components/section/ManageServiceInfo";
+import ManageServiceInfo from "@/app/worker/components/section/ManageServiceInfo";
 
 export const metadata = {
-  title: "VeriTask - Manage Services",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Manage Services",
 };
 
 export default function page() {

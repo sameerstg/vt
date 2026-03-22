@@ -1,7 +1,7 @@
-import MessageInfo from "@/app/contractor/components/section/MessageInfo";
+import MessageInfo from "@/app/worker/components/section/MessageInfo";
 
 export const metadata = {
-  title: "VeriTask - Messages",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Message",
 };
 
 export default function page() {

@@ -1,7 +1,7 @@
-import StatementInfo from "@/app/contractor/components/section/StatementInfo";
+import StatementInfo from "@/app/worker/components/section/StatementInfo";
 
 export const metadata = {
-  title: "VeriTask - Statements",
+  title: "Freeio - Freelance Marketplace React/Next Js Template | Statement",
 };
 
 export default function page() {

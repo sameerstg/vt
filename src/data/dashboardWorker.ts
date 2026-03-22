@@ -102,8 +102,8 @@ export const dasboardNavigation: DashboardWorkerNavigationItem[] = [
     },
     {
         id: 16,
-        name: "My Assignments",
-        icon: "flaticon-work",
+        name: "Teams",
+        icon: "flaticon-team",
         path: "/worker/assignments",
     },
     // {

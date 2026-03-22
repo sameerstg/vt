@@ -1,9 +1,9 @@
-import ContractorAssignedProjectsInfo from "@/app/contractor/components/section/ContractorAssignedProjectsInfo";
+import AssignedProjectsInfo from "@/app/contractor/components/section/AssignedProjectsInfo";
 
 export const metadata = {
   title: "VeriTask - My Projects",
 };
 
 export default function page() {
-  return <ContractorAssignedProjectsInfo />;
+  return <AssignedProjectsInfo />;
 }
