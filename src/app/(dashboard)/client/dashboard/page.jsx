@@ -1,5 +1,5 @@
-import DashboardLayout from "@/components/dashboard-client/DashboardLayout";
-import ClientDashboardComponent from "@/modules/client/pages/ClientDashboard";
+import DashboardLayout from "@/app/(dashboard)/client/components/DashboardLayout";
+import ClientDashboardComponent from "@/app/(dashboard)/client/modules/pages/ClientDashboard";
 
 export const metadata = {
   title: "VeriTask - Client Dashboard",

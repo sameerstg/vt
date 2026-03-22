@@ -61,10 +61,10 @@ All imports use `@/` prefix for src directory.
 ```
 src/
 ├── app/           # Next.js App Router pages
-├── components/    # Reusable UI components
+├── components/    # Reusable UI components (shared/layout)
 ├── data/          # Static data (mock data)
 ├── hook/          # Custom React hooks
-├── modules/       # VeriTask feature modules (client, contractor, worker, shared)
+├── modules/       # VeriTask feature modules (client, contractor, worker, shared) - business logic & state
 ├── store/         # Zustand state stores
 └── utils/         # Utility functions
 ```
@@ -186,16 +186,32 @@ testimonials.js   // Customer testimonials
 | `isActiveNavigation.js` | Active route detection |
 | `wow.js` | WOW.js animation initialization |
 
-### 7. VeriTask Feature Modules (`src/modules/`)
+### 7. VeriTask Feature Modules
 
-Modular feature architecture organized by role, each with its own components, pages, and store:
+Modular feature architecture with dual organization:
+1. Role-based modules in `src/modules/` for business logic and state management
+2. Role-scoped UI components in `src/app/(dashboard)/[role]/` for route isolation
 
 ```
 modules/
-├── client/         # Client role (job poster, task creator)
-├── contractor/     # Contractor role (team manager, payroll)
-├── worker/         # Worker role (task executor, offer submitter)
+├── client/         # Client role (job poster, task creator) - business logic & state
+├── contractor/     # Contractor role (team manager, payroll) - business logic & state
+├── worker/         # Worker role (task executor, offer submitter) - business logic & state
 └── shared/         # Shared utilities (auth, layout, utils, agents)
+```
+
+Role-scoped UI organization:
+```
+src/app/(dashboard)/
+├── client/
+│   ├── components/     # Client-specific UI components
+│   └── modules/        # Client-specific modules (pages, store, etc.)
+├── worker/
+│   ├── components/     # Worker-specific UI components
+│   └── modules/        # Worker-specific modules (pages, store, etc.)
+└── contractor/
+    ├── components/     # Contractor-specific UI components
+    └── modules/        # Contractor-specific modules (pages, store, etc.)
 ```
 
 **Shared Module (`src/modules/shared/`):**
@@ -208,16 +224,32 @@ modules/
 | `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
 | `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
 
-### 7. VeriTask Feature Modules (`src/modules/`)
+### 7. VeriTask Feature Modules
 
-Modular feature architecture organized by role, each with its own components, pages, and store:
+Modular feature architecture with dual organization:
+1. Role-based modules in `src/modules/` for business logic and state management
+2. Role-scoped UI components in `src/app/(dashboard)/[role]/` for route isolation
 
 ```
 modules/
-├── client/         # Client role (job poster, task creator)
-├── contractor/     # Contractor role (team manager, payroll)
-├── worker/         # Worker role (task executor, offer submitter)
+├── client/         # Client role (job poster, task creator) - business logic & state
+├── contractor/     # Contractor role (team manager, payroll) - business logic & state
+├── worker/         # Worker role (task executor, offer submitter) - business logic & state
 └── shared/         # Shared utilities (auth, layout, utils, agents)
+```
+
+Role-scoped UI organization:
+```
+src/app/(dashboard)/
+├── client/
+│   ├── components/     # Client-specific UI components
+│   └── modules/        # Client-specific modules (pages, store, etc.)
+├── worker/
+│   ├── components/     # Worker-specific UI components
+│   └── modules/        # Worker-specific modules (pages, store, etc.)
+└── contractor/
+    ├── components/     # Contractor-specific UI components
+    └── modules/        # Contractor-specific modules (pages, store, etc.)
 ```
 
 **Shared Module (`src/modules/shared/`):**
@@ -229,18 +261,6 @@ modules/
 | `agents/ruleEnforcementAgent.js` | Ensures development follows rules from doc/rules.md |
 | `agents/codebaseAnalysisAgent.js` | Maintains and updates codebase analysis documentation |
 | `agents/businessRequirementAgent.js` | Ensures development follows business requirements from doc/business-requirement.md |
-
-### 7. VeriTask Feature Modules (`src/modules/`)
-
-Modular feature architecture organized by role, each with its own components, pages, and store:
-
-```
-modules/
-├── client/         # Client role (job poster, task creator)
-├── contractor/     # Contractor role (team manager, payroll)
-├── worker/         # Worker role (task executor, offer submitter)
-└── shared/         # Shared utilities (auth, layout, utils, agents)
-```
 
 **Client Module (`src/modules/client/`):**
 | File | Purpose |
@@ -432,7 +452,7 @@ Uses Bootstrap 5 breakpoints with custom container max-width:
 (dashboard)/contractor/dashboard/ → /contractor/dashboard
 ```
 
-*Note: Navigation paths in src/data/dashboardClient.ts, dashboardWorker.ts, and dashboardContractor.ts have been updated to remove redundant dashboard prefixes from navigation paths (e.g., "/client-dashboard/manage-jobs" became "/manage-jobs") to align with the route group structure where the role dashboard is already scoped under /{role}/dashboard.*
+*Note: Navigation paths in src/data/dashboardClient.ts, dashboardWorker.ts, and dashboardContractor.ts have been updated to include role-specific prefixes (e.g., "/manage-jobs" became "/client/manage-jobs") to align with the route group structure where role-specific pages are scoped under /{role}/*.*
 
 ### Navigation Structure (`data/navigation.js`)
 ```javascript

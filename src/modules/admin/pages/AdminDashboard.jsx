@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAdminStore } from "@/modules/admin/store/adminStore";
+import useAdminStore from "@/modules/admin/store/adminStore";
 import DisputeManager from "@/modules/admin/components/DisputeManager";
 import UserManager from "@/modules/admin/components/UserManager";
 import FinancialOversight from "@/modules/admin/components/FinancialOversight";

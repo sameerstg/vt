@@ -1,5 +1,5 @@
-import DashboardLayout from "@/components/dashboard-contractor/DashboardLayout";
-import PayoutInfo from "@/components/dashboard-contractor/section/PayoutInfo";
+import DashboardLayout from "@/app/(dashboard)/contractor/components/DashboardLayout";
+import PayoutInfo from "@/app/(dashboard)/contractor/components/section/PayoutInfo";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 export const metadata = {

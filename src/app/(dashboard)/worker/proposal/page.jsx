@@ -1,5 +1,5 @@
-import DashboardLayout from "@/components/dashboard-worker/DashboardLayout";
-import ProposalInfo from "@/components/dashboard-worker/section/ProposalInfo";
+import DashboardLayout from "@/app/(dashboard)/worker/components/DashboardLayout";
+import ProposalInfo from "@/app/(dashboard)/worker/components/section/ProposalInfo";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 

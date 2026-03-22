@@ -1,5 +1,5 @@
-import DashboardLayout from "@/components/dashboard-worker/DashboardLayout";
-import MyProfileInfo from "@/components/dashboard-worker/section/MyProfileInfo";
+import DashboardLayout from "@/app/(dashboard)/worker/components/DashboardLayout";
+import MyProfileInfo from "@/app/(dashboard)/worker/components/section/MyProfileInfo";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 

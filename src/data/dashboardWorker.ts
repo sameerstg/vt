@@ -52,96 +52,96 @@ interface WorkerManageJob {
 }
 
 export const dasboardNavigation: DashboardWorkerNavigationItem[] = [
-  {
-    id: 1,
-    name: "Dashboard",
-    icon: "flaticon-home",
-    path: "/worker/dashboard",
-  },
-  {
-    id: 2,
-    name: "My Proposals",
-    icon: "flaticon-document",
-    path: "/proposal",
-  },
-  {
-    id: 3,
-    name: "Saved",
-    icon: "flaticon-like",
-    path: "/saved",
-  },
-  {
-    id: 4,
-    name: "Message",
-    icon: "flaticon-chat",
-    path: "/message",
-  },
-  {
-    id: 5,
-    name: "Reviews",
-    icon: "flaticon-review-1",
-    path: "/reviews",
-  },
-  {
-    id: 6,
-    name: "Invoice",
-    icon: "flaticon-receipt",
-    path: "/invoice",
-  },
-  {
-    id: 7,
-    name: "Payouts",
-    icon: "flaticon-dollar",
-    path: "/payouts",
-  },
-  {
-    id: 8,
-    name: "Statements",
-    icon: "flaticon-web",
-    path: "/statements",
-  },
-  {
-    id: 9,
-    name: "Manage Services",
-    icon: "flaticon-presentation",
-    path: "/manage-services",
-  },
-  {
-    id: 10,
-    name: "Manage Jobs",
-    icon: "flaticon-briefcase",
-    path: "/manage-jobs",
-  },
-  {
-    id: 11,
-    name: "Manage Project",
-    icon: "flaticon-content",
-    path: "/manage-projects",
-  },
-  {
-    id: 12,
-    name: "Add Services",
-    icon: "flaticon-document",
-    path: "/add-services",
-  },
-  {
-    id: 13,
-    name: "Create Project",
-    icon: "flaticon-content",
-    path: "/create-projects",
-  },
-  {
-    id: 14,
-    name: "My Profile",
-    icon: "flaticon-photo",
-    path: "/my-profile",
-  },
-  {
-    id: 15,
-    name: "Logout",
-    icon: "flaticon-logout",
-    path: "/login",
-  },
+    {
+        id: 1,
+        name: "Dashboard",
+        icon: "flaticon-home",
+        path: "/worker/dashboard",
+    },
+    {
+        id: 2,
+        name: "My Proposals",
+        icon: "flaticon-document",
+        path: "/worker/proposal",
+    },
+    {
+        id: 3,
+        name: "Saved",
+        icon: "flaticon-like",
+        path: "/worker/saved",
+    },
+    {
+        id: 4,
+        name: "Message",
+        icon: "flaticon-chat",
+        path: "/worker/message",
+    },
+    {
+        id: 5,
+        name: "Reviews",
+        icon: "flaticon-review-1",
+        path: "/worker/reviews",
+    },
+    {
+        id: 6,
+        name: "Invoice",
+        icon: "flaticon-receipt",
+        path: "/worker/invoice",
+    },
+    {
+        id: 7,
+        name: "Payouts",
+        icon: "flaticon-dollar",
+        path: "/worker/payouts",
+    },
+    {
+        id: 8,
+        name: "Statements",
+        icon: "flaticon-web",
+        path: "/worker/statements",
+    },
+    {
+        id: 9,
+        name: "Manage Services",
+        icon: "flaticon-presentation",
+        path: "/worker/manage-services",
+    },
+    {
+        id: 10,
+        name: "Manage Jobs",
+        icon: "flaticon-briefcase",
+        path: "/worker/manage-jobs",
+    },
+    {
+        id: 11,
+        name: "Manage Project",
+        icon: "flaticon-content",
+        path: "/worker/manage-projects",
+    },
+    {
+        id: 12,
+        name: "Add Services",
+        icon: "flaticon-document",
+        path: "/worker/add-services",
+    },
+    {
+        id: 13,
+        name: "Create Project",
+        icon: "flaticon-content",
+        path: "/worker/create-projects",
+    },
+    {
+        id: 14,
+        name: "My Profile",
+        icon: "flaticon-photo",
+        path: "/worker/my-profile",
+    },
+    {
+        id: 15,
+        name: "Logout",
+        icon: "flaticon-logout",
+        path: "/login",
+    },
 ];
 
 export const invoice: WorkerInvoice[] = [

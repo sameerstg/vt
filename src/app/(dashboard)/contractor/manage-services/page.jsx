@@ -1,5 +1,5 @@
-import DashboardLayout from "@/components/dashboard-contractor/DashboardLayout";
-import ManageServiceInfo from "@/components/dashboard-contractor/section/ManageServiceInfo";
+import DashboardLayout from "@/app/(dashboard)/contractor/components/DashboardLayout";
+import ManageServiceInfo from "@/app/(dashboard)/contractor/components/section/ManageServiceInfo";
 
 import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
