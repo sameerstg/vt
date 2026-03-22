@@ -9,6 +9,7 @@ import toggleStore from "@/store/toggleStore";
 import "react-tooltip/dist/react-tooltip.css";
 import "rc-slider/assets/index.css";
 import NavSidebar from "@/components/sidebar/NavSidebar";
+import { Agentation } from "agentation";
 if (typeof window !== "undefined") {
   import("bootstrap");
 }
@@ -44,6 +45,8 @@ export default function RootLayout({ children }) {
 
         {/* sidebar mobile navigation */}
         <NavSidebar />
+
+        {process.env.NODE_ENV === "development" && <Agentation />}
       </body>
     </html>
   );

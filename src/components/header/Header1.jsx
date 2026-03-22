@@ -12,9 +12,8 @@ export default function Header1() {
     return (
         <>
             <header
-                className={`header-nav nav-homepage-style stricky main-menu animated   ${
-                    sticky ? "slideInDown stricky-fixed" : "slideIn"
-                }`}
+                className={`header-nav nav-homepage-style stricky main-menu animated   ${sticky ? "slideInDown stricky-fixed" : "slideIn"
+                    }`}
             >
                 <nav className="posr">
                     <div className="container-fluid posr menu_bdrt1 px30">
@@ -60,17 +59,9 @@ export default function Header1() {
                                     >
                                         <span className="flaticon-loupe" />
                                     </Link>
+
                                     <Link
-                                        className={`login-info mx15-lg mx30`}
-                                        href="/become-seller"
-                                    >
-                                        <span className="d-none d-xl-inline-block">
-                                            Become a
-                                        </span>{" "}
-                                        Worker
-                                    </Link>
-                                    <Link
-                                        className={`login-info mr15-lg mr30`}
+                                        className={`login-info ms-lg-4`}
                                         href="/login"
                                     >
                                         Sign in

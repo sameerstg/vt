@@ -19,7 +19,7 @@ export default function MobileNavigation1() {
                 </Link>
                 <div className="right-side text-end">
                   <Link className="text-white" href="/login">
-                    join
+                    Sign in
                   </Link>
                   <a
                     className="menubar ml30"

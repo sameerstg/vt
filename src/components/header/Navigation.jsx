@@ -11,24 +11,21 @@ export default function Navigation() {
   return (
     <>
       <ul
-        className={`ace-responsive-menu ui-navigation ${
-          path == "/home-3" || path == "/home-4" || path == "/home-10"
-            ? "menu-without-paddingy"
-            : ""
-        } `}
+        className={`ace-responsive-menu ui-navigation ${path == "/home-3" || path == "/home-4" || path == "/home-10"
+          ? "menu-without-paddingy"
+          : ""
+          } `}
       >
-        {navigation.map((item,i) => (
+        {navigation.map((item, i) => (
           <li
-            key={ i }
-            className={`visible_list menu-active ${
-              item.id == 1 ? "home-menu-parent" : ""
-            } `}
+            key={i}
+            className={`visible_list menu-active ${item.id == 1 ? "home-menu-parent" : ""
+              } `}
           >
             {item.children ? (
               <a
-                className={`list-item  ${
-                  isActiveNavigation(path, item) ? "ui-active" : ""
-                }`}
+                className={`list-item  ${isActiveNavigation(path, item) ? "ui-active" : ""
+                  }`}
               >
                 <span className="title">{item.name}</span>{" "}
                 {item.children && <span className="arrow "></span>}
@@ -45,14 +42,13 @@ export default function Navigation() {
 
             {item.children && (
               <ul className={`sub-menu ${item.id == 1 ? "home-menu" : ""} `}>
-                {item.children?.map((item2,i2) => (
+                {item.children?.map((item2, i2) => (
                   <li
                     key={i2}
-                    className={`menu-active ${
-                      isActiveNavigation(path, item2) || item2.path === path
-                        ? "ui-child-active"
-                        : ""
-                    }`}
+                    className={`menu-active ${isActiveNavigation(path, item2) || item2.path === path
+                      ? "ui-child-active"
+                      : ""
+                      }`}
                   >
                     {item2.children ? (
                       <a>
@@ -67,12 +63,12 @@ export default function Navigation() {
 
                     {item2.children && (
                       <ul className="sub-menu">
-                        {item2.children?.map((item3,i3) => (
+                        {item2.children?.map((item3, i3) => (
                           <li
                             key={i3}
                             className={
                               item3.path === path ||
-                              item3.path === path.replace(/\/\d+$/, "")
+                                item3.path === path.replace(/\/\d+$/, "")
                                 ? "ui-child-active"
                                 : ""
                             }

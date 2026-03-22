@@ -3,17 +3,18 @@
   "version": "1.6.0",
   "private": true,
   "engine": "yarn",
-"scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
-  "validate": "node src/modules/shared/agents/testAgents.js"
-},
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "validate": "node src/modules/shared/agents/testAgents.js"
+  },
   "dependencies": {
     "@babel/core": "^7.27.1",
     "@popperjs/core": "^2.11.8",
     "@react-google-maps/api": "^2.20.6",
+    "agentation": "^2.3.3",
     "bootstrap": "5.3.6",
     "chart.js": "^4.4.9",
     "eslint": "9.27.0",
