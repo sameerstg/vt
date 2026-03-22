@@ -418,6 +418,8 @@ Each DashboardLayout provides:
 
 **Worker layout consolidation:** `src/app/worker/layout.jsx` wraps all worker pages with `<MobileNavigation2 />` and `<DashboardLayout>`, so individual worker `page.jsx` files export only their content component.
 
+**Client layout consolidation:** `src/app/client/layout.jsx` wraps all client pages with `<MobileNavigation2 />` and `<DashboardLayout>` (from `dashboard-client`), so individual client `page.jsx` files export only their content component.
+
 ---
 
 ## Component Patterns

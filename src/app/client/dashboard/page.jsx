@@ -1,4 +1,3 @@
-import DashboardLayout from "@/components/dashboard-client/DashboardLayout";
 import ClientDashboard from "@/modules/client/pages/ClientDashboard";
 
 export const metadata = {
@@ -6,9 +5,5 @@ export const metadata = {
 };
 
 export default function ClientDashboardPage() {
-  return (
-    <DashboardLayout>
-      <ClientDashboard />
-    </DashboardLayout>
-  );
+  return <ClientDashboard />;
 }

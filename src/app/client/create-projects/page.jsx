@@ -1,19 +1,9 @@
-import DashboardLayout from "@/components/dashboard-client/DashboardLayout";
 import CreateProjectForm from "@/app/client/components/section/CreateProjectForm";
-
-import MobileNavigation2 from "@/components/header/MobileNavigation2";
 
 export const metadata = {
   title: "VeriTask - Create Project",
 };
 
 export default function page() {
-  return (
-    <>
-      <MobileNavigation2 />
-      <DashboardLayout>
-        <CreateProjectForm />
-      </DashboardLayout>
-    </>
-  );
+  return <CreateProjectForm />;
 }
