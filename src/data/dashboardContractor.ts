@@ -113,6 +113,12 @@ export const dasboardNavigation: DashboardContractorNavigationItem[] = [
         path: "/contractor/manage-jobs",
     },
     {
+        id: 16,
+        name: "Team",
+        icon: "flaticon-team",
+        path: "/contractor/team",
+    },
+    {
         id: 11,
         name: "Manage Project",
         icon: "flaticon-content",

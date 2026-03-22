@@ -100,6 +100,12 @@ export const dasboardNavigation: DashboardWorkerNavigationItem[] = [
         icon: "flaticon-dollar",
         path: "/worker/payouts",
     },
+    {
+        id: 16,
+        name: "My Assignments",
+        icon: "flaticon-work",
+        path: "/worker/assignments",
+    },
     // {
     //     id: 8,
     //     name: "Statements",
