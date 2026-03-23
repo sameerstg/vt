@@ -2,7 +2,8 @@ interface DashboardWorkerNavigationItem {
   id: number;
   name: string;
   icon: string;
-  path: string;
+  path?: string;
+  children?: { name: string; path: string }[];
 }
 
 interface WorkerInvoice {
@@ -58,6 +59,18 @@ export const dasboardNavigation: DashboardWorkerNavigationItem[] = [
         icon: "flaticon-home",
         path: "/worker/dashboard",
     },
+     {
+        id: 4,
+        name: "Message",
+        icon: "flaticon-chat",
+        path: "/worker/message",
+    },
+    {
+        id: 7,
+        name: "Payment History",
+        icon: "flaticon-dollar",
+        path: "/worker/payouts",
+    },
     {
         id: 11,
         name: "Manage Project",
@@ -76,12 +89,7 @@ export const dasboardNavigation: DashboardWorkerNavigationItem[] = [
     //     icon: "flaticon-like",
     //     path: "/worker/saved",
     // },
-    {
-        id: 4,
-        name: "Message",
-        icon: "flaticon-chat",
-        path: "/worker/message",
-    },
+   
     // {
     //     id: 5,
     //     name: "Reviews",
@@ -94,17 +102,15 @@ export const dasboardNavigation: DashboardWorkerNavigationItem[] = [
     //     icon: "flaticon-receipt",
     //     path: "/worker/invoice",
     // },
-    {
-        id: 7,
-        name: "Payouts",
-        icon: "flaticon-dollar",
-        path: "/worker/payouts",
-    },
+    
     {
         id: 16,
         name: "Teams",
         icon: "flaticon-team",
-        path: "/worker/assignments",
+        children: [
+            { name: "My Teams", path: "/worker/team" },
+            { name: "Assigned Tasks", path: "/worker/assignments" },
+        ],
     },
     // {
     //     id: 8,

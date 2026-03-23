@@ -1,9 +1,9 @@
-import WorkerAssignmentsInfo from "@/app/worker/components/section/WorkerAssignmentsInfo";
+import ContractorAssignmentsInfo from "@/app/contractor/components/section/ContractorAssignmentsInfo";
 
 export const metadata = {
-  title: "VeriTask - My Assignments",
+  title: "VeriTask - Task Assigned",
 };
 
 export default function page() {
-  return <WorkerAssignmentsInfo />;
+  return <ContractorAssignmentsInfo />;
 }

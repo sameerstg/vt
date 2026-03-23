@@ -1,69 +1,76 @@
 "use client";
 import { useState, useEffect } from "react";
-import DashboardNavigation from "@/app/worker/components/header/DashboardNavigation";
+import DashboardNavigation from "@/app/contractor/components/header/DashboardNavigation";
+
+const CONTRACTOR_ID = "contractor-001";
 
 const tabs = [
   { key: "PENDING", label: "Pending" },
   { key: "ACCEPTED", label: "Accepted" },
   { key: "IN_PROGRESS", label: "In Progress" },
-  { key: "IN_REVIEW", label: "In Review" },
+  { key: "IN_REVIEW", label: "For Review" },
   { key: "DECLINED", label: "Declined" },
 ];
 
-const emptyMessages = {
-  PENDING: "No pending assignments",
-  ACCEPTED: "No accepted assignments",
-  IN_PROGRESS: "No assignments in progress",
-  IN_REVIEW: "No assignments in review",
-  DECLINED: "No declined assignments",
+const statusBadge = {
+  PENDING: "badge-new",
+  ACCEPTED: "badge-assigned",
+  IN_PROGRESS: "badge-in-progress",
+  IN_REVIEW: "badge-submitted",
+  DECLINED: "badge-cancelled",
 };
 
-export default function WorkerAssignmentsInfo() {
+const statusLabel = {
+  PENDING: "Pending",
+  ACCEPTED: "Accepted",
+  IN_PROGRESS: "In Progress",
+  IN_REVIEW: "For Review",
+  DECLINED: "Declined",
+};
+
+export default function ContractorAssignmentsInfo() {
   const [activeTab, setActiveTab] = useState("PENDING");
   const [allAssignments, setAllAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState(null);
 
-  useEffect(() => { fetchAssignments(); }, []);
-
   const fetchAssignments = async () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/assignments?workerId=worker-021");
+      const res = await fetch(`/api/assignments?contractorId=${CONTRACTOR_ID}`);
       const data = await res.json();
       if (data.success) setAllAssignments(data.data);
       else setError("Failed to load assignments.");
-    } catch { setError("Network error. Please try again."); }
+    } catch { setError("Network error."); }
     finally { setLoading(false); }
   };
 
+  useEffect(() => { fetchAssignments(); }, []);
+
   const handleAction = async (assignmentId, action, nextTab) => {
+    if (action === "cancel" && !confirm("Cancel this assignment?")) return;
     setActionLoading(assignmentId);
     try {
       const res = await fetch("/api/assignments", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, assignmentId, ...(action === "respond" ? {} : {}) }),
+        body: JSON.stringify({ action, assignmentId }),
       });
       const data = await res.json();
-      if (data.success) { await fetchAssignments(); setActiveTab(nextTab); }
+      if (data.success) { await fetchAssignments(); if (nextTab) setActiveTab(nextTab); }
       else setError(data.error || "Action failed.");
-    } catch { setError("Network error. Please try again."); }
+    } catch { setError("Network error."); }
     finally { setActionLoading(null); }
   };
-
-  const handleRespond = (assignmentId, status) =>
-    handleAction(assignmentId, "respond", status === "ACCEPTED" ? "ACCEPTED" : "DECLINED");
 
   const filtered = allAssignments.filter(a => a.status === activeTab);
   const countByStatus = tabs.reduce((acc, t) => {
     acc[t.key] = allAssignments.filter(a => a.status === t.key).length;
     return acc;
   }, {});
-
-  const showActions = ["PENDING", "ACCEPTED", "IN_PROGRESS"].includes(activeTab);
+  const showActions = activeTab === "PENDING" || activeTab === "IN_REVIEW";
 
   return (
     <div className="dashboard__content hover-bgc-color">
@@ -71,8 +78,8 @@ export default function WorkerAssignmentsInfo() {
         <div className="col-lg-12"><DashboardNavigation /></div>
         <div className="col-lg-12">
           <div className="dashboard_title_area">
-            <h2>Assigned Tasks</h2>
-            <p className="text">Tasks assigned to you by contractors</p>
+            <h2>Task Assigned</h2>
+            <p className="text">Assignments you have sent to team members</p>
           </div>
         </div>
       </div>
@@ -109,7 +116,7 @@ export default function WorkerAssignmentsInfo() {
               ) : filtered.length === 0 ? (
                 <div className="text-center p50">
                   <i className="flaticon-document fz60 text-muted mb20 d-block" />
-                  <h5 className="text-muted">{emptyMessages[activeTab]}</h5>
+                  <h5 className="text-muted">No {tabs.find(t => t.key === activeTab)?.label.toLowerCase()} assignments</h5>
                 </div>
               ) : (
                 <div className="packages_table table-responsive">
@@ -117,9 +124,10 @@ export default function WorkerAssignmentsInfo() {
                     <thead className="t-head">
                       <tr>
                         <th scope="col">Project / Milestone</th>
-                        <th scope="col">Contractor</th>
+                        <th scope="col">Assigned To</th>
                         <th scope="col">Pay</th>
                         <th scope="col">Deadline</th>
+                        <th scope="col">Status</th>
                         {showActions && <th scope="col">Actions</th>}
                       </tr>
                     </thead>
@@ -137,50 +145,40 @@ export default function WorkerAssignmentsInfo() {
                               </p>
                             )}
                           </td>
-                          <td className="vam fz14">BuildRight Solutions</td>
+                          <td className="vam">
+                            <span className="fw500 fz15">{a.workerName}</span>
+                            <span className="fz12 text-muted d-block">{a.workerId}</span>
+                          </td>
                           <td className="vam">
                             <span className="text-thm fw500 fz16">${a.pay.toLocaleString()}</span>
                           </td>
                           <td className="vam">
                             <span className="fz14">{new Date(a.deadline).toLocaleDateString()}</span>
                           </td>
+                          <td className="vam">
+                            <span className={`badge fz12 ${statusBadge[a.status] || "badge-new"}`}>
+                              {statusLabel[a.status] || a.status}
+                            </span>
+                          </td>
                           {showActions && (
                             <td className="vam">
                               <div className="d-flex gap-2">
                                 {activeTab === "PENDING" && (
-                                  <>
-                                    <button
-                                      onClick={() => handleRespond(a.id, "ACCEPTED")}
-                                      className="ud-btn btn-thm bdrs4 btn-sm"
-                                      disabled={actionLoading === a.id}
-                                    >
-                                      {actionLoading === a.id ? <span className="spinner-border spinner-border-sm" /> : "Accept"}
-                                    </button>
-                                    <button
-                                      onClick={() => handleRespond(a.id, "DECLINED")}
-                                      className="ud-btn btn-light bdrs4 btn-sm"
-                                      disabled={actionLoading === a.id}
-                                    >
-                                      Decline
-                                    </button>
-                                  </>
-                                )}
-                                {activeTab === "ACCEPTED" && (
                                   <button
-                                    onClick={() => handleAction(a.id, "start", "IN_PROGRESS")}
-                                    className="ud-btn btn-thm bdrs4 btn-sm"
+                                    className="ud-btn btn-light bdrs4 btn-sm"
                                     disabled={actionLoading === a.id}
+                                    onClick={() => handleAction(a.id, "cancel", null)}
                                   >
-                                    {actionLoading === a.id ? <span className="spinner-border spinner-border-sm" /> : "Start"}
+                                    {actionLoading === a.id ? <span className="spinner-border spinner-border-sm" /> : "Cancel"}
                                   </button>
                                 )}
-                                {activeTab === "IN_PROGRESS" && (
+                                {activeTab === "IN_REVIEW" && (
                                   <button
-                                    onClick={() => handleAction(a.id, "submit", "IN_REVIEW")}
                                     className="ud-btn btn-thm bdrs4 btn-sm"
                                     disabled={actionLoading === a.id}
+                                    onClick={() => handleAction(a.id, "approve", "DECLINED")}
                                   >
-                                    {actionLoading === a.id ? <span className="spinner-border spinner-border-sm" /> : "Submit"}
+                                    {actionLoading === a.id ? <span className="spinner-border spinner-border-sm" /> : "Approve"}
                                   </button>
                                 )}
                               </div>

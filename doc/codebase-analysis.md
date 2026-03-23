@@ -38,6 +38,8 @@ Each role has its own top-level route with isolated components and layout:
 Each `DashboardLayout` provides: `DashboardHeader` + `DashboardSidebar` + `DashboardFooter`.
 Individual `page.jsx` files export only their content component (layout is applied once in `layout.jsx`).
 
+**Sidebar nav data** (`src/data/dashboardWorker.ts`, `src/data/dashboardContractor.ts`): nav items support optional `children?: { name, path }[]` for nested sidebar links. Items with children render as non-link labels with indented sub-items. The **Teams** item uses this pattern for both worker and contractor.
+
 **User dropdown** (worker, contractor, client): shows My Profile + Logout. Positioned `fixed; top: 75px; right: 30px` via `public/css/style.css`.
 
 ---
@@ -75,14 +77,14 @@ POSTED → ASSIGNED → IN_PROGRESS → SUBMITTED → COMPLETED
 ### Worker API (`/api/worker/`)
 | Route | Purpose |
 |-------|---------|
-| `projects` | GET `?type=available/assigned`; PUT `action=submit` |
+| `projects` | GET `?type=available/assigned`; GET `?type=team&workerId=x` → worker's teams (array); PUT `action=submit` |
 | `offers` | POST submit; PUT `action=withdraw` |
 | `milestones` | GET by projectId; PUT `action=start/submit/complete` |
 
 ### Contractor API (`/api/contractor/`)
 | Route | Purpose |
 |-------|---------|
-| `route.js` | GET `?type=available` (contractorOnly POSTED); `?type=assigned` (contractor's projects); team; payroll |
+| `route.js` | GET `?type=available` (contractorOnly POSTED); `?type=assigned` (contractor's projects); `?type=team` → teams array (10 teams for contractor-001); POST `addTeamMember`; PUT `removeTeamMember` |
 | `milestones/` | GET/PUT milestones for contractor projects |
 
 ### Shared API
@@ -107,9 +109,13 @@ GET requests merge base data + state. Resets on server restart.
 ### Assignments API (`/api/assignments`)
 - `GET ?contractorId=x` / `GET ?workerId=x`
 - `POST {action:"create"}` — required: contractorId, workerId, workerName, projectId, projectTitle, pay, deadline
-- `PUT {action:"respond"}` — worker accepts/declines (PENDING only)
-- `PUT {action:"cancel"}` — contractor cancels (PENDING only)
-- Pre-seeded: asgn-001 (PENDING), asgn-002 (ACCEPTED, milestone-level), asgn-003 (DECLINED) for worker-021/contractor-001
+- `PUT {action:"respond", status}` — worker accepts/declines (PENDING only) → ACCEPTED | DECLINED
+- `PUT {action:"start"}` — worker starts work (ACCEPTED only) → IN_PROGRESS
+- `PUT {action:"submit"}` — worker submits work (IN_PROGRESS only) → IN_REVIEW
+- `PUT {action:"approve"}` — contractor approves submission (IN_REVIEW only)
+- `PUT {action:"cancel"}` — contractor cancels (PENDING only) → deleted
+- Assignment status flow: `PENDING → ACCEPTED → IN_PROGRESS → IN_REVIEW`; or `PENDING → DECLINED`
+- Pre-seeded: 25 assignments (5 per status × 5 statuses) for contractor-001; worker-021 has 5 assignments per status tab
 
 ---
 
@@ -137,7 +143,12 @@ Pages at `src/app/worker/` | Components at `src/app/worker/components/` | API: `
 5. **Project Detail** `/worker/project/[id]` — milestone actions; FIXED+IN_PROGRESS shows "Ready to submit?" bar
 6. **Submit Work** `/worker/project/[id]/submit` — description + file upload; `PUT /api/worker/projects {action:"submit"}` → SUBMITTED
 7. **My Proposals** `/worker/proposals` — submitted offers, withdraw pending
-8. **My Assignments** `/worker/assignments` — `WorkerAssignmentsInfo`; tabs: PENDING / ACCEPTED / DECLINED; `PUT /api/assignments {action:"respond"}`
+8. **Teams** `/worker/assignments` + `/worker/team` — nested sidebar item with two sub-pages:
+   - **My Teams** `/worker/team` — `WorkerTeamInfo`; collapsible team cards showing all teams worker belongs to; member table with role, rate, "You" badge on own row
+   - **Assigned Tasks** `/worker/assignments` — `WorkerAssignmentsInfo`; tabs: PENDING / ACCEPTED / IN_PROGRESS / IN_REVIEW / DECLINED; count badge on every tab
+     - PENDING: Accept / Decline buttons → `PUT {action:"respond"}`
+     - ACCEPTED: Start button → `PUT {action:"start"}` → IN_PROGRESS
+     - IN_PROGRESS: Submit button → `PUT {action:"submit"}` → IN_REVIEW
 
 ---
 
@@ -150,10 +161,11 @@ All contractor pages use **contractor's own component copies** (not worker's). A
 2. **Browse Projects** `/contractor/browse-projects` — `Listing8`; fetches `/api/contractor?type=available` (contractor-only POSTED projects)
 3. **My Projects** `/contractor/my-projects` — `AssignedProjectsInfo`; fetches `/api/contractor?type=assigned`; milestones from `/api/contractor/milestones`
 4. **Manage Projects** `/contractor/manage-projects` — `ManageProjectInfo`; fetches `/api/contractor?type=assigned`; tabs: In Progress / In Review / Completed / In Dispute
-5. **Team** `/contractor/team` — `TeamManagementInfo`
-   - **Team Members tab:** add/remove members; "Assign" button per row
-   - **Assign modal:** pick project (from contractor's assigned), optional milestone, pay, deadline, note → `POST /api/assignments`
-   - **Assignments tab:** all sent assignments; Cancel (PENDING only) → `PUT /api/assignments {action:"cancel"}`
+5. **Teams** `/contractor/team` + `/contractor/assignments` — nested sidebar item with two sub-pages:
+   - **Team Management** `/contractor/team` — `TeamManagementInfo`; 10 collapsible team cards; Add Member modal (memberId, name, type worker|contractor, role, rate); Assign modal per member (project dropdown, optional milestone, pay, deadline, note → `POST /api/assignments`); Remove button per member
+   - **Task Assigned** `/contractor/assignments` — `ContractorAssignmentsInfo`; tabs: PENDING / ACCEPTED / IN_PROGRESS / FOR_REVIEW / DECLINED; count badge on every tab
+     - PENDING: Cancel button → `PUT {action:"cancel"}` (deletes assignment)
+     - FOR_REVIEW (IN_REVIEW): Approve button → `PUT {action:"approve"}`
 
 ---
 

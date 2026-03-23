@@ -2,7 +2,8 @@ interface DashboardContractorNavigationItem {
   id: number;
   name: string;
   icon: string;
-  path: string;
+  path?: string;
+  children?: { name: string; path: string }[];
 }
 
 interface ContractorInvoice {
@@ -58,6 +59,18 @@ export const dasboardNavigation: DashboardContractorNavigationItem[] = [
         icon: "flaticon-home",
         path: "/contractor/dashboard",
     },
+    {
+        id: 2,
+        name: "Message",
+        icon: "flaticon-chat",
+        path: "/contractor/message",
+    },
+    {
+        id: 7,
+        name: "Payment History",
+        icon: "flaticon-dollar",
+        path: "/contractor/payouts",
+    },
     // {
     //     id: 2,
     //     name: "My Proposals",
@@ -80,14 +93,12 @@ export const dasboardNavigation: DashboardContractorNavigationItem[] = [
         id: 16,
         name: "Teams",
         icon: "flaticon-team",
-        path: "/contractor/team",
+        children: [
+            { name: "Team Management", path: "/contractor/team" },
+            { name: "Task Assigned", path: "/contractor/assignments" },
+        ],
     },
-    {
-        id: 4,
-        name: "Message",
-        icon: "flaticon-chat",
-        path: "/contractor/message",
-    },
+   
     // {
     //     id: 5,
     //     name: "Reviews",
