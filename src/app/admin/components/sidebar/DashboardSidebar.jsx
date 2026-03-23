@@ -26,10 +26,10 @@ export default function DashboardSidebar() {
         {renderItems(dasboardNavigation.slice(0, 4))}
 
         <p className="fz15 fw400 ff-heading pl30 mt30">Manage</p>
-        {renderItems(dasboardNavigation.slice(4, 8))}
+        {renderItems(dasboardNavigation.slice(4, 7))}
 
-        <p className="fz15 fw400 ff-heading pl30 mt30">Account</p>
-        {renderItems(dasboardNavigation.slice(8, 9))}
+        {/* <p className="fz15 fw400 ff-heading pl30 mt30">Account</p>
+        {renderItems(dasboardNavigation.slice(8, 9))} */}
       </div>
     </div>
   );

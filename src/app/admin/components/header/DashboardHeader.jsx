@@ -1,13 +1,10 @@
 "use client";
-import { dasboardNavigation } from "@/data/dashboardAdmin"; // We'll create this data file
 import toggleStore from "@/store/toggleStore";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export default function DashboardHeader() {
   const toggle = toggleStore((state) => state.dashboardSlidebarToggleHandler);
-  const path = usePathname();
 
   return (
     <>
@@ -39,18 +36,6 @@ export default function DashboardHeader() {
                         alt="navicon"
                       />
                     </a>
-                  </div>
-                  <div className="ml40 d-none d-xl-block">
-                    <div className="search_area dashboard-style">
-                      <input
-                        type="text"
-                        className="form-control border-0"
-                        placeholder="Search users, disputes, transactions..."
-                      />
-                      <label>
-                        <span className="flaticon-loupe" />
-                      </label>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -126,29 +111,16 @@ export default function DashboardHeader() {
                             alt="user.png"
                           />
                         </a>
-                        <div className="dropdown-menu">
+                        <div className="dropdown-menu dropdown-menu-end">
                           <div className="user_setting_content">
-                            <p className="fz15 fw400 ff-heading mb10 pl30">Start</p>
-                            {dasboardNavigation.slice(0, 4).map((item, i) => (
-                              <Link key={i} className={`dropdown-item ${path === item.path ? "active" : ""}`} href={item.path}>
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))}
-                            <p className="fz15 fw400 ff-heading mt30 pl30">Manage</p>
-                            {dasboardNavigation.slice(4, 8).map((item, i) => (
-                              <Link key={i} className={`dropdown-item ${path === item.path ? "active" : ""}`} href={item.path}>
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))}
-                            <p className="fz15 fw400 ff-heading mt30 pl30">Account</p>
-                            {dasboardNavigation.slice(8, 9).map((item, i) => (
-                              <Link key={i} className={`dropdown-item ${path === item.path ? "active" : ""}`} href={item.path}>
-                                <i className={`${item.icon} mr10`} />
-                                {item.name}
-                              </Link>
-                            ))}
+                            <Link className="dropdown-item" href="/admin/my-profile">
+                              <i className="flaticon-user mr10" />
+                              My Profile
+                            </Link>
+                            <Link className="dropdown-item" href="/login">
+                              <i className="flaticon-logout mr10" />
+                              Logout
+                            </Link>
                           </div>
                         </div>
                       </div>

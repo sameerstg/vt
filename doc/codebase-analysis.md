@@ -196,6 +196,7 @@ Pages at `src/app/admin/` | Components at `src/app/admin/components/` | Module: 
 All admin pages share `src/app/admin/layout.jsx` → `admin/components/DashboardLayout` + `MobileNavigation2`.
 
 1. **Dashboard** `/admin/dashboard` — `AdminDashboard`; stat cards (Total Users, Total Disputes, Transaction Volume, Active Teams); tabbed panel with all 5 sections: Disputes / Users / Teams / Projects / Financial
+8. **My Profile** `/admin/my-profile` — Profile Details (avatar, username, email, phone, country, city, bio) + Change Password; reuses `worker/components/section/ProfileDetails` and `ChangePassword`
 2. **Disputes** `/admin/disputes` — `DisputeManager`; table with status badges; compact Resolve / Refund / Suspend actions (pending only) → modal with radio + notes; persists via `setDisputes`
 3. **Users** `/admin/users` — `UserManager`; 50 seeded users (10 clients, 25 workers, 10 contractors, 5 admins); Suspend / Activate → confirmation modal; persists via `setUsers`
 4. **Transactions** `/admin/transactions` — `FinancialOversight`; filter by type + date range; summary stats (Total Volume, Count, Fee Income, Net Flow); transactions table
@@ -206,6 +207,8 @@ All admin pages share `src/app/admin/layout.jsx` → `admin/components/Dashboard
 **Admin Store** (`src/modules/admin/store/adminStore.js`): Zustand store with inline mock data — 50 users, 10 teams, 5 disputes, 15 transactions. Exposes `setUsers`, `setDisputes`, `setTransactions`, `setTeams`, `getAdminStats()`. Projects/milestones are read directly from the shared data layer, not stored here.
 
 **Sidebar nav** (`src/data/dashboardAdmin.ts`): 9 items — Start (0–3): Dashboard, Disputes, Users, Transactions; Manage (4–7): Teams, Projects, Reports, Settings; Account (8): Logout. Sidebar slices: `slice(0,4)` / `slice(4,8)` / `slice(8,9)`.
+
+**Header** (`src/app/admin/components/header/DashboardHeader.jsx`): no search bar; avatar dropdown shows only My Profile (`/admin/my-profile`) + Logout.
 
 ---
 
