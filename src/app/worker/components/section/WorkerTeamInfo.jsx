@@ -162,7 +162,7 @@ export default function WorkerTeamInfo() {
                         style={{ cursor: "pointer" }}
                         onClick={() => toggle(team.id)}
                       >
-                        <i className={`flaticon-${expanded[team.id] ? "up" : "down"}-arrow fz14 text-muted`} />
+                        <i className="flaticon-down-filled-triangular-arrow fz12 text-muted" style={{ transition: "transform 0.2s", transform: expanded[team.id] ? "rotate(180deg)" : "rotate(0deg)" }} />
                         <div>
                           <h5 className="mb2">{team.name}</h5>
                           <p className="fz13 text-muted mb0">
