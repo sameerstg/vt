@@ -18,7 +18,7 @@ function SubmitModal({ assignment, onClose, onSubmitted }) {
       const res = await fetch("/api/assignments", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "submit", assignmentId: assignment.id, description }),
+        body: JSON.stringify({ action: "submit", assignmentId: assignment.id, description, fileName: file?.name || null }),
       });
       const data = await res.json();
       if (data.success) { onSubmitted(); onClose(); }
