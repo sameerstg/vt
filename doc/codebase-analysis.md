@@ -16,6 +16,7 @@ src/
 ├── app/           # Next.js App Router — role routes + API
 ├── components/    # Shared UI components (headers, footers, cards, sections)
 ├── data/          # Static mock data for navigation & UI
+├── modules/       # Role-specific business logic (components, pages, stores)
 ├── store/         # Zustand stores (listing filters, cart, UI toggles)
 ├── hook/          # useScreen, useStickyMenu
 ├── models/        # Prisma schema
@@ -36,13 +37,50 @@ Each role has its own top-level route with isolated components and layout:
 | Admin | `/admin/*` | `src/app/admin/layout.jsx` → `admin/components/DashboardLayout` |
 
 Each `DashboardLayout` provides: `DashboardHeader` + `DashboardSidebar` + `DashboardFooter`.
+All layout components live in `src/app/[role]/components/` — **not** in `src/components/`.
 Individual `page.jsx` files export only their content component (layout is applied once in `layout.jsx`).
 
 **Sidebar nav data** (`src/data/dashboardWorker.ts`, `src/data/dashboardContractor.ts`): nav items support optional `children?: { name, path }[]` for nested sidebar links. Items with children render as non-link labels with indented sub-items. The **Teams** item uses this pattern for both worker and contractor.
 
 **User dropdown** (worker, contractor, client): shows My Profile + Logout. Positioned `fixed; top: 75px; right: 30px` via `public/css/style.css`.
 
-**Sidebar toggle icon**: placed to the **left of the logo** in all role headers (`fz20 me-3` div before `dashboard_header_logo`). Applies to worker, contractor, admin (`src/app/*/components/header/DashboardHeader.jsx`) and client (`src/components/dashboard-client/header/DashboardHeader.jsx`).
+**Sidebar toggle icon**: placed to the **left of the logo** in all role headers (`fz20 me-3` div before `dashboard_header_logo`). Applies to all roles via `src/app/*/components/header/DashboardHeader.jsx`.
+
+---
+
+## Component Architecture
+
+### Role-Specific Components (`src/app/[role]/components/`)
+
+Each role owns its complete component set. No cross-role imports for layout/dashboard components.
+
+| Directory | Contents |
+|-----------|----------|
+| `card/` | Role-specific card components |
+| `chart/` | DoughnutChart, LineChart |
+| `element/` | MessageBox, PayoutForm, ReviewComment |
+| `footer/` | DashboardFooter (© VeriTask. 2026) |
+| `header/` | DashboardHeader, DashboardNavigation |
+| `modal/` | DeleteModal, ProposalModal1 |
+| `option/` | SelectInput |
+| `section/` | All page-level section components (28–40 per role) |
+| `sidebar/` | DashboardSidebar |
+| `DashboardLayout.jsx` | Root layout wrapper |
+
+Worker and contractor also have `breadcumb/` (18 Breadcumb components).
+
+### Shared Business Logic (`src/modules/[role]/`)
+
+| Module | Components | Pages | Store |
+|--------|-----------|-------|-------|
+| `admin/` | DisputeManager, FinancialOversight, ProjectManager, ReportsOverview, TeamManager, UserManager | AdminDashboard | adminStore.js |
+| `client/` | EscrowFunding, OfferReviewer, PaymentReleaser, TaskCreator | ClientDashboard | clientStore.js |
+| `worker/` | OfferSubmitter, ProfileBuilder, TaskAcceptor, TaskBrowser | WorkerDashboard | workerStore.js |
+| `contractor/` | PayrollDistributor, SubtaskAssigner, TeamManager | ContractorDashboard | contractorStore.js |
+| `shared/` | — | — | authStore.js; utils: taskStates.js, api.js; agents |
+
+Admin pages (`src/app/admin/*/page.jsx`) import directly from `@/modules/admin/`.
+Client dashboard (`src/app/client/dashboard/page.jsx`) imports from `@/modules/client/pages/ClientDashboard`.
 
 ---
 
@@ -181,6 +219,7 @@ All contractor pages use **contractor's own component copies** (not worker's). A
 |------|---------|
 | `store/authStore.js` | Auth state (role, user) |
 | `utils/taskStates.js` | State machine definitions |
+| `utils/api.js` | Shared API utility |
 | `agents/ruleEnforcementAgent.js` | Enforces doc/rules.md |
 | `agents/codebaseAnalysisAgent.js` | Maintains this doc |
 | `agents/businessRequirementAgent.js` | Enforces doc/business-requirement.md |
@@ -221,5 +260,6 @@ All admin pages share `src/app/admin/layout.jsx` → `admin/components/Dashboard
 
 - `doc/rules.md` — platform rules and workflows
 - `doc/business-requirement.md` — business requirements
+- `doc/sow.txt` — Phase 01 Scope of Work (signed 2026-01-27)
 - `doc/schema.md` — database schema overview
 - `src/models/schema.prisma` — Prisma schema

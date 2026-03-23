@@ -1,5 +1,5 @@
 import Pagination1 from "@/components/section/Pagination1";
-import DashboardNavigation from "@/components/dashboard-client/header/DashboardNavigation";
+import DashboardNavigation from "../header/DashboardNavigation";
 import ManageJobCard from "../card/ManageJobCard";
 import { managejob } from "@/data/dashboard";
 import ProposalModal1 from "../modal/ProposalModal1";

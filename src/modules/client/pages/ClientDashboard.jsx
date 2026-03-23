@@ -7,7 +7,7 @@ import TaskCreator from "@/modules/client/components/TaskCreator";
 import OfferReviewer from "@/modules/client/components/OfferReviewer";
 import EscrowFunding from "@/modules/client/components/EscrowFunding";
 import PaymentReleaser from "@/modules/client/components/PaymentReleaser";
-import DashboardNavigation from "@/components/dashboard-client/header/DashboardNavigation";
+import DashboardNavigation from "@/app/client/components/header/DashboardNavigation";
 import Link from "next/link";
 
 export default function ClientDashboard() {

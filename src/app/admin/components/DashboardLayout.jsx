@@ -3,7 +3,7 @@
 import toggleStore from "@/store/toggleStore";
 import DashboardHeader from "./header/DashboardHeader";
 import DashboardSidebar from "./sidebar/DashboardSidebar";
-import DashboardFooter from "@/components/dashboard-admin/footer/DashboardFooter";
+import DashboardFooter from "./footer/DashboardFooter";
 
 export default function DashboardLayout({ children }) {
   const isActive = toggleStore((state) => state.isDasboardSidebarActive);

@@ -1,7 +1,7 @@
-import MyProfileInfo from "@/components/dashboard/section/MyProfileInfo";
+import MyProfileInfo from "@/app/client/components/section/MyProfileInfo";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | My Profile",
+  title: "VeriTask - My Profile",
 };
 
 export default function page() {

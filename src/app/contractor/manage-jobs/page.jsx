@@ -1,7 +1,7 @@
 import ManageJobInfo from "@/app/worker/components/section/ManageJobInfo";
 
 export const metadata = {
-  title: "Freeio - Freelance Marketplace React/Next Js Template | Manage Job",
+  title: "VeriTask - Manage Job",
 };
 
 export default function page() {
