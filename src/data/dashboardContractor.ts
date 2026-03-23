@@ -96,6 +96,7 @@ export const dasboardNavigation: DashboardContractorNavigationItem[] = [
         children: [
             { name: "Team Management", path: "/contractor/team" },
             { name: "Task Assigned", path: "/contractor/assignments" },
+            { name: "My Tasks", path: "/contractor/my-tasks" },
         ],
     },
    

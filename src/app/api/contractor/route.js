@@ -3,6 +3,37 @@ import { getProjectsState } from '../uiState';
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+const contractorInvites = new Map([
+  ["contractor-001", [
+    {
+      id: "cinv-001", teamId: "team-ext-001", teamName: "Infrastructure Alliance", contractorId: "contractor-ext-1", contractorName: "CloudSphere Inc",
+      description: "Cloud infrastructure and DevOps projects", inviteRole: "Solutions Architect", status: "PENDING",
+      members: [
+        { id: "cim-001", memberId: "contractor-ext-1", name: "Oliver Grant", type: "contractor", role: "CTO", rate: 150 },
+        { id: "cim-002", memberId: "worker-051", name: "Nathan Brooks", type: "worker", role: "DevOps Lead", rate: 90 },
+        { id: "cim-003", memberId: "worker-061", name: "Camille Dufour", type: "worker", role: "Cloud Engineer", rate: 85 },
+      ],
+    },
+    {
+      id: "cinv-002", teamId: "team-ext-002", teamName: "Enterprise Solutions Hub", contractorId: "contractor-ext-2", contractorName: "Nexus Consulting",
+      description: "Large-scale enterprise software delivery", inviteRole: "Technical Lead", status: "PENDING",
+      members: [
+        { id: "cim-010", memberId: "contractor-ext-2", name: "Fiona Blake", type: "contractor", role: "Delivery Manager", rate: 130 },
+        { id: "cim-011", memberId: "worker-023", name: "James Wilson", type: "worker", role: "Backend Dev", rate: 70 },
+      ],
+    },
+    {
+      id: "cinv-003", teamId: "team-ext-003", teamName: "FinTech Builders", contractorId: "contractor-ext-3", contractorName: "PayForge Ltd",
+      description: "Payment and financial platform development", inviteRole: "Integration Specialist", status: "PENDING",
+      members: [
+        { id: "cim-020", memberId: "contractor-ext-3", name: "Marcus Webb", type: "contractor", role: "CEO", rate: 160 },
+        { id: "cim-021", memberId: "worker-081", name: "Rachel Kim", type: "worker", role: "Data Engineer", rate: 88 },
+        { id: "cim-022", memberId: "worker-071", name: "Hassan Ali", type: "worker", role: "Backend Dev", rate: 80 },
+      ],
+    },
+  ]],
+]);
+
 const contractorTeams = new Map([
   ["contractor-001", [
     {
@@ -154,6 +185,11 @@ export async function GET(request) {
     result.teams = contractorTeams.get(contractorId) || [];
   }
 
+  if (type === "invites") {
+    result.invites = contractorInvites.get(contractorId) || [];
+    return Response.json({ success: true, data: result });
+  }
+
   if (type === "subprojects" || !type) {
     const parentProjectId = searchParams.get("parentProjectId");
     if (parentProjectId) {
@@ -212,6 +248,18 @@ export async function PUT(request) {
   const body = await request.json();
   const contractorId = body.contractorId || "contractor-001";
   const teams = contractorTeams.get(contractorId) || [];
+
+  if (body.action === "respondTeamInvite") {
+    const { inviteId, status } = body;
+    if (!["ACCEPTED", "DECLINED"].includes(status)) {
+      return Response.json({ success: false, error: "Invalid status" }, { status: 400 });
+    }
+    const invites = contractorInvites.get(contractorId) || [];
+    const idx = invites.findIndex(i => i.id === inviteId);
+    if (idx === -1) return Response.json({ success: false, error: "Invite not found" }, { status: 404 });
+    invites.splice(idx, 1);
+    return Response.json({ success: true });
+  }
 
   if (body.action === "removeTeamMember") {
     const team = body.teamId ? teams.find(t => t.id === body.teamId) : teams.find(t => t.members.some(m => m.id === body.memberId));

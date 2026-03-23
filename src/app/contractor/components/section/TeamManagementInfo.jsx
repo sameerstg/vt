@@ -170,6 +170,7 @@ function AssignModal({ member, projects, onClose }) {
 
 export default function TeamManagementInfo() {
   const [teams, setTeams] = useState([]);
+  const [invites, setInvites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expanded, setExpanded] = useState({});
@@ -177,6 +178,7 @@ export default function TeamManagementInfo() {
   const [assignTarget, setAssignTarget] = useState(null);
   const [projects, setProjects] = useState([]);
   const [removeLoading, setRemoveLoading] = useState(null);
+  const [inviteLoading, setInviteLoading] = useState(null);
 
   const fetchTeams = async () => {
     try {
@@ -194,8 +196,32 @@ export default function TeamManagementInfo() {
     finally { setLoading(false); }
   };
 
+  const fetchInvites = () => {
+    fetch(`/api/contractor?type=invites&contractorId=${CONTRACTOR_ID}`)
+      .then(r => r.json())
+      .then(data => { if (data.success) setInvites(data.data.invites || []); })
+      .catch(() => {});
+  };
+
+  const handleInviteResponse = async (inviteId, accept) => {
+    setInviteLoading(inviteId);
+    setError("");
+    try {
+      const res = await fetch("/api/contractor", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "respondTeamInvite", contractorId: CONTRACTOR_ID, inviteId, status: accept ? "ACCEPTED" : "DECLINED" }),
+      });
+      const data = await res.json();
+      if (data.success) fetchInvites();
+      else setError(data.error || "Action failed.");
+    } catch { setError("Network error."); }
+    finally { setInviteLoading(null); }
+  };
+
   useEffect(() => {
     fetchTeams();
+    fetchInvites();
     fetch(`/api/contractor?type=assigned&contractorId=${CONTRACTOR_ID}`)
       .then(r => r.json())
       .then(data => { if (data.success) setProjects(data.data.assignedProjects || []); })
@@ -244,6 +270,52 @@ export default function TeamManagementInfo() {
       <div className="row">
         <div className="col-xl-12">
           {error && <div className="alert alert-danger mb20">{error}</div>}
+
+          {invites.length > 0 && (
+            <div className="ps-widget bgc-white bdrs4 p30 mb20">
+              <h5 className="mb20">
+                Team Invitations
+                <span className="badge badge-new ms-2 fz12">{invites.length}</span>
+              </h5>
+              {invites.map(invite => (
+                <div key={invite.id} className="d-flex justify-content-between align-items-center py15 bdrt1">
+                  <div className="d-flex align-items-center gap-3">
+                    <div
+                      className="d-flex align-items-center justify-content-center rounded-circle bgc-thm4 fw600 text-thm fz16"
+                      style={{ width: 44, height: 44, flexShrink: 0 }}
+                    >
+                      {invite.teamName.charAt(0)}
+                    </div>
+                    <div>
+                      <h6 className="mb2 fw600">{invite.teamName}</h6>
+                      <p className="fz13 text-muted mb0">
+                        {invite.contractorName}
+                        {invite.description && <> &middot; {invite.description}</>}
+                        <> &middot; {invite.members.length} member{invite.members.length !== 1 ? "s" : ""}</>
+                      </p>
+                      {invite.inviteRole && <span className="fz12 text-muted">Role: {invite.inviteRole}</span>}
+                    </div>
+                  </div>
+                  <div className="d-flex gap-2">
+                    <button
+                      className="ud-btn btn-thm bdrs4 btn-sm"
+                      disabled={inviteLoading === invite.id}
+                      onClick={() => handleInviteResponse(invite.id, true)}
+                    >
+                      {inviteLoading === invite.id ? <span className="spinner-border spinner-border-sm" /> : "Accept"}
+                    </button>
+                    <button
+                      className="ud-btn btn-light bdrs4 btn-sm"
+                      disabled={inviteLoading === invite.id}
+                      onClick={() => handleInviteResponse(invite.id, false)}
+                    >
+                      Decline
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {loading ? (
             <div className="ps-widget bgc-white bdrs4 p30 text-center">
