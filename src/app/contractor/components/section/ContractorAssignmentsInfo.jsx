@@ -246,10 +246,10 @@ export default function ContractorAssignmentsInfo() {
                                 {activeTab === "IN_REVIEW" && (
                                   <>
                                     <button
-                                      className="ud-btn btn-light bdrs4 btn-sm"
+                                      className="ud-btn btn-light bdrs4 btn-sm d-flex align-items-center gap-1"
                                       onClick={() => setViewTarget(a)}
                                     >
-                                      <i className="flaticon-file-1 me-1" />View
+                                      <i className="flaticon-file-1" />View
                                     </button>
                                     <button
                                       className="ud-btn btn-thm bdrs4 btn-sm"
