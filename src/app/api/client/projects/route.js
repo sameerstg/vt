@@ -1,4 +1,4 @@
-import { getProjectsByClientId } from '../../projects';
+import { getProjectsByClientId, getProjectById } from '../../projects';
 import { getProjectsState } from '../../uiState';
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -24,6 +24,42 @@ export async function GET(request) {
     success: true,
     data: filteredProjects,
   });
+}
+
+export async function PUT(request) {
+  await delay(300);
+  const body = await request.json();
+  const { projectId, action } = body;
+
+  if (!projectId || !action) {
+    return Response.json({ success: false, error: "projectId and action required" }, { status: 400 });
+  }
+
+  const state = getProjectsState();
+  const base = getProjectById(projectId);
+  const project = state.get(projectId) || base;
+
+  if (!project) {
+    return Response.json({ success: false, error: "Project not found" }, { status: 404 });
+  }
+
+  if (project.status !== "SUBMITTED") {
+    return Response.json({ success: false, error: "Project is not in SUBMITTED state" }, { status: 400 });
+  }
+
+  let newStatus;
+  if (action === "approve") {
+    newStatus = "COMPLETED";
+  } else if (action === "dispute") {
+    newStatus = "IN_DISPUTE";
+  } else {
+    return Response.json({ success: false, error: "Unknown action" }, { status: 400 });
+  }
+
+  const updated = { ...project, status: newStatus, updatedAt: new Date().toISOString() };
+  state.set(projectId, updated);
+
+  return Response.json({ success: true, data: updated });
 }
 
 export async function POST(request) {

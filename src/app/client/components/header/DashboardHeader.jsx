@@ -17,6 +17,19 @@ export default function DashboardHeader() {
             <div className="row align-items-center justify-content-between">
               <div className="col-6 col-lg-auto">
                 <div className="text-center text-lg-start d-flex align-items-center">
+                  <div className="fz20 me-3">
+                    <a
+                      onClick={toggle}
+                      className="dashboard_sidebar_toggle_icon vam"
+                    >
+                      <Image
+                        height={18}
+                        width={20}
+                        src="/images/dashboard-navicon.svg"
+                        alt="navicon"
+                      />
+                    </a>
+                  </div>
                   <div className="dashboard_header_logo position-relative me-2 me-xl-5">
                     <Link href="/" className="logo">
                       <Image
@@ -26,21 +39,6 @@ export default function DashboardHeader() {
                         alt="logo"
                       />
                     </Link>
-                  </div>
-                  <div className="fz20 ml90">
-{/* Find the message navigation item */}
-{(function() {
-  const messageItem = dasboardNavigation.find(item => item.name === "Message");
-  return messageItem ? (
-    <Link
-      href={messageItem.path}
-      className="ud-btn btn-thm w-100"
-    >
-      View All Messages
-      <i className="fal fa-arrow-right-long" />
-    </Link>
-  ) : null;
-})()}
                   </div>
                   <div className="ml40 d-none d-xl-block">
                     <div className="search_area dashboard-style">

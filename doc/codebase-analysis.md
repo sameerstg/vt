@@ -42,6 +42,8 @@ Individual `page.jsx` files export only their content component (layout is appli
 
 **User dropdown** (worker, contractor, client): shows My Profile + Logout. Positioned `fixed; top: 75px; right: 30px` via `public/css/style.css`.
 
+**Sidebar toggle icon**: placed to the **left of the logo** in all role headers (`fz20 me-3` div before `dashboard_header_logo`). Applies to worker, contractor, admin (`src/app/*/components/header/DashboardHeader.jsx`) and client (`src/components/dashboard-client/header/DashboardHeader.jsx`).
+
 ---
 
 ## State Machine
@@ -125,7 +127,10 @@ Pages at `src/app/client/` | Components at `src/app/client/components/` | API: `
 
 1. **Dashboard** `/client/dashboard` — overview stats
 2. **Create Project** `/client/create-projects` — `CreateProjectForm` with milestones
-3. **Manage Projects** `/client/manage-projects` — tabs (Posted/Ongoing/Completed), 5/page
+3. **Manage Projects** `/client/manage-projects` — `ManageProjectInfo`; tabs: Posted / Ongoing / For Review / Completed / In Dispute; 5/page
+   - **For Review tab** (SUBMITTED): clicking any row or "Review Submission" button opens modal showing submission notes, attachment (with download), and two actions: **Approve** (`PUT /api/client/projects {projectId, action:"approve"}` → COMPLETED) or **Put in Dispute** (`PUT /api/client/projects {projectId, action:"dispute"}` → IN_DISPUTE)
+   - SUBMITTED mock data: proj-014, proj-017, proj-034–proj-038 (7 projects, all with `submissionDescription`, `submissionFileName`, `submittedAt`)
+   - IN_DISPUTE mock data: proj-031–proj-033, proj-039–proj-043 (8 projects)
 4. **Project Detail** `/client/project/[id]` — offers, milestones, escrow; "Message Worker" only for ASSIGNED/IN_PROGRESS/SUBMITTED
 5. **Reviews** `/client/reviews` — `ReviewForm`
 

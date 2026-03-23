@@ -2,7 +2,14 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(find /f/vt/src/app/contractor/components/section -name *.jsx -type f)"
+      "Bash(find /f/vt/src/app/contractor/components/section -name *.jsx -type f)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(grep -r \"flaticon-up\\\\|flaticon-down\\\\|flaticon-arrow\" F:/vt/public --include=*.css -l)"
     ]
   }
 }

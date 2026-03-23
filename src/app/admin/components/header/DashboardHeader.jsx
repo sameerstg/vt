@@ -14,17 +14,7 @@ export default function DashboardHeader() {
             <div className="row align-items-center justify-content-between">
               <div className="col-6 col-lg-auto">
                 <div className="text-center text-lg-start d-flex align-items-center">
-                  <div className="dashboard_header_logo position-relative me-2 me-xl-5">
-                    <Link href="/" className="logo">
-                      <Image
-                        height={40}
-                        width={133}
-                        src="/images/logo.png"
-                        alt="logo"
-                      />
-                    </Link>
-                  </div>
-                  <div className="fz20 ml90">
+                  <div className="fz20 me-3">
                     <a
                       onClick={toggle}
                       className="dashboard_sidebar_toggle_icon vam"
@@ -36,6 +26,16 @@ export default function DashboardHeader() {
                         alt="navicon"
                       />
                     </a>
+                  </div>
+                  <div className="dashboard_header_logo position-relative me-2 me-xl-5">
+                    <Link href="/" className="logo">
+                      <Image
+                        height={40}
+                        width={133}
+                        src="/images/logo.png"
+                        alt="logo"
+                      />
+                    </Link>
                   </div>
                 </div>
               </div>
