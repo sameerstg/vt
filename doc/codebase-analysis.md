@@ -77,14 +77,14 @@ POSTED → ASSIGNED → IN_PROGRESS → SUBMITTED → COMPLETED
 ### Worker API (`/api/worker/`)
 | Route | Purpose |
 |-------|---------|
-| `projects` | GET `?type=available/assigned`; GET `?type=team&workerId=x` → worker's teams (array); PUT `action=submit` |
+| `projects` | GET `?type=available/assigned`; GET `?type=team&workerId=x` → worker's teams (array, includes `memberStatus: "ACTIVE"\|"PENDING"` and `inviteRole` for pending); PUT `action=submit`; PUT `action=respondTeamInvite` (workerId, teamId, status ACCEPTED\|DECLINED) |
 | `offers` | POST submit; PUT `action=withdraw` |
 | `milestones` | GET by projectId; PUT `action=start/submit/complete` |
 
 ### Contractor API (`/api/contractor/`)
 | Route | Purpose |
 |-------|---------|
-| `route.js` | GET `?type=available` (contractorOnly POSTED); `?type=assigned` (contractor's projects); `?type=team` → teams array (10 teams for contractor-001); POST `addTeamMember`; PUT `removeTeamMember` |
+| `route.js` | GET `?type=available` (contractorOnly POSTED); `?type=assigned` (contractor's projects); `?type=team` → teams array (10 teams for contractor-001); `?type=invites` → pending team invitations array; POST `addTeamMember`; PUT `removeTeamMember`; PUT `respondTeamInvite` (inviteId, accept bool — removes from pending) |
 | `milestones/` | GET/PUT milestones for contractor projects |
 
 ### Shared API
@@ -111,11 +111,11 @@ GET requests merge base data + state. Resets on server restart.
 - `POST {action:"create"}` — required: contractorId, workerId, workerName, projectId, projectTitle, pay, deadline
 - `PUT {action:"respond", status}` — worker accepts/declines (PENDING only) → ACCEPTED | DECLINED
 - `PUT {action:"start"}` — worker starts work (ACCEPTED only) → IN_PROGRESS
-- `PUT {action:"submit"}` — worker submits work (IN_PROGRESS only) → IN_REVIEW
-- `PUT {action:"approve"}` — contractor approves submission (IN_REVIEW only)
+- `PUT {action:"submit", description, fileName}` — worker submits work (IN_PROGRESS only) → IN_REVIEW; stores `submissionDescription`, `submissionFileName`, `submittedAt`
+- `PUT {action:"approve"}` — contractor approves submission (IN_REVIEW only) → COMPLETED
 - `PUT {action:"cancel"}` — contractor cancels (PENDING only) → deleted
 - Assignment status flow: `PENDING → ACCEPTED → IN_PROGRESS → IN_REVIEW`; or `PENDING → DECLINED`
-- Pre-seeded: 25 assignments (5 per status × 5 statuses) for contractor-001; worker-021 has 5 assignments per status tab
+- Pre-seeded: contractor-001 has 5 assignments per status (PENDING/ACCEPTED/IN_PROGRESS/IN_REVIEW/DECLINED) as assignor; also 5 per status (PENDING/ACCEPTED/IN_PROGRESS/IN_REVIEW/DECLINED) as assignee (workerId=contractor-001, assigned by contractor-ext-1/2/3); worker-021 has 5 per status (PENDING/ACCEPTED/IN_PROGRESS/IN_REVIEW/IN_DISPUTE/DECLINED) — all with `teamName` field; all IN_REVIEW assignments have `submissionDescription`, `submissionFileName`, `submittedAt`
 
 ---
 
@@ -144,11 +144,11 @@ Pages at `src/app/worker/` | Components at `src/app/worker/components/` | API: `
 6. **Submit Work** `/worker/project/[id]/submit` — description + file upload; `PUT /api/worker/projects {action:"submit"}` → SUBMITTED
 7. **My Proposals** `/worker/proposals` — submitted offers, withdraw pending
 8. **Teams** `/worker/assignments` + `/worker/team` — nested sidebar item with two sub-pages:
-   - **My Teams** `/worker/team` — `WorkerTeamInfo`; collapsible team cards showing all teams worker belongs to; member table with role, rate, "You" badge on own row
-   - **Assigned Tasks** `/worker/assignments` — `WorkerAssignmentsInfo`; tabs: PENDING / ACCEPTED / IN_PROGRESS / IN_REVIEW / DECLINED; count badge on every tab
+   - **My Teams** `/worker/team` — `WorkerTeamInfo`; pending invitations section at top (Accept/Decline → `PUT /api/worker/projects {action:"respondTeamInvite"}`); search bar filters active teams; collapsible team cards with expand arrow (rightmost); member table with role, rate, "You" badge on own row; 3 seeded pending invites for worker-021
+   - **My Tasks** `/worker/assignments` — `WorkerAssignmentsInfo`; tabs: PENDING / ACCEPTED / IN_PROGRESS / IN_REVIEW / IN_DISPUTE / DECLINED; count badge on every tab; search bar; click any row to open `TaskDetailModal` (pay, deadline, instructions, submitted work, attachment)
      - PENDING: Accept / Decline buttons → `PUT {action:"respond"}`
      - ACCEPTED: Start button → `PUT {action:"start"}` → IN_PROGRESS
-     - IN_PROGRESS: Submit button → `PUT {action:"submit"}` → IN_REVIEW
+     - IN_PROGRESS: Submit button → opens `SubmitModal` (description + optional file) → `PUT {action:"submit", description, fileName}` → IN_REVIEW
 
 ---
 
@@ -161,11 +161,12 @@ All contractor pages use **contractor's own component copies** (not worker's). A
 2. **Browse Projects** `/contractor/browse-projects` — `Listing8`; fetches `/api/contractor?type=available` (contractor-only POSTED projects)
 3. **My Projects** `/contractor/my-projects` — `AssignedProjectsInfo`; fetches `/api/contractor?type=assigned`; milestones from `/api/contractor/milestones`
 4. **Manage Projects** `/contractor/manage-projects` — `ManageProjectInfo`; fetches `/api/contractor?type=assigned`; tabs: In Progress / In Review / Completed / In Dispute
-5. **Teams** `/contractor/team` + `/contractor/assignments` — nested sidebar item with two sub-pages:
-   - **Team Management** `/contractor/team` — `TeamManagementInfo`; 10 collapsible team cards; Add Member modal (memberId, name, type worker|contractor, role, rate); Assign modal per member (project dropdown, optional milestone, pay, deadline, note → `POST /api/assignments`); Remove button per member
-   - **Task Assigned** `/contractor/assignments` — `ContractorAssignmentsInfo`; tabs: PENDING / ACCEPTED / IN_PROGRESS / FOR_REVIEW / DECLINED; count badge on every tab
+5. **Teams** `/contractor/team` + `/contractor/assignments` + `/contractor/my-tasks` — nested sidebar item with three sub-pages:
+   - **Team Management** `/contractor/team` — `TeamManagementInfo`; pending team invitations section at top (Accept/Decline → `PUT /api/contractor {action:"respondTeamInvite"}`); 3 seeded pending invites for contractor-001; 10 collapsible team cards with expand arrow (rightmost); Add Member modal (memberId, name, type worker|contractor, role, rate); Assign modal per member (project dropdown, optional milestone, pay, deadline, note → `POST /api/assignments`); Remove button per member
+   - **Task Assigned** `/contractor/assignments` — `ContractorAssignmentsInfo`; tabs: PENDING / ACCEPTED / IN_PROGRESS / FOR_REVIEW / DECLINED; count badge on every tab; search bar; click any row to open `TaskDetailModal`
      - PENDING: Cancel button → `PUT {action:"cancel"}` (deletes assignment)
-     - FOR_REVIEW (IN_REVIEW): Approve button → `PUT {action:"approve"}`
+     - FOR_REVIEW (IN_REVIEW): View button → opens `SubmissionModal` (description, submitted date, attachment); Approve button → `PUT {action:"approve"}`
+   - **My Tasks** `/contractor/my-tasks` — `ContractorMyTasksInfo`; tasks assigned to contractor-001 by other contractors; same tabs/actions as worker My Tasks (PENDING/ACCEPTED/IN_PROGRESS/IN_REVIEW/DECLINED); click row for `TaskDetailModal`; Submit opens `SubmitModal`
 
 ---
 
