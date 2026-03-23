@@ -331,26 +331,27 @@ export default function TeamManagementInfo() {
           ) : (
             teams.map(team => (
               <div key={team.id} className="ps-widget bgc-white bdrs4 p30 mb20 overflow-hidden position-relative">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div
-                    className="d-flex align-items-center justify-content-between flex-grow-1"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => toggle(team.id)}
-                  >
-                    <div>
-                      <h5 className="mb2">{team.name}</h5>
-                      <p className="fz13 text-muted mb0">
-                        {team.members.length} member{team.members.length !== 1 ? "s" : ""}
-                        {team.description && <> &middot; {team.description}</>}
-                      </p>
-                    </div>
-                    <i className="flaticon-down-filled-triangular-arrow fz12 text-muted" style={{ transition: "transform 0.2s", transform: expanded[team.id] ? "rotate(180deg)" : "rotate(0deg)" }} />
+                <div className="d-flex align-items-center gap-3">
+                  <div className="flex-grow-1" style={{ cursor: "pointer" }} onClick={() => toggle(team.id)}>
+                    <h5 className="mb2">{team.name}</h5>
+                    <p className="fz13 text-muted mb0">
+                      {team.members.length} member{team.members.length !== 1 ? "s" : ""}
+                      {team.description && <> &middot; {team.description}</>}
+                    </p>
                   </div>
                   <button
                     className="ud-btn btn-thm bdrs4 btn-sm"
                     onClick={() => setAddTarget(team)}
                   >
                     <i className="flaticon-plus mr5" /> Add Member
+                  </button>
+                  <button
+                    className="d-flex align-items-center justify-content-center bdrs4 border-0 bgc-thm4"
+                    style={{ width: 36, height: 36, flexShrink: 0, cursor: "pointer" }}
+                    onClick={() => toggle(team.id)}
+                    title={expanded[team.id] ? "Collapse" : "Expand"}
+                  >
+                    <i className="flaticon-down-filled-triangular-arrow fz13 text-thm" style={{ transition: "transform 0.2s", transform: expanded[team.id] ? "rotate(180deg)" : "rotate(0deg)" }} />
                   </button>
                 </div>
 
