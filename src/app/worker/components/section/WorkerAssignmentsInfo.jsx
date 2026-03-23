@@ -24,6 +24,7 @@ export default function WorkerAssignmentsInfo() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState(null);
+  const [search, setSearch] = useState("");
 
   useEffect(() => { fetchAssignments(); }, []);
 
@@ -57,7 +58,12 @@ export default function WorkerAssignmentsInfo() {
   const handleRespond = (assignmentId, status) =>
     handleAction(assignmentId, "respond", status === "ACCEPTED" ? "ACCEPTED" : "DECLINED");
 
-  const filtered = allAssignments.filter(a => a.status === activeTab);
+  const q = search.trim().toLowerCase();
+  const filtered = allAssignments.filter(a =>
+    a.status === activeTab &&
+    (!q || [a.projectTitle, a.milestoneTitle, a.teamName, a.note]
+      .some(f => f?.toLowerCase().includes(q)))
+  );
   const countByStatus = tabs.reduce((acc, t) => {
     acc[t.key] = allAssignments.filter(a => a.status === t.key).length;
     return acc;
@@ -71,7 +77,7 @@ export default function WorkerAssignmentsInfo() {
         <div className="col-lg-12"><DashboardNavigation /></div>
         <div className="col-lg-12">
           <div className="dashboard_title_area">
-            <h2>Assigned Tasks</h2>
+            <h2>My Tasks</h2>
             <p className="text">Tasks assigned to you by contractors</p>
           </div>
         </div>
@@ -81,6 +87,19 @@ export default function WorkerAssignmentsInfo() {
         <div className="col-xl-12">
           <div className="ps-widget bgc-white bdrs4 p30 mb30 overflow-hidden position-relative">
             {error && <div className="alert alert-danger mb20">{error}</div>}
+
+            <div className="mb20">
+              <div className="position-relative" style={{ maxWidth: 360 }}>
+                <i className="flaticon-search fz16 text-muted position-absolute" style={{ top: "50%", left: 14, transform: "translateY(-50%)" }} />
+                <input
+                  type="text"
+                  className="form-control ps-5"
+                  placeholder="Search by project, team, milestone…"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
 
             <div className="navtab-style1">
               <nav>
@@ -117,7 +136,7 @@ export default function WorkerAssignmentsInfo() {
                     <thead className="t-head">
                       <tr>
                         <th scope="col">Project / Milestone</th>
-                        <th scope="col">Contractor</th>
+                        <th scope="col">Team</th>
                         <th scope="col">Pay</th>
                         <th scope="col">Deadline</th>
                         {showActions && <th scope="col">Actions</th>}
@@ -137,7 +156,7 @@ export default function WorkerAssignmentsInfo() {
                               </p>
                             )}
                           </td>
-                          <td className="vam fz14">BuildRight Solutions</td>
+                          <td className="vam fz14">{a.teamName || "—"}</td>
                           <td className="vam">
                             <span className="text-thm fw500 fz16">${a.pay.toLocaleString()}</span>
                           </td>

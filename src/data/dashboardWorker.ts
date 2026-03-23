@@ -109,7 +109,7 @@ export const dasboardNavigation: DashboardWorkerNavigationItem[] = [
         icon: "flaticon-team",
         children: [
             { name: "My Teams", path: "/worker/team" },
-            { name: "Assigned Tasks", path: "/worker/assignments" },
+            { name: "My Tasks", path: "/worker/assignments" },
         ],
     },
     // {
