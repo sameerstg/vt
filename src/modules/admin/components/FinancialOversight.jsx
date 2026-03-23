@@ -149,7 +149,7 @@ export default function FinancialOversight({ transactions, onSuccess }) {
           <tbody>
             {filteredTransactions.length === 0 ? (
               <tr>
-                <td colspan="6" className="text-center py40">
+                <td colSpan="6" className="text-center py40">
                   No transactions found matching the selected filters.
                 </td>
               </tr>

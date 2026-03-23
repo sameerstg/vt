@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function UserManager({ users, onSuccess }) {
+export default function UserManager({ users, setUsers, onSuccess }) {
   const [activeUser, setActiveUser] = useState(null);
   const [actionType, setActionType] = useState(null); // 'suspend' or 'activate'
 
@@ -41,7 +41,7 @@ export default function UserManager({ users, onSuccess }) {
         return user;
       });
       
-      // In a real app, we'd update state here
+      if (setUsers) setUsers(updatedUsers);
       onSuccess();
       handleCancelAction();
     } catch (error) {

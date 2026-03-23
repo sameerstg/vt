@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { TASK_STATES, TASK_STATE_LABELS } from "@/modules/shared/utils/taskStates";
 
-export default function DisputeManager({ disputes, onSuccess }) {
+export default function DisputeManager({ disputes, setDisputes, onSuccess }) {
   const [activeDispute, setActiveDispute] = useState(null);
   const [resolutionAction, setResolutionAction] = useState(null);
   const [resolutionNotes, setResolutionNotes] = useState("");
@@ -51,7 +50,7 @@ export default function DisputeManager({ disputes, onSuccess }) {
         return dispute;
       });
       
-      // In a real app, we'd update state here
+      if (setDisputes) setDisputes(updatedDisputes);
       onSuccess();
       handleCancelResolution();
     } catch (error) {
@@ -94,10 +93,10 @@ export default function DisputeManager({ disputes, onSuccess }) {
                       </span>
                     </td>
                     <td>
-                      <div className="btn-group btn-group-sm" role="group">
+                      <div className="d-flex gap-1 flex-nowrap">
                         <button
                           type="button"
-                          className="ud-btn btn-sm btn-thm"
+                          className="btn btn-sm btn-outline-success"
                           onClick={() => handleResolve(dispute.id)}
                           disabled={dispute.status !== "pending"}
                         >
@@ -105,7 +104,7 @@ export default function DisputeManager({ disputes, onSuccess }) {
                         </button>
                         <button
                           type="button"
-                          className="ud-btn btn-sm btn-dark"
+                          className="btn btn-sm btn-outline-secondary"
                           onClick={() => handleRefund(dispute.id)}
                           disabled={dispute.status !== "pending"}
                         >
@@ -113,11 +112,11 @@ export default function DisputeManager({ disputes, onSuccess }) {
                         </button>
                         <button
                           type="button"
-                          className="ud-btn btn-sm btn-danger"
+                          className="btn btn-sm btn-outline-danger"
                           onClick={() => handleSuspend(dispute.id)}
                           disabled={dispute.status !== "pending"}
                         >
-                          Suspend User
+                          Suspend
                         </button>
                       </div>
                     </td>

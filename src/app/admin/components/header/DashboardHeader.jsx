@@ -128,47 +128,23 @@ export default function DashboardHeader() {
                         </a>
                         <div className="dropdown-menu">
                           <div className="user_setting_content">
-                            <p className="fz15 fw400 ff-heading mb10 pl30">
-                              Start
-                            </p>
-                            {dasboardNavigation.slice(0, 8).map((item,i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
-                                href={item.path}
-                              >
+                            <p className="fz15 fw400 ff-heading mb10 pl30">Start</p>
+                            {dasboardNavigation.slice(0, 4).map((item, i) => (
+                              <Link key={i} className={`dropdown-item ${path === item.path ? "active" : ""}`} href={item.path}>
                                 <i className={`${item.icon} mr10`} />
                                 {item.name}
                               </Link>
                             ))}
-                            <p className="fz15 fw400 ff-heading mt30 pl30">
-                              Manage
-                            </p>
-                            {dasboardNavigation.slice(8, 11).map((item,i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
-                                href={item.path}
-                              >
+                            <p className="fz15 fw400 ff-heading mt30 pl30">Manage</p>
+                            {dasboardNavigation.slice(4, 8).map((item, i) => (
+                              <Link key={i} className={`dropdown-item ${path === item.path ? "active" : ""}`} href={item.path}>
                                 <i className={`${item.icon} mr10`} />
                                 {item.name}
                               </Link>
                             ))}
-                            <p className="fz15 fw400 ff-heading mt30 pl30">
-                              Account
-                            </p>
-                            {dasboardNavigation.slice(11, 13).map((item,i) => (
-                              <Link
-                                key={i}
-                                className={`dropdown-item ${
-                                  path === item.path ? "active" : ""
-                                }`}
-                                href={item.path}
-                              >
+                            <p className="fz15 fw400 ff-heading mt30 pl30">Account</p>
+                            {dasboardNavigation.slice(8, 9).map((item, i) => (
+                              <Link key={i} className={`dropdown-item ${path === item.path ? "active" : ""}`} href={item.path}>
                                 <i className={`${item.icon} mr10`} />
                                 {item.name}
                               </Link>

@@ -1,4 +1,3 @@
-import DashboardLayout from "@/components/dashboard-admin/DashboardLayout";
 import AdminDashboard from "@/modules/admin/pages/AdminDashboard";
 
 export const metadata = {
@@ -6,9 +5,5 @@ export const metadata = {
 };
 
 export default function AdminDashboardPage() {
-  return (
-    <DashboardLayout>
-      <AdminDashboard />
-    </DashboardLayout>
-  );
+  return <AdminDashboard />;
 }

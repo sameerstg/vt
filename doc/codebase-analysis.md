@@ -190,6 +190,25 @@ All contractor pages use **contractor's own component copies** (not worker's). A
 
 ---
 
+## Admin Journey
+
+Pages at `src/app/admin/` | Components at `src/app/admin/components/` | Module: `src/modules/admin/`
+All admin pages share `src/app/admin/layout.jsx` → `admin/components/DashboardLayout` + `MobileNavigation2`.
+
+1. **Dashboard** `/admin/dashboard` — `AdminDashboard`; stat cards (Total Users, Total Disputes, Transaction Volume, Active Teams); tabbed panel with all 5 sections: Disputes / Users / Teams / Projects / Financial
+2. **Disputes** `/admin/disputes` — `DisputeManager`; table with status badges; compact Resolve / Refund / Suspend actions (pending only) → modal with radio + notes; persists via `setDisputes`
+3. **Users** `/admin/users` — `UserManager`; 50 seeded users (10 clients, 25 workers, 10 contractors, 5 admins); Suspend / Activate → confirmation modal; persists via `setUsers`
+4. **Transactions** `/admin/transactions` — `FinancialOversight`; filter by type + date range; summary stats (Total Volume, Count, Fee Income, Net Flow); transactions table
+5. **Teams** `/admin/teams` — `TeamManager`; 10 platform-wide teams from multiple contractors; search by name/contractor; click row expands inline member table (name, type badge, role, rate)
+6. **Projects** `/admin/projects` — `ProjectManager`; reads directly from `@/app/api/projects/data` + `milestones`; paginated 10/page; filter by status + search; click row expands inline milestone table
+7. **Reports** `/admin/reports` — `ReportsOverview`; platform-wide summary: stat cards + Users by Role table + Financial Summary (payments/payouts/fees/refunds + net revenue) + Projects by Status + Disputes by Status
+
+**Admin Store** (`src/modules/admin/store/adminStore.js`): Zustand store with inline mock data — 50 users, 10 teams, 5 disputes, 15 transactions. Exposes `setUsers`, `setDisputes`, `setTransactions`, `setTeams`, `getAdminStats()`. Projects/milestones are read directly from the shared data layer, not stored here.
+
+**Sidebar nav** (`src/data/dashboardAdmin.ts`): 9 items — Start (0–3): Dashboard, Disputes, Users, Transactions; Manage (4–7): Teams, Projects, Reports, Settings; Account (8): Logout. Sidebar slices: `slice(0,4)` / `slice(4,8)` / `slice(8,9)`.
+
+---
+
 ## Additional Documentation
 
 - `doc/rules.md` — platform rules and workflows
