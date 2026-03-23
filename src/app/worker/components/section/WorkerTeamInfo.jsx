@@ -158,11 +158,10 @@ export default function WorkerTeamInfo() {
                   <div key={team.id} className="ps-widget bgc-white bdrs4 p30 mb20 overflow-hidden position-relative">
                     <div className="d-flex justify-content-between align-items-center">
                       <div
-                        className="d-flex align-items-center gap-3 flex-grow-1"
+                        className="d-flex align-items-center justify-content-between flex-grow-1"
                         style={{ cursor: "pointer" }}
                         onClick={() => toggle(team.id)}
                       >
-                        <i className="flaticon-down-filled-triangular-arrow fz12 text-muted" style={{ transition: "transform 0.2s", transform: expanded[team.id] ? "rotate(180deg)" : "rotate(0deg)" }} />
                         <div>
                           <h5 className="mb2">{team.name}</h5>
                           <p className="fz13 text-muted mb0">
@@ -170,6 +169,7 @@ export default function WorkerTeamInfo() {
                             {team.description && <> &middot; {team.description}</>}
                           </p>
                         </div>
+                        <i className="flaticon-down-filled-triangular-arrow fz12 text-muted" style={{ transition: "transform 0.2s", transform: expanded[team.id] ? "rotate(180deg)" : "rotate(0deg)" }} />
                       </div>
                     </div>
 
