@@ -4,6 +4,67 @@ import DashboardNavigation from "@/app/contractor/components/header/DashboardNav
 
 const CONTRACTOR_ID = "contractor-001";
 
+function TaskDetailModal({ assignment: a, onClose }) {
+  return (
+    <div className="modal show d-block" style={{ background: "rgba(0,0,0,0.5)" }}>
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content p30">
+          <div className="d-flex justify-content-between align-items-start mb20">
+            <div>
+              <h5 className="mb5">{a.projectTitle}</h5>
+              {a.milestoneTitle && <p className="fz13 text-muted mb0">› {a.milestoneTitle}</p>}
+            </div>
+            <button className="btn-close ms-3" onClick={onClose} />
+          </div>
+
+          <div className="d-flex align-items-center gap-2 mb20">
+            <span className={`badge fz12 ${statusBadge[a.status] || "badge-new"}`}>{statusLabel[a.status] || a.status}</span>
+            <span className="fz13 text-muted">{a.workerName}</span>
+          </div>
+
+          <div className="row mb20">
+            <div className="col-6">
+              <p className="fz12 text-muted mb4">Pay</p>
+              <p className="fw600 fz18 text-thm mb0">${a.pay.toLocaleString()}</p>
+            </div>
+            <div className="col-6">
+              <p className="fz12 text-muted mb4">Deadline</p>
+              <p className="fw500 fz14 mb0">{new Date(a.deadline).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+            </div>
+          </div>
+
+          {a.note && (
+            <div className="mb20">
+              <p className="fz12 text-muted mb8 fw600">Instructions</p>
+              <p className="fz14 mb0" style={{ lineHeight: 1.7 }}>{a.note}</p>
+            </div>
+          )}
+
+          {a.submissionDescription && (
+            <div className="mb20 p15 bdrs4" style={{ background: "#f5f7ff", border: "1px solid #e0e7ff" }}>
+              <p className="fz12 text-muted mb8 fw600">Submitted Work</p>
+              {a.submittedAt && <p className="fz12 text-muted mb8">Submitted {new Date(a.submittedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>}
+              <p className="fz14 mb0" style={{ lineHeight: 1.7 }}>{a.submissionDescription}</p>
+            </div>
+          )}
+
+          {a.submissionFileName && (
+            <div className="mb20">
+              <p className="fz12 text-muted mb8 fw600">Attachment</p>
+              <div className="d-flex align-items-center gap-2 bdrs4 p10" style={{ background: "#f5f7ff", border: "1px solid #e0e7ff" }}>
+                <i className="flaticon-file-1 fz20 text-thm" />
+                <span className="fz14 fw500">{a.submissionFileName}</span>
+              </div>
+            </div>
+          )}
+
+          <button className="ud-btn btn-light bdrs4" onClick={onClose}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SubmissionModal({ assignment, onClose }) {
   return (
     <div className="modal show d-block" style={{ background: "rgba(0,0,0,0.5)" }}>
@@ -86,6 +147,7 @@ export default function ContractorAssignmentsInfo() {
   const [actionLoading, setActionLoading] = useState(null);
   const [search, setSearch] = useState("");
   const [viewTarget, setViewTarget] = useState(null);
+  const [detailTarget, setDetailTarget] = useState(null);
 
   const fetchAssignments = async () => {
     setLoading(true);
@@ -131,6 +193,7 @@ export default function ContractorAssignmentsInfo() {
 
   return (
     <div className="dashboard__content hover-bgc-color">
+      {detailTarget && <TaskDetailModal assignment={detailTarget} onClose={() => setDetailTarget(null)} />}
       {viewTarget && <SubmissionModal assignment={viewTarget} onClose={() => setViewTarget(null)} />}
       <div className="row pb40">
         <div className="col-lg-12"><DashboardNavigation /></div>
@@ -204,7 +267,7 @@ export default function ContractorAssignmentsInfo() {
                     </thead>
                     <tbody className="t-body">
                       {filtered.map(a => (
-                        <tr key={a.id}>
+                        <tr key={a.id} style={{ cursor: "pointer" }} onClick={() => setDetailTarget(a)}>
                           <td>
                             <h5 className="title mb5">{a.projectTitle}</h5>
                             {a.milestoneTitle && (
@@ -232,7 +295,7 @@ export default function ContractorAssignmentsInfo() {
                             </span>
                           </td>
                           {showActions && (
-                            <td className="vam">
+                            <td className="vam" onClick={e => e.stopPropagation()}>
                               <div className="d-flex gap-2">
                                 {activeTab === "PENDING" && (
                                   <button
